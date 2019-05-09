@@ -31,7 +31,9 @@ const Students = ({ students }) => {
         {!selectedStudent && 'Select a student from the list to display their information.'}
         {selectedStudent && (
           <Pane elevation={2} className="student-detail--infos">
-            <h2>{selectedStudent.firstName} {selectedStudent.lastName}</h2>
+            <h2>
+              {selectedStudent.firstName} {selectedStudent.lastName}
+            </h2>
             <div>
               <h3>Why do you want to join Open Summer of Code? </h3>
               {selectedStudent.motivation}
@@ -52,7 +54,7 @@ const Students = ({ students }) => {
               <h3>For which role(s) do you want to apply? </h3>
               <ul>
                 {selectedStudent.roles.map(role => (
-                  <li>{role}</li>
+                  <li key={role}>{role}</li>
                 ))}
               </ul>
             </div>
