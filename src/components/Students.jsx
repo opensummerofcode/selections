@@ -50,8 +50,14 @@ const Students = ({ students }) => {
             </div>
             <div>
               <h3>Links</h3>
-              <p>CV: {selectedStudent.CV}</p>
-              <p>Portfolio: {selectedStudent.portfolio}</p>
+              <ul>
+                <li>
+                  <a href={selectedStudent.CV}>CV</a>
+                </li>
+                <li>
+                  <a href={selectedStudent.portfolio}>Portfolio</a>
+                </li>
+              </ul>
             </div>
           </Pane>
         )}
