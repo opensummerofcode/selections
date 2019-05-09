@@ -3,10 +3,15 @@ import PropTypes from 'prop-types';
 import Student from '../models/Student';
 
 const Students = ({ students }) => {
+  const renderStudent = student => (
+    <li>{student.firstName} {student.lastName}</li>
+  );
+
+  const $students = students.map(renderStudent);
   return (
-    <div>
-      Students
-    </div>
+    <ul className="students">
+      {$students}
+    </ul>
   );
 };
 
