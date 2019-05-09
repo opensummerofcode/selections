@@ -4,6 +4,7 @@ import {
   authProvider, auth, db, authPersistence
 } from '../firebase';
 import Students from './Students';
+import Student from '../models/Student';
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -31,23 +32,24 @@ const App = () => {
         uid: localUser.uid,
         pending: (existingUser.pending) ? existingUser.pending : true
       }))
-      .then(() => {
-        db.collection('students').get().then((snapshot) => {
-          const gotStudents = [];
-          snapshot.forEach(doc => gotStudents.push(doc.data()));
-          setStudents(gotStudents);
-          // snapshot.forEach(doc => console.log(doc.data()));
+      .then(() => db.collection('students').get())
+      .then((snapshot) => {
+        const gotStudents = [];
+        snapshot.forEach((doc) => {
+          const student = doc.data();
+          gotStudents.push(new Student(student));
         });
+        setStudents(gotStudents);
       })
       .catch((error) => {
         console.error(error);
       });
   }, []);
-
+  console.log(students);
   return (
     <BrowserRouter>
       <Switch>
-        <Route path="/:path(|index|home|start)" component={Students} />
+        <Route path="/:path(|index|home|start)" render={() => <Students students={students} />} />
         <Route render={() => <p>Page not found</p>} />
       </Switch>
     </BrowserRouter>
