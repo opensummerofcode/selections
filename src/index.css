@@ -39,21 +39,26 @@ code {
   margin: 0;
   padding: 0;
   font-size: 1.8rem;
-  width: 30%;
+  width: 20%;
 }
 
 .students__student {
   padding: 1.6rem;
   text-align: left;
-  transition: .3s background-color ease-in-out;
+  transition: 0.3s background-color ease-in-out;
 }
 
 .students__student:hover {
-  background-color: #E6E6E6;
+  background-color: #e6e6e6;
   padding: 1.6rem;
   cursor: pointer;
 }
 
 .student-detail {
   padding: 2rem;
+  width: 80%;
+}
+
+.student-detail--infos {
+  padding: 1rem;
 }
