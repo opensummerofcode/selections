@@ -1,6 +1,9 @@
 import React, { useEffect } from 'react';
-import { API } from './constants';
-import { db } from './firebase';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { API } from '../constants';
+import { db } from '../firebase';
+import Students from './Students';
+import SignIn from './SignIn';
 
 const App = () => {
   useEffect(() => {
@@ -17,7 +20,13 @@ const App = () => {
   });
 
   return (
-    <div>yes-maybe-no </div>
+    <BrowserRouter>
+      <Switch>
+        <Route path="/:path(|index|home|start)" component={Students} />
+        <Route path="/login" component={SignIn} />
+        <Route render={() => <p>Page not found</p>} />
+      </Switch>
+    </BrowserRouter>
   );
 };
 
