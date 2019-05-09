@@ -45,7 +45,7 @@ const App = () => {
         console.error(error);
       });
   }, []);
-  console.log(students);
+
   return (
     <BrowserRouter>
       <Switch>

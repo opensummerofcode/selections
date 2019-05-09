@@ -1,8 +1,9 @@
 class Student {
-  constructor(user) {
-    Object.keys(user).forEach((prop) => {
-      this[prop] = user[prop];
+  constructor(student) {
+    Object.keys(student).forEach((prop) => {
+      this[prop] = student[prop];
     });
+    this.id = student.response_id;
   }
 
   capitalizeName = name => name.split(' ')

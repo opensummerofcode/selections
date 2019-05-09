@@ -20,8 +20,40 @@ code {
     monospace;
 }
 
+.container {
+  display: flex;
+}
+
+.button--seamless {
+  cursor: pointer;
+  background-color: inherit;
+  border: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
 .students {
   list-style-type: none;
   margin: 0;
   padding: 0;
+  font-size: 1.8rem;
+  width: 30%;
+}
+
+.students__student {
+  padding: 1.6rem;
+  text-align: left;
+  transition: .3s background-color ease-in-out;
+}
+
+.students__student:hover {
+  background-color: #E6E6E6;
+  padding: 1.6rem;
+  cursor: pointer;
+}
+
+.student-detail {
+  padding: 2rem;
 }
