@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { API } from './constants';
+import { db } from './firebase';
 
 const App = () => {
   useEffect(() => {
@@ -9,6 +10,10 @@ const App = () => {
         const filledApplications = applications.filter(a => a.answers);
         console.log(filledApplications);
       });
+
+    db.collection('students').get().then((snapshot) => {
+      snapshot.forEach(doc => console.log(doc.data()));
+    });
   });
 
   return (
