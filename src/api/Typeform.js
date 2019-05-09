@@ -1,4 +1,5 @@
 import API from './API';
+import config from '../config';
 
 class TypeformAPI extends API {
   constructor() {
@@ -6,7 +7,7 @@ class TypeformAPI extends API {
     this.BASE_URL = 'https://api.typeform.com/';
     this.headers = {
       ...this.headers,
-      Authorization: `Bearer ${process.env.REACT_APP_TYPEFORM_ACCESS_TOKEN}`
+      Authorization: `Bearer ${config.typeform.ACCESS_TOKEN}`
     };
   }
 
