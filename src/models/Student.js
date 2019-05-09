@@ -11,6 +11,8 @@ class Student {
     .map(s => s.charAt(0).toUpperCase() + s.substring(1))
     .join(' ');
 
+  answer = id => this.answers.find(a => a.field.id === id);
+
   get firstName() {
     const name = this.answers[0].text.trim().toLowerCase();
     return this.capitalizeName(name);
@@ -22,35 +24,35 @@ class Student {
   }
 
   get motivation() {
-    return this.answers[12].text;
+    return this.answer('zDXa9I7QxAL8').text;
   }
 
   get whyGoodFit() {
-    return this.answers[13].text;
+    return this.answer('Eypr9GFkWVwP').text;
   }
 
   get bestSkills() {
-    return this.answers[14].text;
+    return this.answer('bQ8Oj62a9kd6').text;
   }
 
   get learnOrDoBetter() {
-    return this.answers[15].text;
+    return this.answer('Z6UAQVVuBk5M').text;
   }
 
   get roles() {
-    return this.answers[22].choices.labels;
+    return this.answer('VthTuvdWY5U0').choices.labels;
   }
 
   get prevParticipation() {
-    return this.answers[21].choice.label;
+    return this.answer('natCygk0msUH').choice.label;
   }
 
   get CV() {
-    return this.answers[10].url;
+    return this.answer('Y4VaHVC3gqv6').url;
   }
 
   get portfolio() {
-    return this.answers[11].url;
+    return this.answer('GbbykEq5bD9Z').url;
   }
 }
 

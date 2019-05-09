@@ -49,13 +49,32 @@ const Students = ({ students }) => {
               {selectedStudent.learnOrDoBetter}
             </div>
             <div>
+              <h3>For which role(s) do you want to apply? </h3>
+              <ul>
+                {selectedStudent.roles.map(role => (
+                  <li>{role}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3>
+                Have you participated in Osoc before? If so, would you like to be a student manager
+                this year?{' '}
+              </h3>
+              {selectedStudent.prevParticipation}
+            </div>
+            <div>
               <h3>Links</h3>
               <ul>
                 <li>
-                  <a href={selectedStudent.CV}>CV</a>
+                  <a target="_blank" rel="noopener noreferrer" href={selectedStudent.CV}>
+                    CV
+                  </a>
                 </li>
                 <li>
-                  <a href={selectedStudent.portfolio}>Portfolio</a>
+                  <a target="_blank" rel="noopener noreferrer" href={selectedStudent.portfolio}>
+                    Portfolio
+                  </a>
                 </li>
               </ul>
             </div>
