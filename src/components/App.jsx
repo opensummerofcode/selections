@@ -7,6 +7,7 @@ import Students from './Students';
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState(null);
+  const [students, setStudents] = useState([]);
 
   const setUser = async (user) => {
     await db.collection('users').doc(user.uid).set(user);
@@ -32,6 +33,9 @@ const App = () => {
       }))
       .then(() => {
         db.collection('students').get().then((snapshot) => {
+          const gotStudents = [];
+          snapshot.forEach(doc => gotStudents.push(doc.data()));
+          setStudents(gotStudents);
           // snapshot.forEach(doc => console.log(doc.data()));
         });
       })
