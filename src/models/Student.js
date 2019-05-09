@@ -24,19 +24,19 @@ class Student {
   }
 
   get motivation() {
-    return this.answer('zDXa9I7QxAL8').text;
-  }
-
-  get whyGoodFit() {
     return this.answer('Eypr9GFkWVwP').text;
   }
 
-  get bestSkills() {
+  get whyGoodFit() {
     return this.answer('bQ8Oj62a9kd6').text;
   }
 
-  get learnOrDoBetter() {
+  get bestSkills() {
     return this.answer('Z6UAQVVuBk5M').text;
+  }
+
+  get learnOrDoBetter() {
+    return this.answer('tuH5vMRFyedb').text;
   }
 
   get roles() {
