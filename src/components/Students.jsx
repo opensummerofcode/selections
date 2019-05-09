@@ -28,10 +28,10 @@ const Students = ({ students }) => {
     <div className="container">
       <ol className="students">{$students}</ol>
       <main className="student-detail">
-        {console.log(selectedStudent)}
         {!selectedStudent && 'Select a student from the list to display their information.'}
         {selectedStudent && (
           <Pane elevation={2} className="student-detail--infos">
+            <h2>{selectedStudent.firstName} {selectedStudent.lastName}</h2>
             <div>
               <h3>Why do you want to join Open Summer of Code? </h3>
               {selectedStudent.motivation}
