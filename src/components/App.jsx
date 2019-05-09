@@ -26,12 +26,16 @@ const App = () => {
         localUser = user;
         return getUser(user.uid);
       })
-      .then(existingUser => setUser({
-        displayName: localUser.displayName,
-        email: localUser.email,
-        uid: localUser.uid,
-        pending: (existingUser.pending) ? existingUser.pending : true
-      }))
+      .then((response) => {
+        const existingUser = response.data();
+        return setUser({
+          displayName: localUser.displayName,
+          email: localUser.email,
+          uid: localUser.uid,
+          pending: (existingUser) ? existingUser.pending : true,
+          admin: (existingUser) ? existingUser.admin : false
+        });
+      })
       .then(() => db.collection('students').get())
       .then((snapshot) => {
         const gotStudents = [];
