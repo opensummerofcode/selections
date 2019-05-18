@@ -10,33 +10,16 @@ const App = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const [students, setStudents] = useState([]);
 
-  const setUser = async (user) => {
-    await db.collection('users').doc(user.uid).set(user);
-    setCurrentUser(user);
-  };
-
   const getUser = uid => db.collection('users').doc(uid).get();
 
-  useEffect(() => {
-    let localUser;
-    auth.setPersistence(authPersistence)
-      .then(() => auth.signInWithPopup(authProvider))
-      .then((result) => {
-        const { user } = result;
-        localUser = user;
-        return getUser(user.uid);
-      })
-      .then((response) => {
-        const existingUser = response.data();
-        return setUser({
-          displayName: localUser.displayName,
-          email: localUser.email,
-          uid: localUser.uid,
-          pending: (existingUser) ? existingUser.pending : true,
-          admin: (existingUser) ? existingUser.admin : false
-        });
-      })
-      .then(() => db.collection('students').get())
+  const login = () => auth.setPersistence(authPersistence)
+    .then(() => auth.signInWithPopup(authProvider))
+    .then(response => getUser(response.user.uid))
+    .then(doc => setCurrentUser(doc.data()))
+    .catch(console.error);
+
+  const getStudents = () => {
+    db.collection('students').get()
       .then((snapshot) => {
         const gotStudents = [];
         snapshot.forEach((doc) => {
@@ -48,6 +31,16 @@ const App = () => {
       .catch((error) => {
         console.error(error);
       });
+  };
+
+  useEffect(() => {
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        await setCurrentUser(user);
+        return getStudents();
+      }
+      return login();
+    });
   }, []);
 
   return (
