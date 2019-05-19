@@ -1,10 +1,23 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import { Pane } from 'evergreen-ui';
+import { db } from '../firebase';
 import Student from '../models/Student';
 
-const Students = ({ students }) => {
+const Students = ({ user, history }) => {
   const [selectedStudent, selectStudent] = useState(null);
+  const [students, setStudents] = useState([]);
+
+  const getStudents = async () => {
+    const snapshot = await db.collection('students').get();
+    const gotStudents = [];
+    snapshot.forEach((doc) => {
+      const student = doc.data();
+      gotStudents.push(new Student(student));
+    });
+    setStudents(gotStudents);
+  };
 
   const renderStudent = student => (
     <li key={student.id}>
@@ -24,6 +37,13 @@ const Students = ({ students }) => {
     })
     .map(renderStudent);
 
+  if (!user) return <p />;
+  if (user.pending || !('pending' in user)) {
+    history.push('/pending');
+    return <p />;
+  }
+
+  if (students.length === 0) getStudents();
   return (
     <div className="container">
       <ol className="students">{$students}</ol>
@@ -87,8 +107,15 @@ const Students = ({ students }) => {
   );
 };
 
-Students.propTypes = {
-  students: PropTypes.arrayOf(PropTypes.instanceOf(Student)).isRequired
+Students.defaultProps = {
+  user: null
 };
 
-export default Students;
+Students.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  history: PropTypes.object.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  user: PropTypes.object
+};
+
+export default withRouter(Students);
