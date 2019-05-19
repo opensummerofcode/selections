@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { Pane } from 'evergreen-ui';
 import { db } from '../firebase';
+import AuthContext from '../context/auth';
 import Student from '../models/Student';
 
-const Students = ({ user, history }) => {
+const Students = ({ history }) => {
   const [selectedStudent, selectStudent] = useState(null);
   const [students, setStudents] = useState([]);
+
+  const { user } = useContext(AuthContext);
 
   const getStudents = async () => {
     const snapshot = await db.collection('students').get();
@@ -107,15 +110,9 @@ const Students = ({ user, history }) => {
   );
 };
 
-Students.defaultProps = {
-  user: null
-};
-
 Students.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
-  history: PropTypes.object.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  user: PropTypes.object
+  history: PropTypes.object.isRequired
 };
 
 export default withRouter(Students);
