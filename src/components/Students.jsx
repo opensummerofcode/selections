@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { Pane } from 'evergreen-ui';
+import { Pane, Button } from 'evergreen-ui';
 import { db } from '../firebase';
 import AuthContext from '../context/auth';
 import Student from '../models/Student';
@@ -22,18 +22,34 @@ const Students = ({ history }) => {
     setStudents(gotStudents);
   };
 
-  const renderStudent = student => (
-    <li key={student.id}>
-      <button type="button" className="button--seamless" onClick={() => selectStudent(student)}>
-        <Pane className="students__student" elevation={2}>
-          {student.firstName} {student.lastName}
-        </Pane>
-      </button>
-    </li>
-  );
+  const select = () => {
+    selectedStudent.yes();
+  };
+
+  const reject = () => {
+    selectedStudent.maybe();
+  };
+
+  const maybeSelect = () => {
+    selectedStudent.no();
+  };
+
+  const renderStudent = (student) => {
+    if (!student.hasAnswers) return null;
+    return (
+      <li key={student.id} className={`status--${student.status}`}>
+        <button type="button" className="button--seamless" onClick={() => selectStudent(student)}>
+          <Pane className="students__student" elevation={2}>
+            {student.firstName} {student.lastName}
+          </Pane>
+        </button>
+      </li>
+    );
+  };
 
   const $students = students
     .sort((a, b) => {
+      if (!a.hasAnswers) return -1;
       if (a.firstName < b.firstName) return -1;
       if (a.firstName > b.firstName) return 1;
       return 0;
@@ -47,10 +63,18 @@ const Students = ({ history }) => {
   }
 
   if (students.length === 0) getStudents();
+
   return (
     <div className="container">
       <ol className="students">{$students}</ol>
       <main className="student-detail">
+        {user && user.admin && (
+          <div className="student-detail__actions">
+            <Button onClick={select} appearance="primary" intent="success">Yes</Button>
+            <Button onClick={reject} appearance="primary" intent="warning">Maybe</Button>
+            <Button onClick={maybeSelect} appearance="primary" intent="danger">No</Button>
+          </div>
+        )}
         {!selectedStudent && 'Select a student from the list to display their information.'}
         {selectedStudent && (
           <Pane elevation={2} className="student-detail--infos">
@@ -112,7 +136,9 @@ const Students = ({ history }) => {
 
 Students.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
-  history: PropTypes.object.isRequired
+  history: PropTypes.object.isRequired,
+  // eslint-disable-next-line
+  currentUser: PropTypes.object
 };
 
 export default withRouter(Students);

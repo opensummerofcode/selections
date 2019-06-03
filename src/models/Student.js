@@ -1,9 +1,24 @@
+import { db } from '../firebase';
+
 class Student {
   constructor(student) {
     Object.keys(student).forEach((prop) => {
       this[prop] = student[prop];
     });
     this.id = student.response_id;
+    if (!this.answers) console.log(student);
+  }
+
+  yes = () => {
+    db.collection('students').doc(this.id).update({ status: 'yes' });
+  }
+
+  maybe = () => {
+    db.collection('students').doc(this.id).update({ status: 'no' });
+  }
+
+  no = () => {
+    db.collection('students').doc(this.id).update({ status: 'maybe' });
   }
 
   capitalizeName = name => name

@@ -57,8 +57,31 @@ code {
 .student-detail {
   padding: 2rem;
   width: 80%;
+  position: relative;
+}
+
+.student-detail__actions {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  align-items: flex-start;
+  display: flex;
+  justify-content: space-between;
+  width: 20rem;
 }
 
 .student-detail--infos {
   padding: 1rem;
+}
+
+.status--yes {
+  background-color: rgba(71, 184, 129, 0.4);
+}
+
+.status--no {
+  background-color: rgba(236, 76, 71, 0.4)
+}
+
+.status--maybe {
+  background-color: rgba(251, 230, 162, 0.4);
 }
