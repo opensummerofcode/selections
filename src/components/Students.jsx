@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { Pane, Button } from 'evergreen-ui';
@@ -8,19 +8,25 @@ import Student from '../models/Student';
 
 const Students = ({ history }) => {
   const [selectedStudent, selectStudent] = useState(null);
-  const [students, setStudents] = useState([]);
+  const [students, setStudents] = useState({});
 
   const { user } = useContext(AuthContext);
 
-  const getStudents = async () => {
-    const snapshot = await db.collection('students').get();
-    const gotStudents = [];
-    snapshot.forEach((doc) => {
-      const student = doc.data();
-      gotStudents.push(new Student(student));
+  useEffect(() => {
+    db.collection('students').get().then((snapshot) => {
+      const gotStudents = {};
+      snapshot.forEach((doc) => {
+        const student = new Student(doc.data());
+        gotStudents[student.id] = student;
+        db.collection('students').doc(student.id).onSnapshot((update) => {
+          if (!update.metadata.hasPendingWrites) return;
+          const newStudent = new Student(update.data());
+          setStudents(s => ({ ...s, [newStudent.id]: newStudent }));
+        });
+      });
+      setStudents(gotStudents);
     });
-    setStudents(gotStudents);
-  };
+  }, []);
 
   const select = () => {
     selectedStudent.yes();
@@ -34,27 +40,15 @@ const Students = ({ history }) => {
     selectedStudent.no();
   };
 
-  const renderStudent = (student) => {
-    if (!student.hasAnswers) return null;
-    return (
-      <li key={student.id} className={`status--${student.status}`}>
-        <button type="button" className="button--seamless" onClick={() => selectStudent(student)}>
-          <Pane className="students__student" elevation={2}>
-            {student.firstName} {student.lastName}
-          </Pane>
-        </button>
-      </li>
-    );
-  };
-
-  const $students = students
-    .sort((a, b) => {
-      if (!a.hasAnswers) return -1;
-      if (a.firstName < b.firstName) return -1;
-      if (a.firstName > b.firstName) return 1;
-      return 0;
-    })
-    .map(renderStudent);
+  const renderStudent = student => (
+    <li key={student.id} className={`status--${student.status}`}>
+      <button type="button" className="button--seamless" onClick={() => selectStudent(student)}>
+        <Pane className="students__student" elevation={2}>
+          {student.firstName} {student.lastName}
+        </Pane>
+      </button>
+    </li>
+  );
 
   if (!user) return <p />;
   if (user.pending || !('pending' in user)) {
@@ -62,13 +56,20 @@ const Students = ({ history }) => {
     return <p />;
   }
 
-  if (students.length === 0) getStudents();
+  const $students = Object.keys(students)
+    .map(key => students[key])
+    .sort((a, b) => {
+      if (a.firstName < b.firstName) return -1;
+      if (a.firstName > b.firstName) return 1;
+      return 0;
+    })
+    .map(renderStudent);
 
   return (
     <div className="container">
       <ol className="students">{$students}</ol>
       <main className="student-detail">
-        {user && user.admin && (
+        {user && user.admin && selectedStudent && (
           <div className="student-detail__actions">
             <Button onClick={select} appearance="primary" intent="success">Yes</Button>
             <Button onClick={reject} appearance="primary" intent="warning">Maybe</Button>

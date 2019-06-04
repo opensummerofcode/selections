@@ -6,20 +6,13 @@ class Student {
       this[prop] = student[prop];
     });
     this.id = student.response_id;
-    if (!this.answers) console.log(student);
   }
 
-  yes = () => {
-    db.collection('students').doc(this.id).update({ status: 'yes' });
-  }
+  yes = () => db.collection('students').doc(this.id).update({ status: 'yes' });
 
-  maybe = () => {
-    db.collection('students').doc(this.id).update({ status: 'no' });
-  }
+  maybe = () => db.collection('students').doc(this.id).update({ status: 'maybe' });
 
-  no = () => {
-    db.collection('students').doc(this.id).update({ status: 'maybe' });
-  }
+  no = () => db.collection('students').doc(this.id).update({ status: 'no' });
 
   capitalizeName = name => name
     .split(' ')
