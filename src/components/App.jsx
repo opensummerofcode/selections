@@ -8,6 +8,7 @@ import Students from './Students';
 import Pending from './Pending';
 
 const App = () => {
+  const [authFailed, setFailure] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -28,9 +29,9 @@ const App = () => {
           return setIsLoading(false);
         })
         .catch((err) => {
-          window.location = '/';
-          console.error(err);
+          setFailure(true);
           setIsLoading(false);
+          console.error(err);
         });
     });
   }, []);
@@ -38,7 +39,8 @@ const App = () => {
   const authContext = {
     user: currentUser,
     setAuthenticatedUser: setCurrentUser,
-    isLoading
+    isLoading,
+    authFailed
   };
 
   return (

@@ -12,7 +12,12 @@ const Pending = ({ history }) => {
   return (
     <div className="pending">
       <h2>Hey {user && user.displayName} :)</h2>
-      {!user && <p>Please log in via the pop-up window &amp; refresh the page</p>}
+      {!user && (
+        <p>
+          Please log in via the pop-up window &amp; refresh the page.
+          Make sure pop-ups are enabled!
+        </p>
+      )}
       {user && (user.pending || !('pending' in user)) && (
         <p>
           For security reasons, your account is pending.

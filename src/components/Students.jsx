@@ -36,7 +36,7 @@ const Students = ({ history }) => {
     Unassigned: true
   });
 
-  const { user } = useContext(AuthContext);
+  const { user, authFailed } = useContext(AuthContext);
 
   useEffect(() => {
     if (!user || user.pending || !('pending' in user)) return;
@@ -183,7 +183,7 @@ const Students = ({ history }) => {
   };
 
   if (!user) return <p />;
-  if (user.pending || !('pending' in user)) {
+  if (authFailed || user.pending || !('pending' in user)) {
     history.push('/pending');
     return <p />;
   }
