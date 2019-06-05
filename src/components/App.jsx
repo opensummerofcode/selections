@@ -9,6 +9,7 @@ import Pending from './Pending';
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const getUser = uid => db.collection('users').doc(uid).get();
 
@@ -16,19 +17,27 @@ const App = () => {
     auth.onAuthStateChanged(async (rawUser) => {
       if (rawUser) {
         const user = await getUser(rawUser.uid);
-        return setCurrentUser(user.data());
+        setCurrentUser(user.data());
+        return setIsLoading(false);
       }
       return auth.setPersistence(authPersistence)
         .then(() => auth.signInWithPopup(authProvider))
         .then(response => getUser(response.user.uid))
-        .then(doc => setCurrentUser(doc.data()))
-        .catch(console.error);
+        .then((doc) => {
+          setCurrentUser(doc.data());
+          return setIsLoading(false);
+        })
+        .catch((err) => {
+          console.error(err);
+          setIsLoading(false);
+        });
     });
   }, []);
 
   const authContext = {
     user: currentUser,
-    setAuthenticatedUser: setCurrentUser
+    setAuthenticatedUser: setCurrentUser,
+    isLoading
   };
 
   return (

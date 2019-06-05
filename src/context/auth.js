@@ -2,5 +2,6 @@ import React from 'react';
 
 export default React.createContext({
   user: null,
-  setUser: () => {}
+  setUser: () => {},
+  isLoading: true
 });

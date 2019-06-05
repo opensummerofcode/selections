@@ -39,20 +39,24 @@ const Students = ({ history }) => {
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
+    if (!user || user.pending || !('pending' in user)) return;
     db.collection('students').get().then((snapshot) => {
       const gotStudents = {};
       snapshot.forEach((doc) => {
         const student = new Student(doc.data());
         gotStudents[student.id] = student;
         db.collection('students').doc(student.id).onSnapshot((update) => {
+          const data = update.data();
+          console.log(data.key, selectedStudent.id);
           if (!update.metadata.hasPendingWrites) return;
           const newStudent = new Student(update.data());
           setStudents(s => ({ ...s, [newStudent.id]: newStudent }));
           selectStudent(newStudent);
         });
         db.collection('suggestions').doc(student.id).onSnapshot((update) => {
-          if (!update.metadata.hasPendingWrites) return;
-          const newSuggestion = update.data();
+          const data = update.data();
+          if (JSON.stringify(data) === JSON.stringify(suggestions[update.key])) return;
+          const newSuggestion = data;
           setSuggestions(s => ({ ...s, [student.id]: newSuggestion }));
         });
       });
@@ -67,7 +71,7 @@ const Students = ({ history }) => {
       });
       setSuggestions(gotSuggestions);
     });
-  }, []);
+  }, [user]);
 
   const select = () => selectedStudent.yes();
   const reject = () => selectedStudent.maybe();
