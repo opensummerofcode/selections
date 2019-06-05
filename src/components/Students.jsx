@@ -9,6 +9,7 @@ import Student from '../models/Student';
 const Students = ({ history }) => {
   const [selectedStudent, selectStudent] = useState(null);
   const [students, setStudents] = useState({});
+  const [suggestions, setSuggestions] = useState({});
 
   const { user } = useContext(AuthContext);
 
@@ -23,8 +24,21 @@ const Students = ({ history }) => {
           const newStudent = new Student(update.data());
           setStudents(s => ({ ...s, [newStudent.id]: newStudent }));
         });
+        db.collection('suggestions').doc(student.id).onSnapshot((update) => {
+          if (!update.metadata.hasPendingWrites) return;
+          const newSuggestion = update.data();
+          setSuggestions(s => ({ ...s, [student.id]: newSuggestion }));
+        });
       });
       setStudents(gotStudents);
+    });
+    db.collection('suggestions').get().then((snapshot) => {
+      let gotSuggestions = {};
+      snapshot.forEach((doc) => {
+        const suggestion = doc.data();
+        gotSuggestions = { ...gotSuggestions, [doc.id]: suggestion };
+      });
+      setSuggestions(gotSuggestions);
     });
   }, []);
 
@@ -32,9 +46,17 @@ const Students = ({ history }) => {
   const reject = () => selectedStudent.maybe();
   const maybeSelect = () => selectedStudent.no();
 
-  const suggestYes = () => selectedStudent.incrementYes();
-  const suggestMaybe = () => selectedStudent.incrementMaybe();
-  const suggestNo = () => selectedStudent.incrementNo();
+  const suggestYes = () => (
+    selectedStudent.suggestYes(user, suggestions[selectedStudent.id])
+  );
+
+  const suggestMaybe = () => (
+    selectedStudent.suggestMaybe(user, suggestions[selectedStudent.id])
+  );
+
+  const suggestNo = () => (
+    selectedStudent.suggestNo(user, suggestions[selectedStudent.id])
+  );
 
   const renderStudent = student => (
     <li key={student.id} className={`status--${student.status}`}>
@@ -45,6 +67,95 @@ const Students = ({ history }) => {
       </button>
     </li>
   );
+
+  const renderStudentDetail = () => {
+    if (!selectedStudent) {
+      return <p>Select a student from the list to display their information.</p>;
+    }
+    return (
+      <Pane elevation={2} className="student-detail--infos">
+        <h2>
+          {selectedStudent.firstName} {selectedStudent.lastName}
+        </h2>
+        <div>
+          <h3>Why do you want to join Open Summer of Code? </h3>
+          {selectedStudent.motivation}
+        </div>
+        <div>
+          <h3>Tell us why you think you&apos;ll make a good fit? </h3>
+          {selectedStudent.whyGoodFit}
+        </div>
+        <div>
+          <h3>What skills can you best help your teammates with? </h3>
+          {selectedStudent.bestSkills}
+        </div>
+        <div>
+          <h3>What would you like to learn or do better at Osoc? </h3>
+          {selectedStudent.learnOrDoBetter}
+        </div>
+        <div>
+          <h3>For which role(s) do you want to apply? </h3>
+          <ul>
+            {selectedStudent.roles.map(role => (
+              <li key={role}>{role}</li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h3>
+            Have you participated in Osoc before? If so, would you like to be a student manager
+            this year?{' '}
+          </h3>
+          {selectedStudent.prevParticipation}
+        </div>
+        <div>
+          <h3>Links</h3>
+          <ul>
+            <li>
+              <a target="_blank" rel="noopener noreferrer" href={selectedStudent.CV}>
+                CV
+              </a>
+            </li>
+            <li>
+              <a target="_blank" rel="noopener noreferrer" href={selectedStudent.portfolio}>
+                Portfolio
+              </a>
+            </li>
+          </ul>
+        </div>
+      </Pane>
+    );
+  };
+
+  const renderSuggestionsPerType = (type) => {
+    const suggestionsForStudent = suggestions[selectedStudent.id];
+    return Object.keys(suggestionsForStudent)
+      .filter(person => suggestionsForStudent[person] === type)
+      .map(person => <li key={`suggestion-${type}-${person}`}>{person}</li>);
+  };
+
+  const renderSuggestions = () => {
+    if (!selectedStudent) return null;
+    const types = ['yes', 'maybe', 'no'];
+    const $suggestions = types.map((type) => {
+      const $perType = renderSuggestionsPerType(type);
+      const $result = $perType.length === 0 ? `No one has suggested "${type}" yet` : $perType;
+      return (
+        <article key={type}>
+          <h4>{type}:</h4>
+          <ul>
+            {$result}
+          </ul>
+        </article>
+      );
+    });
+    return (
+      <div>
+        <h3>Suggestions</h3>
+        {$suggestions}
+      </div>
+    );
+  };
 
   if (!user) return <p />;
   if (user.pending || !('pending' in user)) {
@@ -63,78 +174,29 @@ const Students = ({ history }) => {
 
   if ($students.length === 0) return <p />;
 
+  const $studentDetail = renderStudentDetail();
+  const $suggestions = renderSuggestions();
+
   return (
     <div className="container">
       <ol className="students">{$students}</ol>
       <main className="student-detail">
         {user && user.admin && selectedStudent && (
-          <div className="student-detail__actions">
+          <div className="student-detail__admin-actions">
             <Button onClick={select} appearance="primary" intent="success">Yes</Button>
             <Button onClick={reject} appearance="primary" intent="warning">Maybe</Button>
             <Button onClick={maybeSelect} appearance="primary" intent="danger">No</Button>
           </div>
         )}
         {user && !user.admin && selectedStudent && (
-          <div className="student-detail__actions">
+          <div className="student-detail__coach-actions">
             <Button onClick={suggestYes} appearance="primary" intent="success">Suggest yes</Button>
-            <Button onClick={suggestNo} appearance="primary" intent="warning">Suggest maybe</Button>
-            <Button onClick={suggestMaybe} appearance="primary" intent="danger">Suggest no</Button>
+            <Button onClick={suggestMaybe} appearance="primary" intent="warning">Suggest maybe</Button>
+            <Button onClick={suggestNo} appearance="primary" intent="danger">Suggest no</Button>
           </div>
         )}
-        {!selectedStudent && 'Select a student from the list to display their information.'}
-        {selectedStudent && (
-          <Pane elevation={2} className="student-detail--infos">
-            <h2>
-              {selectedStudent.firstName} {selectedStudent.lastName}
-            </h2>
-            <div>
-              <h3>Why do you want to join Open Summer of Code? </h3>
-              {selectedStudent.motivation}
-            </div>
-            <div>
-              <h3>Tell us why you think you&apos;ll make a good fit? </h3>
-              {selectedStudent.whyGoodFit}
-            </div>
-            <div>
-              <h3>What skills can you best help your teammates with? </h3>
-              {selectedStudent.bestSkills}
-            </div>
-            <div>
-              <h3>What would you like to learn or do better at Osoc? </h3>
-              {selectedStudent.learnOrDoBetter}
-            </div>
-            <div>
-              <h3>For which role(s) do you want to apply? </h3>
-              <ul>
-                {selectedStudent.roles.map(role => (
-                  <li key={role}>{role}</li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h3>
-                Have you participated in Osoc before? If so, would you like to be a student manager
-                this year?{' '}
-              </h3>
-              {selectedStudent.prevParticipation}
-            </div>
-            <div>
-              <h3>Links</h3>
-              <ul>
-                <li>
-                  <a target="_blank" rel="noopener noreferrer" href={selectedStudent.CV}>
-                    CV
-                  </a>
-                </li>
-                <li>
-                  <a target="_blank" rel="noopener noreferrer" href={selectedStudent.portfolio}>
-                    Portfolio
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </Pane>
-        )}
+        {$studentDetail}
+        {$suggestions}
       </main>
     </div>
   );

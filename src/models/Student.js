@@ -14,11 +14,16 @@ class Student {
 
   no = () => db.collection('students').doc(this.id).update({ status: 'no' });
 
-  incrementYes = () => db.collection('suggestions').doc(this.id);
+  createOrUpdateSuggestion = async (user, exists, status) => {
+    if (!exists) db.collection('suggestions').doc(this.id).set({ [user.displayName]: status });
+    else db.collection('suggestions').doc(this.id).update({ [user.displayName]: status });
+  };
 
-  incrementNo = () => db.collection('suggestions').doc(this.id);
+  suggestYes = (user, exists) => this.createOrUpdateSuggestion(user, exists, 'yes');
 
-  incrementMaybe = () => db.collection('suggestions').doc(this.id);
+  suggestNo = (user, exists) => this.createOrUpdateSuggestion(user, exists, 'no');
+
+  suggestMaybe = (user, exists) => this.createOrUpdateSuggestion(user, exists, 'maybe');
 
   capitalizeName = name => name
     .split(' ')

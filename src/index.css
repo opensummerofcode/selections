@@ -65,14 +65,21 @@ code {
   margin-left: 20%;
 }
 
-.student-detail__actions {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
+.student-detail__admin-actions, .student-detail__coach-actions {
+  position: fixed;
+  top: 3rem;
+  right: 5rem;
   align-items: flex-start;
   display: flex;
   justify-content: space-between;
+}
+
+.student-detail__admin-actions {
   width: 20rem;
+}
+
+.student-detail__coach-actions {
+  width: 35rem;
 }
 
 .student-detail--infos {
