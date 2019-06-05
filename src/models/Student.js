@@ -61,7 +61,14 @@ class Student {
   }
 
   get roles() {
-    return this.answer('VthTuvdWY5U0').choices.labels;
+    return this.answer('VthTuvdWY5U0').choices.labels || [];
+  }
+
+  get customRoles() {
+    const answer = this.answer('VthTuvdWY5U0');
+    const custom = answer.choices.other || [];
+    if (this.roles.length === 0 && custom.length === 0) return [answer.choices.other];
+    return custom;
   }
 
   get prevParticipation() {

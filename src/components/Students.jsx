@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import {
-  Pane, Button, toaster, SearchInput, Switch
+  Pane, Button, toaster, SearchInput, Switch, Badge
 } from 'evergreen-ui';
 import { db } from '../firebase';
 import StudentDetail from './StudentDetail';
@@ -10,6 +10,7 @@ import AuthContext from '../context/auth';
 import Student from '../models/Student';
 
 const Students = ({ history }) => {
+  const [isLoading, setLoadingState] = useState(true);
   const [selectedStudent, selectStudent] = useState(null);
   const [students, setStudents] = useState({});
   const [suggestions, setSuggestions] = useState({});
@@ -26,9 +27,8 @@ const Students = ({ history }) => {
     Copywriter: true,
     'Video editor': true,
     Photographer: true,
-    Other: true
+    other: true
   });
-  const [filterStateIsInclusive, setFilteringState] = useState(true);
 
   const { user } = useContext(AuthContext);
 
@@ -51,6 +51,7 @@ const Students = ({ history }) => {
         });
       });
       setStudents(gotStudents);
+      setLoadingState(false);
     });
     db.collection('suggestions').get().then((snapshot) => {
       let gotSuggestions = {};
@@ -186,6 +187,19 @@ const Students = ({ history }) => {
     );
   };
 
+  const filterByRole = (student) => {
+    const studentHasCustomRoles = student.customRoles.length > 0;
+    const allStandardRoles = Object.keys(roleSwitches);
+    const hasRoles = allStandardRoles.filter((role) => {
+      // if switch is on
+      if (!roleSwitches[role]) return false;
+      if (role === 'other' && studentHasCustomRoles) return true;
+      if (student.roles.includes(role)) return true;
+      return false;
+    });
+    return hasRoles.length > 0;
+  };
+
   const sortByFirstNameThenLastName = (a, b) => {
     if (a.firstName < b.firstName) return -1;
     if (a.firstName > b.firstName) return 1;
@@ -196,10 +210,11 @@ const Students = ({ history }) => {
 
   const $students = Object.keys(students).map(key => students[key])
     .filter(filterBySearchQuery)
+    .filter(filterByRole)
     .sort(sortByFirstNameThenLastName)
     .map(renderStudent);
 
-  if ($students.length === 0) return <p />;
+  if (isLoading) return <p />;
 
   const $studentDetail = renderStudentDetail();
   const $suggestions = renderSuggestions();
@@ -223,6 +238,7 @@ const Students = ({ history }) => {
             </header>
             {$roleSelectors}
           </div>
+          <Badge>{$students.length} results</Badge>
         </Pane>
         <ol className="students__list">
           {$students}

@@ -34,7 +34,7 @@ code {
 }
 
 .filters {
-  height: 35rem;
+  height: 38rem;
   position: fixed;
   top: 0;
   left: 0;
@@ -81,7 +81,7 @@ code {
   top: 0;
   left: 0;
   overflow-y: scroll;
-  margin-top: 35rem;
+  margin-top: 38rem;
   display: flex;
   flex-direction: column;
 }
