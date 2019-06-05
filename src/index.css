@@ -47,15 +47,30 @@ code {
 }
 
 .students__student {
+  display: flex;
   padding: 1.6rem;
-  text-align: left;
   transition: 0.3s background-color ease-in-out;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.students__student__name {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
 }
 
 .students__student:hover {
   background-color: #e6e6e6;
   padding: 1.6rem;
   cursor: pointer;
+}
+
+.students__student__statuses {
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+  text-align: right;
 }
 
 .student-detail {
@@ -75,7 +90,7 @@ code {
 }
 
 .student-detail__admin-actions {
-  width: 20rem;
+  width: 30rem;
 }
 
 .student-detail__coach-actions {
@@ -86,7 +101,7 @@ code {
   padding: 1rem;
 }
 
-.status--yes .students__student {
+.status--yes .students__student, .status--confirmed .students__student {
   background-color: rgba(71, 184, 129, 0.5);
 }
 
@@ -96,4 +111,9 @@ code {
 
 .status--maybe .students__student {
   background-color: rgba(251, 230, 162, 0.5);
+}
+
+.confirmed {
+  font-style: italic;
+  font-size: 1rem;
 }

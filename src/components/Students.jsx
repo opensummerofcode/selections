@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { Pane, Button } from 'evergreen-ui';
+import { Pane, Button, toaster } from 'evergreen-ui';
 import { db } from '../firebase';
 import StudentDetail from './StudentDetail';
 import AuthContext from '../context/auth';
@@ -24,6 +24,7 @@ const Students = ({ history }) => {
           if (!update.metadata.hasPendingWrites) return;
           const newStudent = new Student(update.data());
           setStudents(s => ({ ...s, [newStudent.id]: newStudent }));
+          selectStudent(newStudent);
         });
         db.collection('suggestions').doc(student.id).onSnapshot((update) => {
           if (!update.metadata.hasPendingWrites) return;
@@ -46,6 +47,12 @@ const Students = ({ history }) => {
   const select = () => selectedStudent.yes();
   const reject = () => selectedStudent.maybe();
   const maybeSelect = () => selectedStudent.no();
+  const confirm = () => {
+    if (!selectedStudent.status) {
+      return toaster.danger('A student must have a status before they can be confirmed');
+    }
+    return selectedStudent.confirm();
+  };
 
   const suggestYes = () => (
     selectedStudent.suggestYes(user, suggestions[selectedStudent.id])
@@ -59,11 +66,25 @@ const Students = ({ history }) => {
     selectedStudent.suggestNo(user, suggestions[selectedStudent.id])
   );
 
+  const countSuggestionsOfType = (studentId, type) => {
+    const sug = suggestions[studentId];
+    if (!sug) return 0;
+    return Object.keys(sug).filter(person => sug[person] === type).length;
+  };
+
   const renderStudent = student => (
     <li key={student.id} className={`status--${student.status}`}>
       <button type="button" className="button--seamless" onClick={() => selectStudent(student)}>
         <Pane className="students__student" elevation={2}>
-          {student.firstName} {student.lastName}
+          <div className="students__student__name">
+            <span>{student.firstName} {student.lastName}</span>
+            {student.confirmed && <span className="confirmed">Confirmed</span>}
+          </div>
+          <div className="students__student__statuses">
+            <span>Yes: {countSuggestionsOfType(student.id, 'yes')}</span>
+            <span>Maybe: {countSuggestionsOfType(student.id, 'maybe')}</span>
+            <span>No: {countSuggestionsOfType(student.id, 'no')}</span>
+          </div>
         </Pane>
       </button>
     </li>
@@ -120,6 +141,8 @@ const Students = ({ history }) => {
     .sort((a, b) => {
       if (a.firstName < b.firstName) return -1;
       if (a.firstName > b.firstName) return 1;
+      if (a.lastName < b.lastName) return -1;
+      if (a.lastName > b.lastName) return 1;
       return 0;
     })
     .map(renderStudent);
@@ -133,14 +156,20 @@ const Students = ({ history }) => {
     <div className="container">
       <ol className="students">{$students}</ol>
       <main className="student-detail">
-        {user && user.admin && selectedStudent && (
+        {user && selectedStudent && selectedStudent.confirmed && (
+          <div className="student-detail__coach-actions">
+            {selectedStudent.firstName} was notified via email
+          </div>
+        )}
+        {user && user.admin && selectedStudent && !selectedStudent.confirmed && (
           <div className="student-detail__admin-actions">
+            <Button onClick={confirm} appearance="primary" intent="success">Confirm</Button>
             <Button onClick={select} appearance="primary" intent="success">Yes</Button>
             <Button onClick={reject} appearance="primary" intent="warning">Maybe</Button>
             <Button onClick={maybeSelect} appearance="primary" intent="danger">No</Button>
           </div>
         )}
-        {user && !user.admin && selectedStudent && (
+        {user && !user.admin && selectedStudent && !selectedStudent.confirmed && (
           <div className="student-detail__coach-actions">
             <Button onClick={suggestYes} appearance="primary" intent="success">Suggest yes</Button>
             <Button onClick={suggestMaybe} appearance="primary" intent="warning">Suggest maybe</Button>
