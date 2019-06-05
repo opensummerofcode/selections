@@ -34,7 +34,7 @@ code {
 }
 
 .filters {
-  height: 38rem;
+  height: 50rem;
   position: fixed;
   top: 0;
   left: 0;
@@ -45,7 +45,7 @@ code {
   box-sizing: border-box;
 }
 
-.filters__role-select {
+.filters__role-select, .filters__status-select  {
   width: 100%;
   margin-top: 1rem;
 }
@@ -58,11 +58,11 @@ code {
   margin-bottom: 2rem;
 }
 
-.filters__role-select h5 {
+.filters__role-select h5, .filters__status-select h5 {
   margin: 0;
 }
 
-.filters__role-select__role {
+.filters__role-select__role, .filters__status-select__status {
   display: flex;
   width: 100%;
   justify-content: space-between;
@@ -81,7 +81,7 @@ code {
   top: 0;
   left: 0;
   overflow-y: scroll;
-  margin-top: 38rem;
+  margin-top: 50rem;
   display: flex;
   flex-direction: column;
 }

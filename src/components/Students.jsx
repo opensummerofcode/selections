@@ -29,6 +29,12 @@ const Students = ({ history }) => {
     Photographer: true,
     other: true
   });
+  const [statusSwitches, setStatusSwitchState] = useState({
+    Yes: true,
+    Maybe: true,
+    No: true,
+    Unassigned: true
+  });
 
   const { user } = useContext(AuthContext);
 
@@ -92,9 +98,10 @@ const Students = ({ history }) => {
     return Object.keys(sug).filter(person => sug[person] === type).length;
   };
 
-  const toggleRoleSwitch = (value, role) => {
-    setRoleSwitchState({ ...roleSwitches, [role]: value });
-  };
+  const toggleStatusSwitch = (value, status) => (
+    setStatusSwitchState({ ...statusSwitches, [status]: value })
+  );
+  const toggleRoleSwitch = (value, role) => setRoleSwitchState({ ...roleSwitches, [role]: value });
 
   const selectAllRoles = () => {
     const switchStates = { ...roleSwitches };
@@ -128,6 +135,16 @@ const Students = ({ history }) => {
       <Switch
         checked={roleSwitches[role]}
         onChange={e => toggleRoleSwitch(e.target.checked, role)}
+      />
+    </div>
+  ));
+
+  const renderStatusSelectors = () => Object.keys(statusSwitches).map(status => (
+    <div className="filters__status-select__status" key={status}>
+      <span>{status}</span>
+      <Switch
+        checked={statusSwitches[status]}
+        onChange={e => toggleStatusSwitch(e.target.checked, status)}
       />
     </div>
   ));
@@ -220,6 +237,7 @@ const Students = ({ history }) => {
   const $studentDetail = renderStudentDetail();
   const $suggestions = renderSuggestions();
   const $roleSelectors = renderRoleSelectors();
+  const $statusSelectors = renderStatusSelectors();
   return (
     <div className="container">
       <div className="students">
@@ -238,6 +256,10 @@ const Students = ({ history }) => {
               <Button height={24} appearance="default" onClick={selectAllRoles}>Select all</Button>
             </header>
             {$roleSelectors}
+          </div>
+          <div className="filters__status-select">
+            <header><h5>Select status</h5></header>
+            {$statusSelectors}
           </div>
           <Badge>{$students.length} results</Badge>
         </Pane>
