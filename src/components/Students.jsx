@@ -28,17 +28,13 @@ const Students = ({ history }) => {
     });
   }, []);
 
-  const select = () => {
-    selectedStudent.yes();
-  };
+  const select = () => selectedStudent.yes();
+  const reject = () => selectedStudent.maybe();
+  const maybeSelect = () => selectedStudent.no();
 
-  const reject = () => {
-    selectedStudent.maybe();
-  };
-
-  const maybeSelect = () => {
-    selectedStudent.no();
-  };
+  const suggestYes = () => selectedStudent.incrementYes();
+  const suggestMaybe = () => selectedStudent.incrementMaybe();
+  const suggestNo = () => selectedStudent.incrementNo();
 
   const renderStudent = student => (
     <li key={student.id} className={`status--${student.status}`}>
@@ -65,6 +61,8 @@ const Students = ({ history }) => {
     })
     .map(renderStudent);
 
+  if ($students.length === 0) return <p />;
+
   return (
     <div className="container">
       <ol className="students">{$students}</ol>
@@ -74,6 +72,13 @@ const Students = ({ history }) => {
             <Button onClick={select} appearance="primary" intent="success">Yes</Button>
             <Button onClick={reject} appearance="primary" intent="warning">Maybe</Button>
             <Button onClick={maybeSelect} appearance="primary" intent="danger">No</Button>
+          </div>
+        )}
+        {user && !user.admin && selectedStudent && (
+          <div className="student-detail__actions">
+            <Button onClick={suggestYes} appearance="primary" intent="success">Suggest yes</Button>
+            <Button onClick={suggestNo} appearance="primary" intent="warning">Suggest maybe</Button>
+            <Button onClick={suggestMaybe} appearance="primary" intent="danger">Suggest no</Button>
           </div>
         )}
         {!selectedStudent && 'Select a student from the list to display their information.'}

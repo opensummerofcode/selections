@@ -14,6 +14,12 @@ class Student {
 
   no = () => db.collection('students').doc(this.id).update({ status: 'no' });
 
+  incrementYes = () => db.collection('suggestions').doc(this.id);
+
+  incrementNo = () => db.collection('suggestions').doc(this.id);
+
+  incrementMaybe = () => db.collection('suggestions').doc(this.id);
+
   capitalizeName = name => name
     .split(' ')
     .map(s => s.charAt(0).toUpperCase() + s.substring(1))
