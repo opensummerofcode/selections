@@ -160,3 +160,27 @@ code {
   font-style: italic;
   font-size: 1rem;
 }
+
+.pending {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 50rem;
+  height: 30rem;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  margin-top: -15rem;
+  margin-left: -25rem;
+}
+
+.logo-container {
+  width: 20rem;
+}
+
+.logo-container img {
+  width: 100%;
+}
+

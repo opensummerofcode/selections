@@ -28,6 +28,7 @@ const App = () => {
           return setIsLoading(false);
         })
         .catch((err) => {
+          window.location = '/';
           console.error(err);
           setIsLoading(false);
         });
