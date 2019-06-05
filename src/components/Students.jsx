@@ -72,6 +72,7 @@ const Students = ({ history }) => {
     }
     return selectedStudent.confirm();
   };
+  const unconfirm = () => selectedStudent.unconfirm();
 
   const suggestYes = () => (
     selectedStudent.suggestYes(user, suggestions[selectedStudent.id])
@@ -248,6 +249,7 @@ const Students = ({ history }) => {
         {user && selectedStudent && selectedStudent.confirmed && (
           <div className="student-detail__coach-actions">
             {selectedStudent.firstName} was notified via email
+            <Button onClick={unconfirm} appearance="primary" intent="danger">Unconfirm</Button>
           </div>
         )}
         {user && user.admin && selectedStudent && !selectedStudent.confirmed && (

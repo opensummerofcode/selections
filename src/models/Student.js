@@ -16,6 +16,8 @@ class Student {
 
   confirm = () => db.collection('students').doc(this.id).update({ confirmed: true });
 
+  unconfirm = () => db.collection('students').doc(this.id).update({ confirmed: false });
+
   createOrUpdateSuggestion = async (user, exists, status) => {
     if (!exists) db.collection('suggestions').doc(this.id).set({ [user.displayName]: status });
     else db.collection('suggestions').doc(this.id).update({ [user.displayName]: status });
