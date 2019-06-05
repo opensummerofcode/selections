@@ -218,6 +218,13 @@ const Students = ({ history }) => {
     return hasRoles.length > 0;
   };
 
+  const filterByStatus = student => Object.keys(statusSwitches).filter((status) => {
+    if (!statusSwitches[status]) return false;
+    if (status === 'Unassigned' && !student.status) return true;
+    if (student.status === status.toLowerCase()) return true;
+    return false;
+  }).length > 0;
+
   const sortByFirstNameThenLastName = (a, b) => {
     if (a.firstName < b.firstName) return -1;
     if (a.firstName > b.firstName) return 1;
@@ -229,6 +236,7 @@ const Students = ({ history }) => {
   const $students = Object.keys(students).map(key => students[key])
     .filter(filterBySearchQuery)
     .filter(filterByRole)
+    .filter(filterByStatus)
     .sort(sortByFirstNameThenLastName)
     .map(renderStudent);
 
