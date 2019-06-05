@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { Pane, Button } from 'evergreen-ui';
 import { db } from '../firebase';
+import StudentDetail from './StudentDetail';
 import AuthContext from '../context/auth';
 import Student from '../models/Student';
 
@@ -73,62 +74,13 @@ const Students = ({ history }) => {
       return <p>Select a student from the list to display their information.</p>;
     }
     return (
-      <Pane elevation={2} className="student-detail--infos">
-        <h2>
-          {selectedStudent.firstName} {selectedStudent.lastName}
-        </h2>
-        <div>
-          <h3>Why do you want to join Open Summer of Code? </h3>
-          {selectedStudent.motivation}
-        </div>
-        <div>
-          <h3>Tell us why you think you&apos;ll make a good fit? </h3>
-          {selectedStudent.whyGoodFit}
-        </div>
-        <div>
-          <h3>What skills can you best help your teammates with? </h3>
-          {selectedStudent.bestSkills}
-        </div>
-        <div>
-          <h3>What would you like to learn or do better at Osoc? </h3>
-          {selectedStudent.learnOrDoBetter}
-        </div>
-        <div>
-          <h3>For which role(s) do you want to apply? </h3>
-          <ul>
-            {selectedStudent.roles.map(role => (
-              <li key={role}>{role}</li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <h3>
-            Have you participated in Osoc before? If so, would you like to be a student manager
-            this year?{' '}
-          </h3>
-          {selectedStudent.prevParticipation}
-        </div>
-        <div>
-          <h3>Links</h3>
-          <ul>
-            <li>
-              <a target="_blank" rel="noopener noreferrer" href={selectedStudent.CV}>
-                CV
-              </a>
-            </li>
-            <li>
-              <a target="_blank" rel="noopener noreferrer" href={selectedStudent.portfolio}>
-                Portfolio
-              </a>
-            </li>
-          </ul>
-        </div>
-      </Pane>
+      <StudentDetail student={selectedStudent} />
     );
   };
 
   const renderSuggestionsPerType = (type) => {
     const suggestionsForStudent = suggestions[selectedStudent.id];
+    if (!suggestionsForStudent) return [];
     return Object.keys(suggestionsForStudent)
       .filter(person => suggestionsForStudent[person] === type)
       .map(person => <li key={`suggestion-${type}-${person}`}>{person}</li>);
