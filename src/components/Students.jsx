@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import {
-  Pane, Button, toaster, SearchInput
+  Pane, Button, toaster, SearchInput, Switch
 } from 'evergreen-ui';
 import { db } from '../firebase';
 import StudentDetail from './StudentDetail';
@@ -14,6 +14,21 @@ const Students = ({ history }) => {
   const [students, setStudents] = useState({});
   const [suggestions, setSuggestions] = useState({});
   const [searchQuery, updateSearchQuery] = useState('');
+  const [roleSwitches, setRoleSwitchState] = useState({
+    'Front-end developer': true,
+    'Back-end developer': true,
+    'UX designer': true,
+    'UI designer': true,
+    'Graphic designer': true,
+    'Business modeler': true,
+    Storyteller: true,
+    Marketer: true,
+    Copywriter: true,
+    'Video editor': true,
+    Photographer: true,
+    Other: true
+  });
+  const [filterStateIsInclusive, setFilteringState] = useState(true);
 
   const { user } = useContext(AuthContext);
 
@@ -75,6 +90,18 @@ const Students = ({ history }) => {
     return Object.keys(sug).filter(person => sug[person] === type).length;
   };
 
+  const toggleRoleSwitch = (value, role) => {
+    setRoleSwitchState({ ...roleSwitches, [role]: value });
+  };
+
+  const selectAllRoles = () => {
+    const switchStates = { ...roleSwitches };
+    Object.keys(switchStates).forEach((role) => {
+      switchStates[role] = true;
+    });
+    setRoleSwitchState({ ...switchStates });
+  };
+
   const renderStudent = student => (
     <li key={student.id} className={`status--${student.status}`}>
       <button type="button" className="button--seamless" onClick={() => selectStudent(student)}>
@@ -92,6 +119,16 @@ const Students = ({ history }) => {
       </button>
     </li>
   );
+
+  const renderRoleSelectors = () => Object.keys(roleSwitches).map(role => (
+    <div className="filters__role-select__role" key={role}>
+      <span>{role}</span>
+      <Switch
+        checked={roleSwitches[role]}
+        onChange={e => toggleRoleSwitch(e.target.checked, role)}
+      />
+    </div>
+  ));
 
   const renderStudentDetail = () => {
     if (!selectedStudent) {
@@ -119,9 +156,7 @@ const Students = ({ history }) => {
       return (
         <article key={type}>
           <h4>{type}:</h4>
-          <ul>
-            {$result}
-          </ul>
+          <ul>{$result}</ul>
         </article>
       );
     });
@@ -165,7 +200,7 @@ const Students = ({ history }) => {
 
   const $studentDetail = renderStudentDetail();
   const $suggestions = renderSuggestions();
-
+  const $roleSelectors = renderRoleSelectors();
   return (
     <div className="container">
       <div className="students">
@@ -179,7 +214,11 @@ const Students = ({ history }) => {
             />
           </div>
           <div className="filters__role-select">
-
+            <header>
+              <h5>Select roles</h5>
+              <Button height={24} appearance="default" onClick={selectAllRoles}>Select all</Button>
+            </header>
+            {$roleSelectors}
           </div>
         </Pane>
         <ol className="students__list">
