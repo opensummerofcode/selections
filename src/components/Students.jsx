@@ -1,4 +1,6 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, {
+  useState, useContext, useEffect, useReducer
+} from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import {
@@ -10,7 +12,7 @@ import AuthContext from '../context/auth';
 import Student from '../models/Student';
 
 const Students = ({ history }) => {
-  const [isLoading, setLoadingState] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedStudent, selectStudent] = useState(null);
   const [students, setStudents] = useState({});
   const [suggestions, setSuggestions] = useState({});
@@ -40,36 +42,27 @@ const Students = ({ history }) => {
 
   useEffect(() => {
     if (!user || user.pending || !('pending' in user)) return;
-    db.collection('students').get().then((snapshot) => {
-      const gotStudents = {};
-      snapshot.forEach((doc) => {
-        const student = new Student(doc.data());
-        gotStudents[student.id] = student;
-        db.collection('students').doc(student.id).onSnapshot((update) => {
-          const data = update.data();
-          console.log(data.key, selectedStudent.id);
-          if (!update.metadata.hasPendingWrites) return;
-          const newStudent = new Student(update.data());
-          setStudents(s => ({ ...s, [newStudent.id]: newStudent }));
-          selectStudent(newStudent);
-        });
-        db.collection('suggestions').doc(student.id).onSnapshot((update) => {
-          const data = update.data();
-          if (JSON.stringify(data) === JSON.stringify(suggestions[update.key])) return;
-          const newSuggestion = data;
-          setSuggestions(s => ({ ...s, [student.id]: newSuggestion }));
-        });
+    db.collection('students').onSnapshot((snapshot) => {
+      const data = snapshot.docChanges();
+      const newStudents = data.reduce((all, s) => {
+        const ref = s.doc.data();
+        const student = new Student(ref);
+        all[student.id] = student;
+        return all;
+      }, {});
+      setStudents((s) => {
+        if (selectedStudent) selectStudent(newStudents[selectedStudent.id]);
+        return { ...s, ...newStudents };
       });
-      setStudents(gotStudents);
-      setLoadingState(false);
+      setIsLoading(false);
     });
-    db.collection('suggestions').get().then((snapshot) => {
-      let gotSuggestions = {};
-      snapshot.forEach((doc) => {
-        const suggestion = doc.data();
-        gotSuggestions = { ...gotSuggestions, [doc.id]: suggestion };
-      });
-      setSuggestions(gotSuggestions);
+    db.collection('suggestions').onSnapshot((snapshot) => {
+      const data = snapshot.docChanges();
+      const newSuggestions = data.reduce((all, s) => {
+        all[s.doc.id] = s.doc.data();
+        return all;
+      }, {});
+      setSuggestions(s => ({ ...s, ...newSuggestions }));
     });
   }, [user]);
 
@@ -237,14 +230,14 @@ const Students = ({ history }) => {
     return 0;
   };
 
+  if (isLoading) return <p />;
+
   const $students = Object.keys(students).map(key => students[key])
     .filter(filterBySearchQuery)
     .filter(filterByRole)
     .filter(filterByStatus)
     .sort(sortByFirstNameThenLastName)
     .map(renderStudent);
-
-  if (isLoading) return <p />;
 
   const $studentDetail = renderStudentDetail();
   const $suggestions = renderSuggestions();

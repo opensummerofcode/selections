@@ -79,9 +79,8 @@ code {
   height: 100%;
   position: fixed;
   top: 0;
-  left: 0;
+  left: 20%;
   overflow-y: scroll;
-  margin-top: 50rem;
   display: flex;
   flex-direction: column;
 }
@@ -119,9 +118,9 @@ code {
 
 .student-detail {
   padding: 2rem;
-  width: 80%;
+  width: 55%;
   position: relative;
-  margin-left: 20%;
+  margin-left: 40%;
 }
 
 .student-detail__admin-actions, .student-detail__coach-actions {
