@@ -174,26 +174,29 @@ const Students = ({ history }) => {
     return <p />;
   }
 
-  const $students = Object.keys(students)
-    .map(key => students[key])
-    .filter((student) => {
-      const query = searchQuery.toLowerCase();
-      const firstName = student.firstName.toLowerCase();
-      const lastName = student.lastName.toLowerCase();
-      return (
-        firstName.includes(query)
-        || lastName.includes(query)
-        || `${firstName} ${lastName}`.includes(query)
-        || `${lastName} ${firstName}`.includes(query)
-      );
-    })
-    .sort((a, b) => {
-      if (a.firstName < b.firstName) return -1;
-      if (a.firstName > b.firstName) return 1;
-      if (a.lastName < b.lastName) return -1;
-      if (a.lastName > b.lastName) return 1;
-      return 0;
-    })
+  const filterBySearchQuery = (student) => {
+    const query = searchQuery.toLowerCase();
+    const firstName = student.firstName.toLowerCase();
+    const lastName = student.lastName.toLowerCase();
+    return (
+      firstName.includes(query)
+      || lastName.includes(query)
+      || `${firstName} ${lastName}`.includes(query)
+      || `${lastName} ${firstName}`.includes(query)
+    );
+  };
+
+  const sortByFirstNameThenLastName = (a, b) => {
+    if (a.firstName < b.firstName) return -1;
+    if (a.firstName > b.firstName) return 1;
+    if (a.lastName < b.lastName) return -1;
+    if (a.lastName > b.lastName) return 1;
+    return 0;
+  };
+
+  const $students = Object.keys(students).map(key => students[key])
+    .filter(filterBySearchQuery)
+    .sort(sortByFirstNameThenLastName)
     .map(renderStudent);
 
   if ($students.length === 0) return <p />;
