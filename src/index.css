@@ -33,7 +33,19 @@ code {
   height: 100%;
 }
 
-.students {
+.filters {
+  height: 10rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 20%;
+  z-index: 10;
+  background: #fff;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.students__list {
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -44,6 +56,13 @@ code {
   top: 0;
   left: 0;
   overflow-y: scroll;
+  margin-top: 10rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.students__list li {
+  width: 100%;
 }
 
 .students__student {
@@ -75,7 +94,7 @@ code {
 
 .student-detail {
   padding: 2rem;
-  width: 75%;
+  width: 80%;
   position: relative;
   margin-left: 20%;
 }

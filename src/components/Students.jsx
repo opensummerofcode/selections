@@ -1,7 +1,9 @@
 import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { Pane, Button, toaster } from 'evergreen-ui';
+import {
+  Pane, Button, toaster, SearchInput
+} from 'evergreen-ui';
 import { db } from '../firebase';
 import StudentDetail from './StudentDetail';
 import AuthContext from '../context/auth';
@@ -11,6 +13,7 @@ const Students = ({ history }) => {
   const [selectedStudent, selectStudent] = useState(null);
   const [students, setStudents] = useState({});
   const [suggestions, setSuggestions] = useState({});
+  const [searchQuery, updateSearchQuery] = useState('');
 
   const { user } = useContext(AuthContext);
 
@@ -75,7 +78,7 @@ const Students = ({ history }) => {
   const renderStudent = student => (
     <li key={student.id} className={`status--${student.status}`}>
       <button type="button" className="button--seamless" onClick={() => selectStudent(student)}>
-        <Pane className="students__student" elevation={2}>
+        <Pane className="students__student" elevation={1}>
           <div className="students__student__name">
             <span>{student.firstName} {student.lastName}</span>
             {student.confirmed && <span className="confirmed">Confirmed</span>}
@@ -138,6 +141,17 @@ const Students = ({ history }) => {
 
   const $students = Object.keys(students)
     .map(key => students[key])
+    .filter((student) => {
+      const query = searchQuery.toLowerCase();
+      const firstName = student.firstName.toLowerCase();
+      const lastName = student.lastName.toLowerCase();
+      return (
+        firstName.includes(query)
+        || lastName.includes(query)
+        || `${firstName} ${lastName}`.includes(query)
+        || `${lastName} ${firstName}`.includes(query)
+      );
+    })
     .sort((a, b) => {
       if (a.firstName < b.firstName) return -1;
       if (a.firstName > b.firstName) return 1;
@@ -154,7 +168,24 @@ const Students = ({ history }) => {
 
   return (
     <div className="container">
-      <ol className="students">{$students}</ol>
+      <div className="students">
+        <Pane className="filters" elevation={1}>
+          <div className="filters__search">
+            <SearchInput
+              placeholder="Filter student names..."
+              onChange={e => updateSearchQuery(e.target.value)}
+              value={searchQuery}
+              width="100%"
+            />
+          </div>
+          <div className="filters__role-select">
+
+          </div>
+        </Pane>
+        <ol className="students__list">
+          {$students}
+        </ol>
+      </div>
       <main className="student-detail">
         {user && selectedStudent && selectedStudent.confirmed && (
           <div className="student-detail__coach-actions">
