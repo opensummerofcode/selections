@@ -88,6 +88,10 @@ class Student {
   get portfolio() {
     return this.answer('GbbykEq5bD9Z').url;
   }
+
+  get github() {
+    return this.answer('vbaUhTm2HQlF').url;
+  }
 }
 
 export default Student;

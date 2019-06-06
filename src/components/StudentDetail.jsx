@@ -50,6 +50,13 @@ const StudentDetail = ({ student }) => (
             Portfolio
           </a>
         </li>
+        { student.github && (
+          <li>
+            <a target="_blank" rel="noopener noreferrer" href={student.github}>
+              GitHub
+            </a>
+          </li>
+        )}
       </ul>
     </div>
   </Pane>
