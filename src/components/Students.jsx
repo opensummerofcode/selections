@@ -14,6 +14,7 @@ const Students = ({ history }) => {
   const [selectedStudent, selectStudent] = useState(null);
   const [students, setStudents] = useState({});
   const [suggestions, setSuggestions] = useState({});
+  const [projects, setProjects] = useState({});
   const [searchQuery, updateSearchQuery] = useState('');
   const [roleSwitches, setRoleSwitchState] = useState({
     'Front-end developer': true,
@@ -33,6 +34,7 @@ const Students = ({ history }) => {
     Yes: true,
     Maybe: true,
     No: true,
+    Confirmed: true,
     Unassigned: true
   });
 
@@ -112,7 +114,7 @@ const Students = ({ history }) => {
         <Pane className="students__student" elevation={1}>
           <div className="students__student__name">
             <span>{student.firstName} {student.lastName}</span>
-            {student.confirmed && <span className="confirmed">Confirmed</span>}
+            {student.confirmed && <span className="confirmed">Email sent</span>}
           </div>
           <div className="students__student__statuses">
             <span>Yes: {countSuggestionsOfType(student.id, 'yes')}</span>
@@ -215,6 +217,7 @@ const Students = ({ history }) => {
 
   const filterByStatus = student => Object.keys(statusSwitches).filter((status) => {
     if (!statusSwitches[status]) return false;
+    if (status === 'Confirmed' && student.confirmed) return true;
     if (status === 'Unassigned' && !student.status) return true;
     if (student.status === status.toLowerCase()) return true;
     return false;
@@ -241,6 +244,7 @@ const Students = ({ history }) => {
   const $suggestions = renderSuggestions();
   const $roleSelectors = renderRoleSelectors();
   const $statusSelectors = renderStatusSelectors();
+
   return (
     <div className="container">
       <div className="students">
