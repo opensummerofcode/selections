@@ -205,7 +205,7 @@ a:hover {
 }
 
 .project {
-  width: 30rem;
+  width: 32rem;
   height: 40rem;
   padding: 1rem;
 }
@@ -224,6 +224,7 @@ a:hover {
 
 .project__title {
   margin: 0 0 .8rem 0;
+  font-size: 1.6rem;
 }
 
 .project__partner {
@@ -244,4 +245,8 @@ a:hover {
 
 .project__template-link {
   align-self: flex-end;
+}
+
+.project__coach-disclaimer {
+  font-size: 1.4rem;
 }

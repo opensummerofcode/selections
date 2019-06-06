@@ -9,7 +9,6 @@ import StudentDetail from './StudentDetail';
 import AuthContext from '../context/auth';
 import Student from '../models/Student';
 import Project from '../models/Project';
-import tempProjects from './projects';
 
 const Students = ({ history }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -196,8 +195,19 @@ const Students = ({ history }) => {
     );
   };
 
-  const renderProject = (p) => {
-    const project = new Project(2, p);
+  const renderCoachesList = (project) => {
+    if (project.coaches.length === 0) return <p className="project__coach-disclaimer">No coaches yet</p>;
+    return (
+      project.coaches
+        .sort(a => (a.type === 'Lead' ? -1 : 1))
+        .map(coach => (
+          <li><Badge color={coach.type === 'Lead' ? 'blue' : 'neutral'}>{coach.name}</Badge></li>
+        ))
+    );
+  };
+
+  const renderProject = (project) => {
+    const $coaches = renderCoachesList(project);
     return (
       <Pane className="project" elevation={2}>
         <header className="project__header">
@@ -205,13 +215,7 @@ const Students = ({ history }) => {
           <div className="project__details">
             <span className="project__partner">{project.partner}</span>
             <ul className="project__coaches">
-              {project.coach.length > 0 && (
-                project.coach
-                  .sort(a => (a.type === 'Lead' ? -1 : 1))
-                  .map(coach => (
-                    <li><Badge color={coach.type === 'Lead' ? 'blue' : 'neutral'}>{coach.name}</Badge></li>
-                  ))
-              )}
+              {$coaches}
             </ul>
             {project.template && <a href={project.template} className="project__template-link" rel="noopener noreferrer" target="_blank">View template</a>}
           </div>
@@ -279,8 +283,10 @@ const Students = ({ history }) => {
     .sort(sortByFirstNameThenLastName)
     .map(renderStudent);
 
-  //const $projects = Object.keys(projects).map(key => renderProject(projects[key]));
-  const $projects = tempProjects.map(renderProject);
+  const $projects = Object.keys(projects).map(key => projects[key])
+    .sort((a, b) => a.order - b.order)
+    .map(renderProject);
+
   const $studentDetail = renderStudentDetail();
   const $suggestions = renderSuggestions();
   const $roleSelectors = renderRoleSelectors();
