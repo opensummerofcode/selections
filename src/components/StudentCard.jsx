@@ -11,15 +11,16 @@ const collect = (connect, monitor) => ({
 
 const beginDrag = props => ({ ...props });
 
-const endDrag = (props, monitor, component) => {
+const endDrag = (props, monitor) => {
   if (!monitor.didDrop()) return;
 
   const { student } = monitor.getItem();
   const project = monitor.getDropResult();
+  project.assign(student);
 };
 
 const StudentCard = ({
-  student, countSuggestionsOfType, selectStudent, isDragging, connectDragSource
+  student, countSuggestionsOfType, selectStudent, connectDragSource
 }) => connectDragSource(
   <li className={`status--${student.status}`}>
     <button type="button" className="button--seamless" onClick={() => selectStudent(student)}>

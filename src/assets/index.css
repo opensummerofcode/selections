@@ -208,6 +208,7 @@ a:hover {
   width: 32rem;
   height: 40rem;
   padding: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .project__header {
@@ -251,6 +252,33 @@ a:hover {
   font-size: 1.4rem;
 }
 
+.project__students__student {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.project__students__student > div {
+  display: flex;
+  flex-flow:column;
+  width: 100%;
+}
+
+.project__students__student > div ul {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  flex-flow: row;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.project__students__student > div ul li {
+  margin: .2rem;
+  list-style-type: none;
+}
+
 .dropping {
-  background-color: rgba(16, 112, 202, .6);
+  background-color: rgba(16, 112, 202, .2);
 }

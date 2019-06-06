@@ -121,8 +121,6 @@ const Students = ({ history }) => {
     setRoleSwitchState({ ...switchStates });
   };
 
-  const assignStudentToProject = () => {};
-
   const renderStudent = student => (
     <StudentCard
       key={student.id}
@@ -132,7 +130,9 @@ const Students = ({ history }) => {
     />
   );
 
-  const renderProject = project => <ProjectCard key={project.id} project={project} />;
+  const renderProject = project => (
+    <ProjectCard key={project.id} students={students} project={project} />
+  );
 
   const renderRoleSelectors = () => Object.keys(roleSwitches).map(role => (
     <div className="filters__role-select__role" key={role}>
