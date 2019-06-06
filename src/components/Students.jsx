@@ -40,7 +40,7 @@ const Students = ({ history }) => {
     'Emailed (status is final)': true,
     'No status': true
   });
-  const [projectsTabIsActive, setProjectTabVisibility] = useState(true);
+  const [projectsTabIsActive, setProjectTabVisibility] = useState(false);
 
   const { user, authFailed } = useContext(AuthContext);
 

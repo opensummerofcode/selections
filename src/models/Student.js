@@ -90,7 +90,8 @@ class Student {
   }
 
   get github() {
-    return this.answer('vbaUhTm2HQlF').url || null;
+    if (!this.answer('vbaUhTm2HQlF')) return null;
+    return this.answer('vbaUhTm2HQlF').url;
   }
 }
 
