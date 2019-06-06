@@ -36,6 +36,10 @@ class Student {
 
   answer = id => this.answers.find(a => a.field.id === id);
 
+  setAssignedStatus = (status) => {
+    this.assigned = status;
+  }
+
   get firstName() {
     const name = this.answers[0].text.trim().toLowerCase();
     return this.capitalizeName(name);

@@ -68,16 +68,24 @@ const Students = ({ history }) => {
       }, {});
       setSuggestions(s => ({ ...s, ...newSuggestions }));
     });
+  }, [user]);
+
+  useEffect(() => {
+    if (isLoading) return;
     db.collection('projects').onSnapshot((snapshot) => {
       const data = snapshot.docChanges();
       const newProjects = data.reduce((all, s) => {
         const { id } = s.doc;
-        all[id] = new Project(id, s.doc.data());
+        const project = new Project(id, s.doc.data());
+        project.assignedStudents.forEach((studentId) => {
+          students[studentId].setAssignedStatus(true);
+        });
+        all[id] = project;
         return all;
       }, {});
       setProjects(p => ({ ...p, ...newProjects }));
     });
-  }, [user]);
+  }, [user, isLoading]);
 
   const select = () => selectedStudent.yes();
   const reject = () => selectedStudent.maybe();
@@ -244,6 +252,13 @@ const Students = ({ history }) => {
   const $students = Object.keys(students).map(key => students[key])
     .filter(filterBySearchQuery)
     .filter(filterByRole)
+    .filter((student) => {
+      if (projectsTabIsActive && (student.status === 'yes' || student.status === 'maybe') && !student.assigned) {
+        return true;
+      }
+      if (!projectsTabIsActive) return true;
+      return false;
+    })
     .filter(filterByStatus)
     .sort(sortByFirstNameThenLastName)
     .map(renderStudent);

@@ -41,6 +41,12 @@ const Project = ({
     );
   };
 
+  const removeStudent = (studentId) => {
+    project.unassign(studentId).then(() => {
+      students[studentId].setAssignedStatus(false);
+    });
+  };
+
   const renderRole = role => (
     <li key={role}>
       <Badge>{role}</Badge>
@@ -56,7 +62,7 @@ const Project = ({
           <span>{student.firstName} {student.lastName}</span>
           <ul>{$roles}</ul>
         </div>
-        <IconButton icon="cross" intent="danger" height={24} onClick={() => project.unassign(studentId)} />
+        <IconButton icon="cross" intent="danger" height={24} onClick={() => removeStudent(studentId)} />
       </article>
     );
   };

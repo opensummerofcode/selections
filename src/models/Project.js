@@ -16,7 +16,7 @@ class Project {
   unassign = (studentId) => {
     const assignedStudents = [...this.assignedStudents];
     const index = assignedStudents.indexOf(studentId);
-    if (index) assignedStudents.splice(index, 1);
+    if (index !== -1) assignedStudents.splice(index, 1);
     return db.collection('projects').doc(this.id).update({ assignedStudents });
   }
 }
