@@ -6,6 +6,8 @@ import {
 } from 'evergreen-ui';
 import { db } from '../firebase';
 import StudentDetail from './StudentDetail';
+import StudentCard from './StudentCard';
+import ProjectCard from './ProjectCard';
 import AuthContext from '../context/auth';
 import Student from '../models/Student';
 import Project from '../models/Project';
@@ -119,23 +121,18 @@ const Students = ({ history }) => {
     setRoleSwitchState({ ...switchStates });
   };
 
+  const assignStudentToProject = () => {};
+
   const renderStudent = student => (
-    <li key={student.id} className={`status--${student.status}`}>
-      <button type="button" className="button--seamless" onClick={() => selectStudent(student)}>
-        <Pane className="students__student" elevation={1}>
-          <div className="students__student__name">
-            <span>{student.firstName} {student.lastName}</span>
-            {student.confirmed && <span className="confirmed">Email sent</span>}
-          </div>
-          <div className="students__student__statuses">
-            <span>Yes: {countSuggestionsOfType(student.id, 'yes')}</span>
-            <span>Maybe: {countSuggestionsOfType(student.id, 'maybe')}</span>
-            <span>No: {countSuggestionsOfType(student.id, 'no')}</span>
-          </div>
-        </Pane>
-      </button>
-    </li>
+    <StudentCard
+      key={student.id}
+      countSuggestionsOfType={countSuggestionsOfType}
+      student={student}
+      selectStudent={selectStudent}
+    />
   );
+
+  const renderProject = project => <ProjectCard key={project.id} project={project} />;
 
   const renderRoleSelectors = () => Object.keys(roleSwitches).map(role => (
     <div className="filters__role-select__role" key={role}>
@@ -192,38 +189,6 @@ const Students = ({ history }) => {
         <h3>Suggestions</h3>
         {$suggestions}
       </div>
-    );
-  };
-
-  const renderCoachesList = (project) => {
-    if (project.coaches.length === 0) return <p className="project__coach-disclaimer">No coaches yet</p>;
-    return (
-      project.coaches
-        .sort(a => (a.type === 'Lead' ? -1 : 1))
-        .map(coach => (
-          <li><Badge color={coach.type === 'Lead' ? 'blue' : 'neutral'}>{coach.name}</Badge></li>
-        ))
-    );
-  };
-
-  const renderProject = (project) => {
-    const $coaches = renderCoachesList(project);
-    return (
-      <Pane className="project" elevation={2}>
-        <header className="project__header">
-          <h3 className="project__title">{project.name}</h3>
-          <div className="project__details">
-            <span className="project__partner">{project.partner}</span>
-            <ul className="project__coaches">
-              {$coaches}
-            </ul>
-            {project.template && <a href={project.template} className="project__template-link" rel="noopener noreferrer" target="_blank">View template</a>}
-          </div>
-        </header>
-        <div className="project__students">
-          Drag students here
-        </div>
-      </Pane>
     );
   };
 

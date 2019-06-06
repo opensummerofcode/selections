@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import HTML5Backend from 'react-dnd-html5-backend';
+import { DragDropContextProvider } from 'react-dnd';
 import {
   authProvider, auth, db, authPersistence
 } from '../firebase';
@@ -44,15 +46,17 @@ const App = () => {
   };
 
   return (
-    <AuthContext.Provider value={authContext}>
-      <BrowserRouter>
-        <Switch>
-          <Route path="/:path(|index|home|start)" component={Students} />
-          <Route path="/pending" component={Pending} />
-          <Route render={() => <p>Page not found</p>} />
-        </Switch>
-      </BrowserRouter>
-    </AuthContext.Provider>
+    <DragDropContextProvider backend={HTML5Backend}>
+      <AuthContext.Provider value={authContext}>
+        <BrowserRouter>
+          <Switch>
+            <Route path="/:path(|index|home|start)" component={Students} />
+            <Route path="/pending" component={Pending} />
+            <Route render={() => <p>Page not found</p>} />
+          </Switch>
+        </BrowserRouter>
+      </AuthContext.Provider>
+    </DragDropContextProvider>
   );
 };
 

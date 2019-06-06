@@ -250,3 +250,7 @@ a:hover {
 .project__coach-disclaimer {
   font-size: 1.4rem;
 }
+
+.dropping {
+  background-color: rgba(16, 112, 202, .6);
+}
