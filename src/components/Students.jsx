@@ -39,7 +39,7 @@ const Students = ({ history }) => {
     'Emailed (status is final)': true,
     'No status': true
   });
-  const [projectsTabIsActive, setProjectTabVisibility] = useState(false);
+  const [projectsTabIsActive, setProjectTabVisibility] = useState(true);
 
   const { user, authFailed } = useContext(AuthContext);
 
@@ -203,13 +203,17 @@ const Students = ({ history }) => {
         <header className="project__header">
           <h3 className="project__title">{project.name}</h3>
           <div className="project__details">
-            <span>{project.partner}</span>
+            <span className="project__partner">{project.partner}</span>
             <ul className="project__coaches">
               {project.coach.length > 0 && (
-                project.coach.map(coach => <li>{coach.type}: {coach.name}</li>)
+                project.coach
+                  .sort(a => (a.type === 'Lead' ? -1 : 1))
+                  .map(coach => (
+                    <li><Badge color={coach.type === 'Lead' ? 'blue' : 'neutral'}>{coach.name}</Badge></li>
+                  ))
               )}
             </ul>
-            {project.template && <a href={project.template} rel="noopener noreferrer" target="_blank">View template</a>}
+            {project.template && <a href={project.template} className="project__template-link" rel="noopener noreferrer" target="_blank">View template</a>}
           </div>
         </header>
         <div className="project__students">
@@ -314,7 +318,7 @@ const Students = ({ history }) => {
       <main className="detail">
         <header>
           <Tab
-            height={55}
+            height={50}
             isSelected={!projectsTabIsActive}
             onSelect={() => setProjectTabVisibility(false)}
           >

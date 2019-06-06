@@ -20,6 +20,15 @@ code {
     monospace;
 }
 
+a, .a:visited, a:hover, a:active {
+  color: #1070ca;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
 .container {
 }
 
@@ -196,7 +205,8 @@ code {
 }
 
 .project {
-  width: 28rem;
+  width: 30rem;
+  height: 40rem;
   padding: 1rem;
 }
 
@@ -204,4 +214,34 @@ code {
   padding: 1rem;
   border-bottom: 1px solid #1070ca;
   margin-bottom: 2rem;
+}
+
+.project__details {
+  display: flex;
+  flex-flow: column;
+  justify-content: flex-start;
+}
+
+.project__title {
+  margin: 0 0 .8rem 0;
+}
+
+.project__partner {
+  font-style: italic;
+}
+
+.project__coaches {
+  display: flex;
+  padding: 0;
+  list-style-type: none;
+  flex-wrap: wrap;
+  margin: .4rem 0;
+}
+
+.project__coaches li {
+  padding: .5rem .5rem .5rem 0;
+}
+
+.project__template-link {
+  align-self: flex-end;
 }
