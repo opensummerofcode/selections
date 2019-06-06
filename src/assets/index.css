@@ -116,11 +116,15 @@ code {
   text-align: right;
 }
 
-.student-detail {
+.detail {
   padding: 2rem;
   width: 55%;
   position: relative;
   margin-left: 40%;
+}
+
+.detail > header {
+  margin-bottom: 3rem;
 }
 
 .student-detail__admin-actions, .student-detail__coach-actions {
@@ -184,3 +188,20 @@ code {
   width: 100%;
 }
 
+.projects {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.project {
+  width: 28rem;
+  padding: 1rem;
+}
+
+.project__header {
+  padding: 1rem;
+  border-bottom: 1px solid #1070ca;
+  margin-bottom: 2rem;
+}

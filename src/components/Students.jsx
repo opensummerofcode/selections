@@ -2,12 +2,14 @@ import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import {
-  Pane, Button, toaster, SearchInput, Switch, Badge
+  Pane, Button, toaster, SearchInput, Switch, Badge, Tab
 } from 'evergreen-ui';
 import { db } from '../firebase';
 import StudentDetail from './StudentDetail';
 import AuthContext from '../context/auth';
 import Student from '../models/Student';
+import Project from '../models/Project';
+import tempProjects from './projects';
 
 const Students = ({ history }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -34,9 +36,10 @@ const Students = ({ history }) => {
     Yes: true,
     Maybe: true,
     No: true,
-    Confirmed: true,
-    Unassigned: true
+    'Emailed (status is final)': true,
+    'No status': true
   });
+  const [projectsTabIsActive, setProjectTabVisibility] = useState(false);
 
   const { user, authFailed } = useContext(AuthContext);
 
@@ -63,6 +66,15 @@ const Students = ({ history }) => {
         return all;
       }, {});
       setSuggestions(s => ({ ...s, ...newSuggestions }));
+    });
+    db.collection('projects').onSnapshot((snapshot) => {
+      const data = snapshot.docChanges();
+      const newProjects = data.reduce((all, s) => {
+        const { id } = s.doc;
+        all[id] = new Project(id, s.doc.data());
+        return all;
+      }, {});
+      setProjects(p => ({ ...p, ...newProjects }));
     });
   }, [user]);
 
@@ -184,6 +196,29 @@ const Students = ({ history }) => {
     );
   };
 
+  const renderProject = (p) => {
+    const project = new Project(2, p);
+    return (
+      <Pane className="project" elevation={2}>
+        <header className="project__header">
+          <h3 className="project__title">{project.name}</h3>
+          <div className="project__details">
+            <span>{project.partner}</span>
+            <ul className="project__coaches">
+              {project.coach.length > 0 && (
+                project.coach.map(coach => <li>{coach.type}: {coach.name}</li>)
+              )}
+            </ul>
+            {project.template && <a href={project.template} rel="noopener noreferrer" target="_blank">View template</a>}
+          </div>
+        </header>
+        <div className="project__students">
+          Drag students here
+        </div>
+      </Pane>
+    );
+  };
+
   if (!user) return <p />;
   if (authFailed || user.pending || !('pending' in user)) {
     history.push('/pending');
@@ -217,8 +252,8 @@ const Students = ({ history }) => {
 
   const filterByStatus = student => Object.keys(statusSwitches).filter((status) => {
     if (!statusSwitches[status]) return false;
-    if (status === 'Confirmed' && student.confirmed) return true;
-    if (status === 'Unassigned' && !student.status) return true;
+    if (status === 'Emailed (status is final)' && student.confirmed) return true;
+    if (status === 'No status' && !student.status) return true;
     if (student.status === status.toLowerCase()) return true;
     return false;
   }).length > 0;
@@ -231,7 +266,7 @@ const Students = ({ history }) => {
     return 0;
   };
 
-  if (isLoading) return <p />;
+  if (isLoading || Object.keys(projects).length === 0) return <p />;
 
   const $students = Object.keys(students).map(key => students[key])
     .filter(filterBySearchQuery)
@@ -240,6 +275,8 @@ const Students = ({ history }) => {
     .sort(sortByFirstNameThenLastName)
     .map(renderStudent);
 
+  //const $projects = Object.keys(projects).map(key => renderProject(projects[key]));
+  const $projects = tempProjects.map(renderProject);
   const $studentDetail = renderStudentDetail();
   const $suggestions = renderSuggestions();
   const $roleSelectors = renderRoleSelectors();
@@ -274,30 +311,55 @@ const Students = ({ history }) => {
           {$students}
         </ol>
       </div>
-      <main className="student-detail">
-        {user && selectedStudent && selectedStudent.confirmed && (
-          <div className="student-detail__coach-actions">
-            {selectedStudent.firstName} was notified via email
-            <Button onClick={unconfirm} appearance="primary" intent="danger">Unconfirm</Button>
+      <main className="detail">
+        <header>
+          <Tab
+            height={55}
+            isSelected={!projectsTabIsActive}
+            onSelect={() => setProjectTabVisibility(false)}
+          >
+            Student detail
+          </Tab>
+          <Tab
+            height={55}
+            isSelected={projectsTabIsActive}
+            onSelect={() => setProjectTabVisibility(true)}
+          >
+            Project assignments
+          </Tab>
+        </header>
+        { projectsTabIsActive && (
+          <div className="projects">
+            {$projects}
           </div>
         )}
-        {user && user.admin && selectedStudent && !selectedStudent.confirmed && (
-          <div className="student-detail__admin-actions">
-            <Button onClick={confirm} appearance="primary" intent="success">Confirm</Button>
-            <Button onClick={select} appearance="primary" intent="success">Yes</Button>
-            <Button onClick={reject} appearance="primary" intent="warning">Maybe</Button>
-            <Button onClick={maybeSelect} appearance="primary" intent="danger">No</Button>
+        { !projectsTabIsActive && (
+          <div className="student-detail">
+            {user && selectedStudent && selectedStudent.confirmed && (
+              <div className="student-detail__coach-actions">
+                {selectedStudent.firstName} was notified via email
+                <Button onClick={unconfirm} appearance="primary" intent="danger">Unconfirm</Button>
+              </div>
+            )}
+            {user && user.admin && selectedStudent && !selectedStudent.confirmed && (
+              <div className="student-detail__admin-actions">
+                <Button onClick={confirm} appearance="primary" intent="success">Confirm</Button>
+                <Button onClick={select} appearance="primary" intent="success">Yes</Button>
+                <Button onClick={reject} appearance="primary" intent="warning">Maybe</Button>
+                <Button onClick={maybeSelect} appearance="primary" intent="danger">No</Button>
+              </div>
+            )}
+            {user && !user.admin && selectedStudent && !selectedStudent.confirmed && (
+              <div className="student-detail__coach-actions">
+                <Button onClick={suggestYes} appearance="primary" intent="success">Suggest yes</Button>
+                <Button onClick={suggestMaybe} appearance="primary" intent="warning">Suggest maybe</Button>
+                <Button onClick={suggestNo} appearance="primary" intent="danger">Suggest no</Button>
+              </div>
+            )}
+            {$studentDetail}
+            {$suggestions}
           </div>
         )}
-        {user && !user.admin && selectedStudent && !selectedStudent.confirmed && (
-          <div className="student-detail__coach-actions">
-            <Button onClick={suggestYes} appearance="primary" intent="success">Suggest yes</Button>
-            <Button onClick={suggestMaybe} appearance="primary" intent="warning">Suggest maybe</Button>
-            <Button onClick={suggestNo} appearance="primary" intent="danger">Suggest no</Button>
-          </div>
-        )}
-        {$studentDetail}
-        {$suggestions}
       </main>
     </div>
   );
