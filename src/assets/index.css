@@ -179,7 +179,7 @@ a:hover {
   top: 50%;
   left: 50%;
   width: 50rem;
-  height: 30rem;
+  height: 35rem;
   display: flex;
   flex-flow: column;
   justify-content: center;
@@ -209,6 +209,7 @@ a:hover {
   height: 40rem;
   padding: 1rem;
   margin-bottom: 1.5rem;
+  overflow-y: auto;
 }
 
 .project__header {
@@ -252,11 +253,36 @@ a:hover {
   font-size: 1.4rem;
 }
 
+.project__students {
+
+}
+
 .project__students__student {
   width: 100%;
   display: flex;
   align-items: center;
   margin-bottom: 1rem;
+}
+
+.project__roles {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.project__roles li {
+  padding: .4rem;
+  list-style-type: none;
+  max-width: 100%;
+}
+
+.project__roles li > strong {
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .project__students__student > div {
@@ -281,4 +307,8 @@ a:hover {
 
 .dropping {
   background-color: rgba(16, 112, 202, .2);
+}
+
+.roles__required {
+  font-size: 1.1rem;
 }

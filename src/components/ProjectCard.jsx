@@ -41,6 +41,23 @@ const Project = ({
     );
   };
 
+  const renderRolesRequired = () => {
+    const roles = project.studentsRequired.reduce((all, profile) => {
+      const role = Array.isArray(profile.role) ? profile.role.join('/') : profile.role;
+      if (!all[role]) all[role] = profile;
+      const count = all[role].count || 0;
+      all[role] = {
+        ...profile, role, count: count + 1
+      };
+      return all;
+    }, {});
+
+    return Object.keys(roles).map((key) => {
+      const profile = roles[key];
+      return <li key={profile.role}><Badge>{profile.count}x {profile.role}</Badge></li>;
+    });
+  };
+
   const removeStudent = (studentId) => {
     project.unassign(studentId).then(() => {
       students[studentId].setAssignedStatus(false);
@@ -68,6 +85,7 @@ const Project = ({
   };
 
   const $coaches = renderCoachesList();
+  const $roles = renderRolesRequired();
   const $assignedStudents = project.assignedStudents.map(renderStudent);
 
   return connectDropTarget(
@@ -79,6 +97,10 @@ const Project = ({
             <span className="project__partner">{project.partner}</span>
             <ul className="project__coaches">
               {$coaches}
+            </ul>
+            <span className="roles__required">Roles required:</span>
+            <ul className="project__roles">
+              {$roles}
             </ul>
             {project.template && <a href={project.template} className="project__template-link" rel="noopener noreferrer" target="_blank">View template</a>}
           </div>
