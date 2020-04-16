@@ -13,8 +13,11 @@ const firebaseConfig = {
 
 const fire = firebase.initializeApp(firebaseConfig);
 export const authProvider = new firebase.auth.GoogleAuthProvider();
+
 export const db = fire.firestore();
 export const auth = fire.auth();
+auth.useDeviceLanguage();
+
 export const authPersistence = firebase.auth.Auth.Persistence.LOCAL;
 
 export default fire;

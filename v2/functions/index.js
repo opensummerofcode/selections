@@ -1,8 +1,24 @@
 const functions = require('firebase-functions');
+const admin = require('firebase-admin');
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
+admin.initializeApp();
+
+exports.createUser = functions.auth.user().onCreate((user) => {
+  const newUser = {
+    email: user.email,
+    displayName: user.displayName,
+    uid: user.uid
+  };
+  return admin
+    .firestore()
+    .collection('users')
+    .doc(user.uid)
+    .set(newUser)
+    .then(() => admin.auth().setCustomUserClaims(user.uid, { admin: false, pending: true }))
+    .then(() => {
+      return {
+        message: `Account for ${newUser.displayName} successfully created.`
+      };
+    })
+    .catch((err) => err);
+});
