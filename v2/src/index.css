@@ -1,13 +1,93 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@font-face {
+  font-family: 'Montserrat';
+  font-weight: 400;
+  font-display: swap;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+@font-face {
+  font-family: 'Open Sans';
+  font-weight: 400;
+  font-display: swap;
+}
+
+:root {
+  --color-white: #fff;
+  --color-off-white: #f1f3f8;
+  --color-black: #333;
+  --color-dark-blue: #1e1d36;
+  --color-green: #1de1ae;
+  --color-yellow: #fcb70f;
+  --color-red: #f14a3b;
+  --color-danger: #8c312d;
+  --font-copy: 'Open Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-titles: 'Oswald', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+html {
+  box-sizing: border-box;
+  font-size: 62.5%;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  background-color: var(--color-white);
+  color: var(--color-dark-blue);
+  font-size: 1.6rem;
+  font-family: var(--font-copy);
+  position: relative;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-titles);
+  font-weight: normal;
+}
+
+h2 {
+  text-transform: uppercase;
+  font-weight: 900;
+  line-height: 1.6;
+  font-size: 4rem;
+  margin: 0;
+  color: var(--color-dark-blue);
+}
+
+@media screen and (max-width: 1024px) {
+  h2 {
+    font-size: 3.4rem;
+  }
+}
+
+p {
+  max-width: 80rem;
+}
+
+p,
+ul li,
+ol li {
+  line-height: 1.6;
+}
+
+a,
+a:visited,
+a:active,
+a:hover {
+  color: var(--color-red);
+}
+
+input,
+textarea {
+  font-family: var(--font-copy);
 }
