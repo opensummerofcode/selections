@@ -1,28 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import { auth, db } from '../firebase';
+import { auth } from '../firebase';
 import Dashboard from './Dashboard';
 import Login from './Login';
 import AuthContext from '../context/auth';
 import PrivateRoute from './PrivateRoute';
+import { User } from '../models';
 
 const App = () => {
-  const [authFailed, setFailure] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const getUser = (uid) => db.collection('users').doc(uid).get();
-
   useEffect(() => {
-    auth.onAuthStateChanged(async (rawUser) => {
-      if (!rawUser) {
+    auth.onAuthStateChanged(async () => {
+      const user = auth.currentUser;
+      if (!user) {
         setIsLoading(false);
         return setCurrentUser(null);
       }
 
-      const user = await getUser(rawUser.uid);
-      console.log(user.data());
-      setCurrentUser(user.data());
+      const token = await user.getIdTokenResult();
+      setCurrentUser(new User(user, token.claims));
       return setIsLoading(false);
     });
   }, []);
@@ -30,8 +28,7 @@ const App = () => {
   const authContext = {
     user: currentUser,
     setAuthenticatedUser: setCurrentUser,
-    isLoading,
-    authFailed
+    isLoading
   };
 
   if (isLoading) return <p />;
