@@ -10,7 +10,7 @@ const Login = ({ history, isLoggedIn }) => {
     if (!isLoggedIn) return;
     history.push('/');
     setIsLoggingIn(false);
-  }, [isLoggedIn]);
+  }, [isLoggedIn, history]);
 
   const doLogin = () => {
     setIsLoggingIn(true);

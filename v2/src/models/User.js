@@ -1,9 +1,9 @@
 class User {
-  constructor(user, claims) {
+  constructor(user) {
     this.id = user.uid;
     this.name = user.displayName;
-    this.isPending = claims.pending;
-    this.isAdmin = claims.admin;
+    this.isPending = user.pending;
+    this.isAdmin = user.admin;
   }
 }
 

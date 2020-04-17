@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import { auth } from '../firebase';
+import { auth, db } from '../firebase';
 import AuthContext from '../context/auth';
 
 import Dashboard from './Dashboard';
@@ -15,16 +15,21 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    auth.onAuthStateChanged(async () => {
-      const user = auth.currentUser;
-      if (!user) {
+    auth.onAuthStateChanged(async (rawUser) => {
+      if (!rawUser) {
         setIsLoading(false);
         return setCurrentUser(null);
       }
-
-      const token = await user.getIdTokenResult();
-      setCurrentUser(new User(user, token.claims));
-      return setIsLoading(false);
+      return db
+        .collection('users')
+        .doc(rawUser.uid)
+        .onSnapshot((doc) => {
+          const user = doc.data();
+          if (!user) return;
+          console.log(user);
+          setCurrentUser(new User(user));
+          setIsLoading(false);
+        });
     });
   }, []);
 
@@ -40,7 +45,10 @@ const App = () => {
       <BrowserRouter>
         <Switch>
           <PrivateRoute path="/:path(|index|home|start)" guarded component={Dashboard} />
-          <Route path="/pending" component={(props) => <Pending {...props} user={currentUser} />} />
+          <PrivateRoute
+            path="/pending"
+            component={(props) => <Pending {...props} user={currentUser} />}
+          />
           <Route
             path="/login"
             render={(props) => <Login {...props} isLoggedIn={!!currentUser} />}
