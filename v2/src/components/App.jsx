@@ -6,6 +6,7 @@ import AuthContext from '../context/auth';
 import Dashboard from './Dashboard';
 import Login from './Login';
 import Pending from './Pending';
+import UserManagement from './UserManagement';
 import PrivateRoute from './PrivateRoute';
 
 import { User } from '../models';
@@ -26,7 +27,6 @@ const App = () => {
         .onSnapshot((doc) => {
           const user = doc.data();
           if (!user) return;
-          console.log(user);
           setCurrentUser(new User(user));
           setIsLoading(false);
         });
@@ -45,6 +45,11 @@ const App = () => {
       <BrowserRouter>
         <Switch>
           <PrivateRoute path="/:path(|index|home|start)" guarded component={Dashboard} />
+          <PrivateRoute
+            path="/manage-users"
+            admin
+            component={(props) => <UserManagement {...props} user={currentUser} />}
+          />
           <PrivateRoute
             path="/pending"
             component={(props) => <Pending {...props} user={currentUser} />}
