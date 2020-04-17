@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { auth } from '../firebase';
+import AuthContext from '../context/auth';
+
 import Dashboard from './Dashboard';
 import Login from './Login';
-import AuthContext from '../context/auth';
+import Pending from './Pending';
 import PrivateRoute from './PrivateRoute';
+
 import { User } from '../models';
 
 const App = () => {
@@ -36,7 +39,8 @@ const App = () => {
     <AuthContext.Provider value={authContext}>
       <BrowserRouter>
         <Switch>
-          <PrivateRoute path="/:path(|index|home|start)" component={Dashboard} />
+          <PrivateRoute path="/:path(|index|home|start)" guarded component={Dashboard} />
+          <Route path="/pending" component={(props) => <Pending {...props} user={currentUser} />} />
           <Route
             path="/login"
             render={(props) => <Login {...props} isLoggedIn={!!currentUser} />}

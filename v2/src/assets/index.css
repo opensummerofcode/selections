@@ -5,7 +5,7 @@
 }
 
 @font-face {
-  font-family: 'Open Sans';
+  font-family: 'Roboto';
   font-weight: 400;
   font-display: swap;
 }
@@ -19,8 +19,8 @@
   --color-yellow: #fcb70f;
   --color-red: #f14a3b;
   --color-danger: #8c312d;
-  --font-copy: 'Open Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  --font-titles: 'Oswald', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-copy: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-titles: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 html {
@@ -53,15 +53,6 @@ h5,
 h6 {
   font-family: var(--font-titles);
   font-weight: normal;
-}
-
-h2 {
-  text-transform: uppercase;
-  font-weight: 900;
-  line-height: 1.6;
-  font-size: 4rem;
-  margin: 0;
-  color: var(--color-dark-blue);
 }
 
 @media screen and (max-width: 1024px) {
