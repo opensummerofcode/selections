@@ -18,6 +18,4 @@ export const db = fire.firestore();
 export const auth = fire.auth();
 auth.useDeviceLanguage();
 
-export const authPersistence = firebase.auth.Auth.Persistence.LOCAL;
-
 export default fire;
