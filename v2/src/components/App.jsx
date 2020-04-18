@@ -3,6 +3,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { auth, db } from '../firebase';
 import AuthContext from '../context/auth';
 
+import Header from './Header';
 import Dashboard from './Dashboard';
 import Login from './Login';
 import Pending from './Pending';
@@ -33,6 +34,10 @@ const App = () => {
     });
   }, []);
 
+  const logout = () => {
+    auth.signOut().then(() => setCurrentUser(null));
+  };
+
   const authContext = {
     user: currentUser,
     setAuthenticatedUser: setCurrentUser,
@@ -43,6 +48,7 @@ const App = () => {
   return (
     <AuthContext.Provider value={authContext}>
       <BrowserRouter>
+        <Header user={currentUser} logout={logout} />
         <Switch>
           <PrivateRoute path="/:path(|index|home|start)" guarded component={Dashboard} />
           <PrivateRoute

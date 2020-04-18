@@ -4,7 +4,7 @@ import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 
 import 'normalize.css';
-import './assets/index.css';
+import './assets/styles/index.css';
 
 ReactDOM.render(
   // eslint-disable-next-line react/jsx-filename-extension

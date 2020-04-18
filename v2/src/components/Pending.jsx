@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { User } from '../models';
 
-import styles from '../assets/pending.module.css';
-import logo from '../assets/osoc.png';
+import styles from '../assets/styles/pending.module.css';
+import logo from '../assets/img/osoc.png';
 
 const Pending = ({ user }) => {
   if (user && !user.isPending) return <Redirect to="/" />;
