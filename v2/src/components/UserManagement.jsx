@@ -5,7 +5,7 @@ import { Table, Select } from 'evergreen-ui';
 import { User } from '../models';
 import { db } from '../firebase';
 
-import styles from '../assets/styles/user-management.module.css';
+import '../assets/styles/user-management.module.css';
 
 const UserManagement = ({ user: currentUser }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -35,7 +35,6 @@ const UserManagement = ({ user: currentUser }) => {
   };
 
   const setRole = (id, val) => {
-    console.log(val);
     const roles = {
       admin: val === 'admin',
       pending: val === 'pending'
