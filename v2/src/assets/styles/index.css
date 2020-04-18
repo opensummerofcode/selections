@@ -82,3 +82,7 @@ input,
 textarea {
   font-family: var(--font-copy);
 }
+
+.page-container {
+  min-height: calc(100vh - 8rem);
+}
