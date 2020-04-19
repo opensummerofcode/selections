@@ -1,0 +1,19 @@
+.dashboard {
+}
+
+.content-wrapper {
+  display: flex;
+}
+
+.filters {
+  width: 100%;
+}
+
+.student-list {
+  width: 30%;
+}
+
+.student-detail {
+  width: 70%;
+  padding: 3rem;
+}
