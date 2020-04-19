@@ -3,11 +3,12 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { auth, db } from '../firebase';
 import AuthContext from '../context/auth';
 
+import Dashboard from '../pages/Dashboard';
+import Login from '../pages/Login';
+import UserManagement from '../pages/UserManagement';
+import Pending from '../pages/Pending';
+
 import Header from './Header';
-import Dashboard from './Dashboard';
-import Login from './Login';
-import Pending from './Pending';
-import UserManagement from './UserManagement';
 import PrivateRoute from './PrivateRoute';
 
 import { User } from '../models';

@@ -1,5 +1,7 @@
 import React from 'react';
 
-const Dashboard = () => <p>Index</p>;
+const Dashboard = () => {
+  return <p>Index</p>;
+};
 
 export default Dashboard;
