@@ -5,8 +5,10 @@ import StudentCard from './StudentCard';
 
 import styles from '../assets/styles/dashboard.module.css';
 
-const StudentList = ({ students }) => {
-  const renderStudent = (student) => <StudentCard key={student.id} student={student} />;
+const StudentList = ({ students, selectStudent }) => {
+  const renderStudent = (student) => (
+    <StudentCard select={selectStudent} key={student.id} student={student} />
+  );
 
   const sortByFirstNameThenLastName = (a, b) => {
     if (a.firstName < b.firstName) return -1;

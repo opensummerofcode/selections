@@ -44,7 +44,7 @@ const Dashboard = () => {
     <main className={`page-container ${styles.dashboard}`}>
       <Filters />
       <div className={styles['content-wrapper']}>
-        <StudentList students={students} />
+        <StudentList selectStudent={selectStudent} students={students} />
         <StudentDetail selectedStudent={selectedStudent} />
       </div>
     </main>
