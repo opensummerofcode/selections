@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 import { Table, Select } from 'evergreen-ui';
 import { User } from '../models';
 import { db } from '../firebase';
+import { sortByRole } from '../util';
 
 import '../assets/styles/user-management.module.css';
 
@@ -63,8 +64,9 @@ const UserManagement = ({ user: currentUser }) => {
       </Table.Row>
     );
   };
-
-  const filteredUsers = Object.keys(users).filter((id) => users[id].name.includes(searchQuery));
+  const filteredUsers = Object.keys(users)
+    .filter((id) => users[id].name.toLowerCase().includes(searchQuery.toLowerCase()))
+    .sort((id1, id2) => sortByRole(users[id1], users[id2]));
 
   const renderUsers = () => {
     const $users = filteredUsers.map((id) => renderUser(users[id]));

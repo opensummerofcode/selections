@@ -11,7 +11,7 @@ class User {
   get role() {
     if (this.isAdmin) return 'admin';
     if (!this.isPending) return 'coach';
-    return 'disabled';
+    return 'pending';
   }
 }
 
