@@ -38,6 +38,12 @@ body {
   position: relative;
 }
 
+html,
+body,
+#root {
+  height: 100%;
+}
+
 *,
 *:before,
 *:after {
@@ -85,4 +91,15 @@ textarea {
 
 .page-container {
   min-height: calc(100vh - 8rem);
+}
+
+.button--seamless {
+  cursor: pointer;
+  background-color: inherit;
+  border: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  text-align: inherit;
 }

@@ -14,7 +14,8 @@ const Dashboard = () => {
   const [students, setStudents] = useState({});
   const [selectedStudent, selectStudent] = useState(null);
 
-  /* useEffect(() => {
+  /*
+  useEffect(() => {
     const unsubscribe = db.collection('students').onSnapshot((snapshot) => {
       const data = snapshot.docChanges();
       const newStudents = {};
@@ -32,7 +33,11 @@ const Dashboard = () => {
   */
 
   useEffect(() => {
-    setStudents(tempData);
+    const data = Object.keys(tempData).reduce((all, id) => {
+      all[id] = new Student(tempData[id]);
+      return all;
+    }, {});
+    setStudents(data);
   }, []);
 
   return (

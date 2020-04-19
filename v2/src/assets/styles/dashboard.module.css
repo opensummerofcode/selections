@@ -1,19 +1,35 @@
 .dashboard {
-}
-
-.content-wrapper {
-  display: flex;
+  min-height: calc(100% - 8rem) !important;
+  height: calc(100% - 8rem);
 }
 
 .filters {
   width: 100%;
+  height: 8rem;
+  display: flex;
+  align-items: center;
+}
+
+.content-wrapper {
+  display: flex;
+  height: calc(100% - 8rem);
+  align-items: stretch;
+}
+
+.student-list,
+.student-detail {
+  height: 100%;
 }
 
 .student-list {
-  width: 30%;
+  width: 25%;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  overflow-y: scroll;
 }
 
 .student-detail {
-  width: 70%;
-  padding: 3rem;
+  width: 75%;
+  padding: 1rem;
 }

@@ -1,0 +1,8 @@
+.card {
+  text-align: left;
+  background: var(--color-off-white);
+}
+
+.wrapper {
+  padding: 2rem;
+}
