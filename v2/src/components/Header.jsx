@@ -29,7 +29,7 @@ const Header = ({ user, logout }) => (
         )}
         {!user && (
           <li>
-            <Link to="/login">Log out</Link>
+            <Link to="/login">Log in</Link>
           </li>
         )}
       </ul>
