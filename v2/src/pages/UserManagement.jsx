@@ -6,34 +6,28 @@ import { User } from '../models';
 import { db } from '../firebase';
 import { sortByRole } from '../util';
 
-import '../assets/styles/user-management.module.css';
+import styles from '../assets/styles/user-management.module.css';
 
 const UserManagement = ({ user: currentUser }) => {
-  const [isLoading, setIsLoading] = useState(true);
   const [users, setUsers] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const unsubscribe = db.collection('users').onSnapshot((snapshot) => {
+      const data = snapshot.docChanges();
       const newUsers = {};
-      snapshot.forEach((doc) => {
-        const data = doc.data();
-        // Don't show currently logged in user
-        if (currentUser.id !== data.uid) {
-          newUsers[data.uid] = new User(data);
-          if (isLoading) setIsLoading(false);
+      data.forEach((change) => {
+        const updated = change.doc.data();
+        if (currentUser.id !== updated.uid) {
+          newUsers[data.uid] = new User(updated);
         }
       });
       setUsers(newUsers);
     });
     return unsubscribe;
-  }, []);
+  }, [currentUser.id]);
 
   const doSearch = (value) => setSearchQuery(value);
-
-  const renderEmptyState = () => {
-    return <p>There are no users yet! Other than you of course :)</p>;
-  };
 
   const setRole = (id, val) => {
     const roles = {
@@ -86,12 +80,10 @@ const UserManagement = ({ user: currentUser }) => {
     if (!currentUser.isAdmin) return <Redirect to="/" />;
   }
 
-  if (isLoading) return <div className="page-container" />;
-
-  const $content = Object.keys(users).length === 0 ? renderEmptyState() : renderUsers();
+  const $content = renderUsers();
   return (
     <div className="page-container">
-      <main>
+      <main className={styles.module}>
         <h2>Manage users</h2>
         {$content}
       </main>
