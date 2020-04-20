@@ -47,3 +47,19 @@
 .icon {
   margin-right: 1rem;
 }
+
+.socials {
+  display: flex;
+}
+
+.socials a {
+  margin-left: 1.6rem;
+}
+
+.icon-container {
+  width: 2.4rem;
+}
+
+.icon-container img {
+  max-width: 100%;
+}
