@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { Badge, Icon } from 'evergreen-ui';
+import { Badge, Icon, Button, Dialog, TextInput } from 'evergreen-ui';
+import AuthContext from '../context/auth';
 import { Student } from '../models';
 
 import twitterIcon from '../assets/img/icon-twitter.png';
@@ -29,6 +30,10 @@ ExternalLink.propTypes = {
 };
 
 const StudentDetail = ({ selectedStudent: student }) => {
+  const { user } = useContext(AuthContext);
+  const [isSuggesting, setIsSuggesting] = useState(false);
+  let $inputReason = useRef(null);
+
   if (!student) {
     return (
       <Wrapper>
@@ -39,13 +44,52 @@ const StudentDetail = ({ selectedStudent: student }) => {
 
   const renderStatusIcon = (condition) => (
     <i className={styles.icon} aria-label={`${condition ? 'positive' : 'negative'}`}>
-      {condition ? <Icon icon="tick" color="success" /> : <Icon icon="cross" color="danger" />}
+      {condition ? (
+        <Icon size={16} icon="tick" color="success" />
+      ) : (
+        <Icon size={16} icon="cross" color="danger" />
+      )}
     </i>
   );
+
+  const makeSuggestion = () => {
+    if (isSuggesting === 'yes') student.suggestNo($inputReason.value);
+    else if (isSuggesting === 'maybe') student.suggesYes($inputReason.value);
+    else if (isSuggesting === 'no') student.suggestMaybe($inputReason.value);
+    $inputReason.value = '';
+    setIsSuggesting(false);
+  };
+
+  const suggest = (type) => {
+    setIsSuggesting(type);
+  };
 
   const { firstName, lastName } = student;
   return (
     <Wrapper>
+      <Dialog
+        isShown={!!isSuggesting}
+        title={`Suggest "${isSuggesting}" for ${student.firstName}`}
+        intent="none"
+        onCloseComplete={() => setIsSuggesting(false)}
+        confirmLabel="Make suggestion"
+        onConfirm={makeSuggestion}
+        hasCancel={false}
+      >
+        <div className={styles.reasoning}>
+          <h2>Why are you making this decision?</h2>
+          <TextInput
+            width="100%"
+            placeholder="Enter reason..."
+            autoFocus
+            innerRef={(c) => ($inputReason = c)}
+          />
+          <p>
+            A reason is not required, but will open up discussion and help us and your fellow
+            coaches understand.
+          </p>
+        </div>
+      </Dialog>
       <header>
         <h2 className={styles.name}>
           {firstName} {lastName}{' '}
@@ -77,6 +121,34 @@ const StudentDetail = ({ selectedStudent: student }) => {
           <Badge color="green" marginLeft={16}>
             alum
           </Badge>
+        )}
+        {!student.confirmed && (
+          <div className={styles.actions}>
+            <Button
+              marginRight={16}
+              onClick={() => suggest('yes')}
+              appearance="primary"
+              intent="success"
+            >
+              Suggest yes
+            </Button>
+            <Button
+              marginRight={16}
+              onClick={() => suggest('maybe')}
+              appearance="primary"
+              intent="warning"
+            >
+              Suggest maybe
+            </Button>
+            <Button
+              marginRight={16}
+              onClick={() => suggest('no')}
+              appearance="primary"
+              intent="danger"
+            >
+              Suggest no
+            </Button>
+          </div>
         )}
       </header>
 

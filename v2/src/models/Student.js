@@ -1,3 +1,5 @@
+import { db } from '../firebase';
+
 const parseField = (value, other = false) => {
   if (typeof value === 'object' && value !== null) {
     if (other) return value.other;
@@ -63,6 +65,24 @@ class Student {
   get wantsToCoach() {
     return !parseField(this.alum).includes('Yes, but');
   }
+
+  createOrUpdateSuggestion = (user, exists, status) => {
+    if (!exists)
+      return db
+        .collection('suggestions')
+        .doc(this.id)
+        .set({ [user.id]: status });
+    return db
+      .collection('suggestions')
+      .doc(this.id)
+      .update({ [user.id]: status });
+  };
+
+  suggestYes = (user, exists) => this.createOrUpdateSuggestion(user, exists, 'yes');
+
+  suggestNo = (user, exists) => this.createOrUpdateSuggestion(user, exists, 'no');
+
+  suggestMaybe = (user, exists) => this.createOrUpdateSuggestion(user, exists, 'maybe');
 }
 
 export default Student;

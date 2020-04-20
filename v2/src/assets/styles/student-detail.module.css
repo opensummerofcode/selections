@@ -5,11 +5,15 @@
 
 .student-detail header {
   position: fixed;
-  width: 100%;
+  width: 71%;
   height: 4rem;
   background: var(--color-white);
   display: flex;
   align-items: center;
+}
+
+.actions {
+  margin-left: auto;
 }
 
 .student-detail h4 {
@@ -32,6 +36,14 @@
 .name {
   margin: 0;
   font-size: 2rem;
+}
+
+.reasoning h2 {
+  font-size: 1.8rem;
+  margin-top: 0;
+}
+.reasoning p {
+  font-size: 1.4rem;
 }
 
 .newlines {
