@@ -66,23 +66,11 @@ class Student {
     return !parseField(this.alum).includes('Yes, but');
   }
 
-  createOrUpdateSuggestion = (user, exists, status) => {
-    if (!exists)
-      return db
-        .collection('suggestions')
-        .doc(this.id)
-        .set({ [user.id]: status });
-    return db
-      .collection('suggestions')
-      .doc(this.id)
-      .update({ [user.id]: status });
+  createOrUpdateSuggestion = (userId, status, reason, exists) => {
+    const updated = { [userId]: { status, reason } };
+    if (!exists) return db.collection('suggestions').doc(this.id).set(updated);
+    return db.collection('suggestions').doc(this.id).update(updated);
   };
-
-  suggestYes = (user, exists) => this.createOrUpdateSuggestion(user, exists, 'yes');
-
-  suggestNo = (user, exists) => this.createOrUpdateSuggestion(user, exists, 'no');
-
-  suggestMaybe = (user, exists) => this.createOrUpdateSuggestion(user, exists, 'maybe');
 }
 
 export default Student;

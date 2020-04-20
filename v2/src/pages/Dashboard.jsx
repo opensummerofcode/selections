@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import tempData from './tempData';
 import { db } from '../firebase';
 import { Student } from '../models';
 import StudentContext from '../context/students';
@@ -14,39 +13,40 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [students, setStudents] = useState({});
   const [selectedStudent, setSelectedStudent] = useState(null);
-  /*
+  const [suggestions, setSuggestions] = useState({});
+
+  const selectStudent = (student) => setSelectedStudent(student);
+
   useEffect(() => {
     const unsubscribe = db.collection('students').onSnapshot((snapshot) => {
       const data = snapshot.docChanges();
       const newStudents = {};
-      data.forEach((change, i) => {
+      data.forEach((change) => {
         const updated = change.doc.data();
         const student = new Student(updated);
         newStudents[student.id] = student;
       });
-      setStudents(newStudents);
+      setStudents((s) => ({ ...s, ...newStudents }));
       setIsLoading(false);
     });
-
     return unsubscribe;
   }, []);
-*/
-  useEffect(() => {
-    const data = Object.keys(tempData).reduce((all, id) => {
-      all[id] = new Student(tempData[id]);
-      return all;
-    }, {});
-    setStudents(data);
-  }, []);
 
-  const selectStudent = (student) => {
-    console.log(student);
-    setSelectedStudent(student);
-  };
+  useEffect(() => {
+    return db.collection('suggestions').onSnapshot((snapshot) => {
+      const data = snapshot.docChanges();
+      const newSuggestions = data.reduce((all, s) => {
+        all[s.doc.id] = s.doc.data();
+        return all;
+      }, {});
+      setSuggestions((s) => ({ ...s, ...newSuggestions }));
+    });
+  }, []);
 
   const studentContext = {
     selectedStudent,
-    selectStudent
+    selectStudent,
+    suggestions
   };
 
   return (

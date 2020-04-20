@@ -2,6 +2,7 @@ import React, { useContext, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Badge, Icon, Button, Dialog, TextInput } from 'evergreen-ui';
 import AuthContext from '../context/auth';
+import StudentContext from '../context/students';
 import { Student } from '../models';
 
 import twitterIcon from '../assets/img/icon-twitter.png';
@@ -31,7 +32,11 @@ ExternalLink.propTypes = {
 
 const StudentDetail = ({ selectedStudent: student }) => {
   const { user } = useContext(AuthContext);
+  const { suggestions } = useContext(StudentContext);
+
   const [isSuggesting, setIsSuggesting] = useState(false);
+  const [suggestionIsLoading, setSuggestionIsLoading] = useState(false);
+
   let $inputReason = useRef(null);
 
   if (!student) {
@@ -52,12 +57,14 @@ const StudentDetail = ({ selectedStudent: student }) => {
     </i>
   );
 
-  const makeSuggestion = () => {
-    if (isSuggesting === 'yes') student.suggestNo($inputReason.value);
-    else if (isSuggesting === 'maybe') student.suggesYes($inputReason.value);
-    else if (isSuggesting === 'no') student.suggestMaybe($inputReason.value);
-    $inputReason.value = '';
+  const makeSuggestion = async () => {
+    setSuggestionIsLoading(true);
+
+    const exists = !!suggestions[student.id];
+    await student.createOrUpdateSuggestion(user.id, isSuggesting, $inputReason.value, exists);
+    if ($inputReason) $inputReason.value = '';
     setIsSuggesting(false);
+    setSuggestionIsLoading(false);
   };
 
   const suggest = (type) => {
@@ -75,8 +82,15 @@ const StudentDetail = ({ selectedStudent: student }) => {
         confirmLabel="Make suggestion"
         onConfirm={makeSuggestion}
         hasCancel={false}
+        isConfirmLoading={suggestionIsLoading}
       >
-        <div className={styles.reasoning}>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            makeSuggestion();
+          }}
+          className={styles.reasoning}
+        >
           <h2>Why are you making this decision?</h2>
           <TextInput
             width="100%"
@@ -88,7 +102,7 @@ const StudentDetail = ({ selectedStudent: student }) => {
             A reason is not required, but will open up discussion and help us and your fellow
             coaches understand.
           </p>
-        </div>
+        </form>
       </Dialog>
       <header>
         <h2 className={styles.name}>

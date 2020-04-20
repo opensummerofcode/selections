@@ -31,12 +31,6 @@ const StudentList = ({ students }) => {
     return 0;
   };
 
-  const $students = Object.keys(students)
-    .map((id) => students[id])
-    .filter(filterBySearchQuery)
-    .sort(sortByFirstNameThenLastName)
-    .map(renderStudent);
-
   return (
     <div className={styles['student-list']}>
       <header>
@@ -47,7 +41,14 @@ const StudentList = ({ students }) => {
           value={searchQuery}
         />
       </header>
-      <ol>{$students}</ol>
+      <ol>
+        {students &&
+          Object.keys(students)
+            .map((id) => students[id])
+            .filter(filterBySearchQuery)
+            .sort(sortByFirstNameThenLastName)
+            .map(renderStudent)}
+      </ol>
     </div>
   );
 };
