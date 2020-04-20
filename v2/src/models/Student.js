@@ -33,11 +33,19 @@ const parseHasLaptop = (value) => {
   return parseField(value).includes('Yes');
 };
 
+const capitalizeName = (name) =>
+  name
+    .split(' ')
+    .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+    .join(' ');
+
 class Student {
   constructor(student) {
     Object.keys(student).forEach((prop) => {
       const value = student[prop];
       if (prop === 'gender') this[prop] = parseGender(value);
+      else if (prop === 'firstName') this[prop] = capitalizeName(value);
+      else if (prop === 'lastName') this[prop] = capitalizeName(value);
       else if (prop === 'nameOfSchool') this.school = parseNameOfSchool(value, student.otherSchool);
       else if (prop === 'fieldOfStudy') this[prop] = parseFieldOfStudy(value);
       else if (prop === 'typeOfDegree') this[prop] = parseTypeOfDegree(value);
@@ -53,7 +61,7 @@ class Student {
   }
 
   get wantsToCoach() {
-    return parseField(this.alum).includes('Yes, but');
+    return !parseField(this.alum).includes('Yes, but');
   }
 }
 

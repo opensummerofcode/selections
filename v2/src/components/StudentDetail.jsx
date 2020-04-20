@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import { Badge, Icon } from 'evergreen-ui';
 import { Student } from '../models';
 
+import twitterIcon from '../assets/img/icon-twitter.png';
+import linkedinIcon from '../assets/img/icon-linkedin.png';
+import githubIcon from '../assets/img/icon-github.png';
 import dashStyles from '../assets/styles/dashboard.module.css';
 import styles from '../assets/styles/student-detail.module.css';
 
@@ -11,8 +14,17 @@ const Wrapper = ({ children }) => (
     {children}
   </section>
 );
-
 Wrapper.propTypes = {
+  children: PropTypes.node.isRequired
+};
+
+const ExternalLink = ({ href, children, ...rest }) => (
+  <a href={href} {...rest} target="_blank" rel="noopener noreferrer">
+    {children}
+  </a>
+);
+ExternalLink.propTypes = {
+  href: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired
 };
 
@@ -37,12 +49,35 @@ const StudentDetail = ({ selectedStudent: student }) => {
       <header>
         <h2 className={styles.name}>
           {firstName} {lastName}{' '}
-          {student.isAlum && (
-            <Badge color="green" marginLeft={8}>
-              alum
-            </Badge>
-          )}
         </h2>
+        <div className={styles.socials}>
+          {student.twitter && (
+            <ExternalLink href={student.twitter}>
+              <div className={styles['icon-container']}>
+                <img src={twitterIcon} alt="Twitter" />
+              </div>
+            </ExternalLink>
+          )}
+          {student.github && (
+            <ExternalLink href={student.github}>
+              <div className={styles['icon-container']}>
+                <img src={githubIcon} alt="GitHub" />
+              </div>
+            </ExternalLink>
+          )}
+          {student.linkedin && (
+            <ExternalLink href={student.linkedin}>
+              <div className={styles['icon-container']}>
+                <img src={linkedinIcon} alt="LinkedIn" />
+              </div>
+            </ExternalLink>
+          )}
+        </div>
+        {student.isAlum && (
+          <Badge color="green" marginLeft={16}>
+            alum
+          </Badge>
+        )}
       </header>
 
       <section>
@@ -67,20 +102,25 @@ const StudentDetail = ({ selectedStudent: student }) => {
         <h3>Experience</h3>
         <ul>
           <li>
-            <a href={student.cv} rel="noopener noreferrer" target="_blank">
-              CV
-            </a>
+            <ExternalLink href={student.cv}>CV</ExternalLink>
           </li>
           {student.portfolio && (
             <li>
-              <a href={student.portfolio} rel="noopener noreferrer">
-                Portfolio
-              </a>
+              <ExternalLink href={student.portfolio}>Portfolio</ExternalLink>
             </li>
           )}
         </ul>
         <h4>Project you&apos;re most proud of:</h4>
         <p className={styles.newlines}>{student.mostProud}</p>
+        {student.isAlum && (
+          <ul className={styles['true-false']}>
+            <li>
+              {renderStatusIcon(student.wantsToCoach)}
+              {student.firstName} {student.wantsToCoach ? 'wants to be' : 'does not want to be'} a
+              student coach
+            </li>
+          </ul>
+        )}
       </section>
 
       <section>
