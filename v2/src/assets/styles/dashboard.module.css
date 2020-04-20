@@ -22,14 +22,15 @@
 }
 
 .student-list {
-  width: 25%;
+  width: 28%;
   list-style-type: none;
   padding: 0;
   margin: 0;
   overflow-y: scroll;
+  font-size: 1.5rem;
 }
 
 .student-detail {
-  width: 75%;
+  width: 72%;
   padding: 0 2rem;
 }

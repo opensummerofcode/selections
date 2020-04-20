@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import tempData from './tempData';
 import { db } from '../firebase';
 import { Student } from '../models';
+import StudentContext from '../context/students';
 
 import StudentList from '../components/StudentList';
 import StudentDetail from '../components/StudentDetail';
@@ -12,8 +13,7 @@ import styles from '../assets/styles/dashboard.module.css';
 const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [students, setStudents] = useState({});
-  const [selectedStudent, selectStudent] = useState(null);
-
+  const [selectedStudent, setSelectedStudent] = useState(null);
   /*
   useEffect(() => {
     const unsubscribe = db.collection('students').onSnapshot((snapshot) => {
@@ -30,8 +30,7 @@ const Dashboard = () => {
 
     return unsubscribe;
   }, []);
-  */
-
+*/
   useEffect(() => {
     const data = Object.keys(tempData).reduce((all, id) => {
       all[id] = new Student(tempData[id]);
@@ -40,13 +39,25 @@ const Dashboard = () => {
     setStudents(data);
   }, []);
 
+  const selectStudent = (student) => {
+    console.log(student);
+    setSelectedStudent(student);
+  };
+
+  const studentContext = {
+    selectedStudent,
+    selectStudent
+  };
+
   return (
     <main className={`page-container ${styles.dashboard}`}>
-      <Filters />
-      <div className={styles['content-wrapper']}>
-        <StudentList selectStudent={selectStudent} students={students} />
-        <StudentDetail selectedStudent={selectedStudent} />
-      </div>
+      <StudentContext.Provider value={studentContext}>
+        <Filters />
+        <div className={styles['content-wrapper']}>
+          <StudentList students={students} />
+          <StudentDetail selectedStudent={selectedStudent} />
+        </div>
+      </StudentContext.Provider>
     </main>
   );
 };
