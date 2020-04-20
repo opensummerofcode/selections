@@ -24,6 +24,14 @@
   display: flex;
 }
 
+.name {
+  display: flex;
+  align-items: center;
+}
+.suggestion-amount {
+  margin-left: auto;
+}
+
 .suggestions span {
   transition: all 0.3s ease;
   border-radius: 0.2rem;

@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { Badge, Pane } from 'evergreen-ui';
+import { Badge, Pane, Pill } from 'evergreen-ui';
 import { Student } from '../models';
 import StudentContext from '../context/students';
 
@@ -37,11 +37,16 @@ const StudentCard = ({ student }) => {
           elevation={isActive ? 2 : 1}
         >
           <div className={styles.name}>
-            {firstName} {lastName}
+            {firstName}&nbsp;<strong>{lastName}</strong>
             {student.isAlum && (
               <Badge color="green" marginLeft={8}>
                 alum
               </Badge>
+            )}
+            {suggestionAmounts.total > 0 && (
+              <div className={styles['suggestion-amount']}>
+                <Pill>{suggestionAmounts.total}</Pill>
+              </div>
             )}
           </div>
           <div className={styles.suggestions}>
