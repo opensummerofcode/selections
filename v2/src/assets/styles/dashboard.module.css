@@ -32,6 +32,7 @@
   display: flex;
   align-items: center;
   background: var(--color-white);
+  z-index: 11;
 }
 
 .student-list ol {
@@ -40,6 +41,7 @@
   margin: 0;
   font-size: 1.5rem;
   margin-top: var(--filters-height);
+  background-color: var(--color-off-white);
 }
 
 .student-detail {

@@ -10,7 +10,6 @@ import Filters from '../components/Filters';
 import styles from '../assets/styles/dashboard.module.css';
 
 const Dashboard = () => {
-  const [isLoading, setIsLoading] = useState(true);
   const [students, setStudents] = useState({});
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [suggestions, setSuggestions] = useState({});
@@ -27,7 +26,6 @@ const Dashboard = () => {
         newStudents[student.id] = student;
       });
       setStudents((s) => ({ ...s, ...newStudents }));
-      setIsLoading(false);
     });
     return unsubscribe;
   }, []);

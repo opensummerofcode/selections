@@ -15,10 +15,10 @@
   --color-off-white: #f1f3f8;
   --color-black: #333;
   --color-dark-blue: #1e1d36;
-  --color-green: #1de1ae;
-  --color-yellow: #fcb70f;
   --color-red: #f14a3b;
-  --color-danger: #8c312d;
+  --color-yes: rgba(71, 184, 129, 0.5);
+  --color-no: rgba(236, 76, 71, 0.5);
+  --color-maybe: rgba(251, 230, 162, 0.5);
   --font-copy: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   --font-titles: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
