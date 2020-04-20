@@ -1,5 +1,49 @@
+.student-detail {
+  position: relative;
+  padding: 0 2rem 2rem;
+}
+
+.student-detail header {
+  position: fixed;
+  width: 100%;
+  height: 4rem;
+  background: var(--color-white);
+  display: flex;
+  align-items: center;
+}
+
+.student-detail h4 {
+  margin: 3rem 0 0;
+}
+
+.student-detail section {
+  margin-bottom: 4.8rem;
+}
+
+.student-detail section:first-of-type {
+  margin-top: 5rem;
+}
+
+.student-detail p {
+  max-width: 80rem;
+}
+
 .empty,
 .name {
   margin: 0;
   font-size: 2rem;
+}
+
+.newlines {
+  white-space: pre-line;
+}
+
+.true-false {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+.icon {
+  margin-right: 1rem;
 }

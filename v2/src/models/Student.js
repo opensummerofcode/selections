@@ -38,12 +38,12 @@ class Student {
     Object.keys(student).forEach((prop) => {
       const value = student[prop];
       if (prop === 'gender') this[prop] = parseGender(value);
-      else if (prop === 'school') this.school = parseNameOfSchool(value, student.otherSchool);
+      else if (prop === 'nameOfSchool') this.school = parseNameOfSchool(value, student.otherSchool);
       else if (prop === 'fieldOfStudy') this[prop] = parseFieldOfStudy(value);
       else if (prop === 'typeOfDegree') this[prop] = parseTypeOfDegree(value);
       else if (prop === 'applyingForRoles') this[prop] = parseRoles(value);
       else if (prop === 'ownLaptop') this.hasLaptop = parseHasLaptop(value);
-      this[prop] = parseField(value);
+      else this[prop] = parseField(value);
     });
     this.id = student.id;
   }
