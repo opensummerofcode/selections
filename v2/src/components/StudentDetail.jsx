@@ -128,8 +128,8 @@ const StudentDetail = ({ selectedStudent: student }) => {
         <p>The student can work:</p>
         <ul className={styles['true-false']}>
           <li>
-            {renderStatusIcon(student.canWorkUnderEmploymentAgreement)}under a Belgian Employment
-            Agreement
+            {renderStatusIcon(student.canWorkUnderEmploymentAgreement)}under a Belgian employment
+            agreement
           </li>
           <li>
             {renderStatusIcon(student.canWorkDuringHours)}
