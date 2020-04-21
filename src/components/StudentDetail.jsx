@@ -90,7 +90,11 @@ const StudentDetail = ({ selectedStudent: student }) => {
   };
 
   const $suggestions = ['yes', 'maybe', 'no'].map(renderSuggestionsPerType);
-  const $applyingFor = student.applyingForRoles.map((r) => <Badge marginRight={8}>{r}</Badge>);
+  const $applyingFor = student.applyingForRoles.map((r) => (
+    <Badge key={r} marginRight={8}>
+      {r}
+    </Badge>
+  ));
 
   const { firstName, lastName } = student;
   return (

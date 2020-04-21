@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { SearchInput } from 'evergreen-ui';
 import { Student } from '../models';
+import Filters from './Filters';
 import StudentCard from './StudentCard';
 
 import styles from '../assets/styles/dashboard.module.css';
 
 const StudentList = ({ students }) => {
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const renderStudent = (student) => <StudentCard key={student.id} student={student} />;
+  const [filters, setFilters] = useState({});
 
   const filterBySearchQuery = (student) => {
-    const query = searchQuery.toLowerCase();
+    const query = filters.searchQuery.toLowerCase();
     const firstName = student.firstName.toLowerCase();
     const lastName = student.lastName.toLowerCase();
     return (
@@ -31,16 +29,10 @@ const StudentList = ({ students }) => {
     return 0;
   };
 
+  const renderStudent = (student) => <StudentCard key={student.id} student={student} />;
   return (
     <div className={styles['student-list']}>
-      <header>
-        <SearchInput
-          placeholder="Search students by name..."
-          width="100%"
-          onChange={(e) => setSearchQuery(e.target.value)}
-          value={searchQuery}
-        />
-      </header>
+      <Filters setFilters={setFilters} />
       <ol>
         {students &&
           Object.keys(students)

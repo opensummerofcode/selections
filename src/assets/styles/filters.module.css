@@ -1,0 +1,15 @@
+.filters {
+  position: fixed;
+  height: var(--filters-height);
+  width: var(--width-list);
+  display: flex;
+  flex-direction: column;
+  background: var(--color-white);
+  z-index: 5;
+  padding: 0 1rem;
+  box-shadow: 0 0.5rem 2rem -2rem rgba(0, 0, 0, 0.8);
+}
+
+.filters > div {
+  margin-bottom: 0.8rem;
+}

@@ -51,7 +51,6 @@
 
 .suggestions .suggestions-empty {
   background-color: lightgray;
-  z-index: 10;
   flex: 1;
 }
 

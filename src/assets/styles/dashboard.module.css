@@ -1,51 +1,37 @@
 .dashboard {
-  min-height: calc(100% - 8rem) !important;
-  height: calc(100% - 8rem);
-}
-
-.filters {
-  width: 100%;
-  height: 2rem;
-  display: flex;
-  align-items: center;
+  /* account for height of header */
+  min-height: calc(100% - 10rem) !important;
+  height: calc(100% - 10rem);
 }
 
 .content-wrapper {
   display: flex;
-  height: calc(100% - 2rem);
+  height: 100%;
   align-items: stretch;
+  --width-list: 28%;
+  --width-detail: 72%;
+  --height-filters: 15rem;
 }
 
 .student-list {
   position: relative;
-  width: 28%;
+  width: var(--width-list);
   height: 100%;
-  overflow-y: scroll;
   font-size: 1.5rem;
-  --filters-height: 4rem;
-}
-
-.student-list header {
-  position: fixed;
-  height: var(--filters-height);
-  width: 27%;
-  display: flex;
-  align-items: center;
-  background: var(--color-white);
-  z-index: 11;
 }
 
 .student-list ol {
+  height: calc(100% - var(--height-filters));
   list-style-type: none;
   padding: 0;
-  margin: 0;
+  margin: var(--height-filters) 0 0;
   font-size: 1.5rem;
-  margin-top: var(--filters-height);
   background-color: var(--color-off-white);
+  overflow-y: scroll;
 }
 
 .student-detail {
-  width: 72%;
+  width: var(--width-detail);
   height: 100%;
   overflow-y: scroll;
 }
