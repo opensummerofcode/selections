@@ -50,6 +50,7 @@ const StudentCard = ({ student }) => {
             )}
           </div>
           <div className={styles.suggestions}>
+            {/* TODO: This could be a lot more dynamic */}
             {suggestionAmounts.total > 0 ? (
               <>
                 {suggestionAmounts.yes > 0 && (
