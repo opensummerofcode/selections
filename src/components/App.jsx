@@ -1,62 +1,74 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import HTML5Backend from 'react-dnd-html5-backend';
-import { DragDropContextProvider } from 'react-dnd';
-import {
-  authProvider, auth, db, authPersistence
-} from '../firebase';
+import { auth, db } from '../firebase';
 import AuthContext from '../context/auth';
-import Students from './Students';
-import Pending from './Pending';
+
+import Dashboard from '../pages/Dashboard';
+import Login from '../pages/Login';
+import UserManagement from '../pages/UserManagement';
+import Pending from '../pages/Pending';
+
+import Header from './Header';
+import PrivateRoute from './PrivateRoute';
+
+import { User } from '../models';
 
 const App = () => {
-  const [authFailed, setFailure] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const getUser = uid => db.collection('users').doc(uid).get();
-
   useEffect(() => {
     auth.onAuthStateChanged(async (rawUser) => {
-      if (rawUser) {
-        const user = await getUser(rawUser.uid);
-        setCurrentUser(user.data());
-        return setIsLoading(false);
+      if (!rawUser) {
+        setIsLoading(false);
+        return setCurrentUser(null);
       }
-      return auth.setPersistence(authPersistence)
-        .then(() => auth.signInWithPopup(authProvider))
-        .then(response => getUser(response.user.uid))
-        .then((doc) => {
-          setCurrentUser(doc.data());
-          return setIsLoading(false);
-        })
-        .catch((err) => {
-          setFailure(true);
+      return db
+        .collection('users')
+        .doc(rawUser.uid)
+        .onSnapshot((doc) => {
+          const user = doc.data();
+          if (!user) return;
+          setCurrentUser(new User(user));
           setIsLoading(false);
-          console.error(err);
         });
     });
   }, []);
 
+  const logout = () => {
+    auth.signOut().then(() => setCurrentUser(null));
+  };
+
   const authContext = {
     user: currentUser,
     setAuthenticatedUser: setCurrentUser,
-    isLoading,
-    authFailed
+    isLoading
   };
 
+  if (isLoading) return <p />;
   return (
-    <DragDropContextProvider backend={HTML5Backend}>
-      <AuthContext.Provider value={authContext}>
-        <BrowserRouter>
-          <Switch>
-            <Route path="/:path(|index|home|start)" component={Students} />
-            <Route path="/pending" component={Pending} />
-            <Route render={() => <p>Page not found</p>} />
-          </Switch>
-        </BrowserRouter>
-      </AuthContext.Provider>
-    </DragDropContextProvider>
+    <AuthContext.Provider value={authContext}>
+      <BrowserRouter>
+        <Header user={currentUser} logout={logout} />
+        <Switch>
+          <PrivateRoute path="/:path(|index|home|start)" guarded component={Dashboard} />
+          <PrivateRoute
+            path="/manage-users"
+            admin
+            component={(props) => <UserManagement {...props} user={currentUser} />}
+          />
+          <PrivateRoute
+            path="/pending"
+            component={(props) => <Pending {...props} user={currentUser} />}
+          />
+          <Route
+            path="/login"
+            render={(props) => <Login {...props} isLoggedIn={!!currentUser} />}
+          />
+          <Route render={() => <p>Page not found</p>} />
+        </Switch>
+      </BrowserRouter>
+    </AuthContext.Provider>
   );
 };
 
