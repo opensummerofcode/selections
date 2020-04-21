@@ -183,7 +183,11 @@ const StudentDetail = ({ selectedStudent: student }) => {
 
       <section>
         <h3>Suggestions</h3>
-        <ul className={styles['true-false']}>{$suggestions}</ul>
+        {[].concat(...$suggestions).length > 0 ? (
+          <ul className={styles['true-false']}>{$suggestions}</ul>
+        ) : (
+          <p>No one has made a suggestion for {student.firstName} yet.</p>
+        )}
       </section>
 
       <section>
