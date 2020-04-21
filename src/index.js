@@ -8,9 +8,7 @@ import './assets/styles/index.css';
 
 ReactDOM.render(
   // eslint-disable-next-line react/jsx-filename-extension
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <App />,
   document.getElementById('root')
 );
 
