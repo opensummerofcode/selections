@@ -19,10 +19,10 @@ const UserManagement = ({ user: currentUser }) => {
       data.forEach((change) => {
         const updated = change.doc.data();
         if (currentUser.id !== updated.uid) {
-          newUsers[data.uid] = new User(updated);
+          newUsers[updated.uid] = new User(updated);
         }
       });
-      setUsers(newUsers);
+      setUsers((u) => ({ ...u, ...newUsers }));
     });
     return unsubscribe;
   }, [currentUser.id]);
@@ -71,7 +71,7 @@ const UserManagement = ({ user: currentUser }) => {
           <Table.TextHeaderCell>Email</Table.TextHeaderCell>
           <Table.TextHeaderCell>Account status</Table.TextHeaderCell>
         </Table.Head>
-        <Table.Body height={240}>{$users}</Table.Body>
+        <Table.Body>{$users}</Table.Body>
       </Table>
     );
   };

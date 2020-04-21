@@ -1,4 +1,9 @@
 .module {
   width: 96rem;
-  margin: 5rem auto;
+  margin: 0 auto;
+  padding-top: 5rem;
+}
+
+.module h2 {
+  margin-top: 0;
 }
