@@ -16,6 +16,7 @@ import { User } from '../models';
 const App = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   useEffect(() => {
     auth.onAuthStateChanged(async (rawUser) => {
@@ -63,7 +64,14 @@ const App = () => {
           />
           <Route
             path="/login"
-            render={(props) => <Login {...props} isLoggedIn={!!currentUser} />}
+            render={(props) => (
+              <Login
+                {...props}
+                isLoggingIn={isLoggingIn}
+                setIsLoggingIn={setIsLoggingIn}
+                isLoggedIn={!!currentUser}
+              />
+            )}
           />
           <Route render={() => <p>Page not found</p>} />
         </Switch>

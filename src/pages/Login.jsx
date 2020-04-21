@@ -7,9 +7,7 @@ import { authProvider, auth } from '../firebase';
 import styles from '../assets/styles/pending.module.css';
 import logo from '../assets/img/osoc.png';
 
-const Login = ({ history, isLoggedIn }) => {
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
-
+const Login = ({ history, isLoggingIn, isLoggedIn, setIsLoggingIn }) => {
   useEffect(() => {
     if (!isLoggedIn) return;
     history.push('/');
@@ -29,7 +27,7 @@ const Login = ({ history, isLoggedIn }) => {
         After you&apos;ve logged in with your Google account, we&apos;ll enable your account so you
         can get started.
       </p>
-      <Button onClick={doLogin} appearance="primary" intent="default">
+      <Button isLoading={isLoggingIn} onClick={doLogin} appearance="primary">
         Log in
       </Button>
       <div className={styles.logo}>
@@ -42,7 +40,9 @@ const Login = ({ history, isLoggedIn }) => {
 Login.propTypes = {
   // eslint-disable-next-line
   history: PropTypes.object,
-  isLoggedIn: PropTypes.bool.isRequired
+  isLoggedIn: PropTypes.bool.isRequired,
+  isLoggingIn: PropTypes.bool.isRequired,
+  setIsLoggingIn: PropTypes.func.isRequired
 };
 
 export default withRouter(Login);
