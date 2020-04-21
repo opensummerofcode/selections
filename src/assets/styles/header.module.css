@@ -1,0 +1,60 @@
+.header {
+  width: 100vw;
+  padding: 0 2rem;
+  box-shadow: 0.4rem 0 2rem -0.5rem rgba(0, 0, 0, 0.2);
+  height: 8rem;
+}
+
+.title {
+  font-size: 2.2rem;
+  font-weight: bold;
+  padding-left: 5rem;
+  background-image: url('../img/osoc-small-transparent.png');
+  background-position: left center;
+  background-size: 4rem;
+  background-repeat: no-repeat;
+  padding: 1.2rem 0rem 1.2rem 5rem;
+}
+
+.navigation {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navitems {
+  list-style-type: none;
+  display: flex;
+  padding: 0;
+}
+
+.navitems li {
+  margin-left: 5rem;
+}
+
+.navitems a {
+  text-decoration: none;
+  position: relative;
+  font-weight: 600;
+}
+
+.navitems a:after {
+  background: none repeat scroll 0 0 transparent;
+  bottom: -0.4rem;
+  content: '';
+  display: block;
+  height: 2px;
+  left: 50%;
+  position: absolute;
+  background: var(--color-dark-blue);
+  transition: width 0.3s ease 0s, left 0.3s ease 0s;
+  width: 0;
+}
+
+.navitems a.active:after,
+.navitems a:focus:after,
+.navitems a:hover:after {
+  width: 100%;
+  left: 0;
+}

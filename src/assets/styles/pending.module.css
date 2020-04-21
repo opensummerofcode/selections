@@ -1,0 +1,26 @@
+.title {
+  font-weight: bold;
+}
+
+.pending {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 50rem;
+  height: 35rem;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  margin-top: -15rem;
+  margin-left: -25rem;
+}
+
+.logo {
+  width: 40rem;
+}
+
+.logo img {
+  width: 100%;
+}

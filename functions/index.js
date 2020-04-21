@@ -11,5 +11,13 @@ exports.createUser = functions.auth.user().onCreate((user) => {
     admin: false,
     pending: true
   };
-  return admin.firestore().collection('users').doc(user.uid).set(newUser);
+  return admin
+    .firestore()
+    .collection('users')
+    .doc(user.uid)
+    .set(newUser)
+    .then(() => ({
+      message: `Account for ${newUser.displayName} successfully created.`
+    }))
+    .catch((err) => err);
 });

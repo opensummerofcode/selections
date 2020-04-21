@@ -1,49 +1,82 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { Pane } from 'evergreen-ui';
-import { DragSource } from 'react-dnd';
-import Student from '../models/Student';
+import { Badge, Pane, Pill } from 'evergreen-ui';
+import { Student } from '../models';
+import StudentContext from '../context/students';
 
-const collect = (connect, monitor) => ({
-  connectDragSource: connect.dragSource(),
-  isDragging: monitor.isDragging()
-});
+import styles from '../assets/styles/student-card.module.css';
 
-const beginDrag = props => ({ ...props });
+const StudentCard = ({ student }) => {
+  const { firstName, lastName } = student;
+  const { selectedStudent, selectStudent, suggestions } = useContext(StudentContext);
 
-const endDrag = (props, monitor) => {
-  if (!monitor.didDrop()) return;
+  const isActive = selectedStudent && selectedStudent.id === student.id;
 
-  const { student } = monitor.getItem();
-  const project = monitor.getDropResult();
-  student.setAssignedStatus(true);
-  project.assign(student).catch(() => student.setAssignedStatus(false));
+  const suggestionList = suggestions[student.id];
+  const countSuggestionsOfType = (type) => {
+    if (!suggestionList) return 0;
+    return Object.keys(suggestionList).filter((person) => suggestionList[person].status === type)
+      .length;
+  };
+
+  const suggestionAmounts = ['yes', 'maybe', 'no'].reduce(
+    (all, status) => {
+      const amount = countSuggestionsOfType(status);
+      all[status] = amount;
+      all.total += amount;
+      return all;
+    },
+    { total: 0 }
+  );
+
+  return (
+    <li className={styles.card}>
+      <button onClick={() => selectStudent(student)} type="button" className="button--seamless">
+        <Pane
+          className={`${styles.wrapper} ${isActive ? styles.active : ''}`}
+          elevation={isActive ? 2 : 1}
+        >
+          <div className={styles.name}>
+            {firstName}&nbsp;<strong>{lastName}</strong>
+            {student.isAlum && (
+              <Badge color="green" marginLeft={8}>
+                alum
+              </Badge>
+            )}
+            {suggestionAmounts.total > 0 && (
+              <div className={styles['suggestion-amount']}>
+                <Pill>{suggestionAmounts.total}</Pill>
+              </div>
+            )}
+          </div>
+          <div className={styles.suggestions}>
+            {suggestionAmounts.total > 0 ? (
+              <>
+                <span
+                  style={{ flex: suggestionAmounts.total / suggestionAmounts.yes }}
+                  className={styles['suggestions-yes']}
+                />
+                <span
+                  style={{ flex: suggestionAmounts.total / suggestionAmounts.maybe }}
+                  className={styles['suggestions-maybe']}
+                />
+                <span
+                  style={{ flex: suggestionAmounts.total / suggestionAmounts.no }}
+                  className={styles['suggestions-no']}
+                />
+              </>
+            ) : (
+              <span className={styles['suggestions-empty']} />
+            )}
+          </div>
+        </Pane>
+      </button>
+    </li>
+  );
 };
-
-const StudentCard = ({
-  student, countSuggestionsOfType, selectStudent, connectDragSource
-}) => connectDragSource(
-  <li className={`status--${student.status}`}>
-    <button type="button" className="button--seamless" onClick={() => selectStudent(student)}>
-      <Pane className="students__student" elevation={1}>
-        <div className="students__student__name">
-          <span>{student.firstName} {student.lastName}</span>
-          {student.confirmed && <span className="confirmed">Email sent</span>}
-        </div>
-        <div className="students__student__statuses">
-          <span>Yes: {countSuggestionsOfType(student.id, 'yes')}</span>
-          <span>Maybe: {countSuggestionsOfType(student.id, 'maybe')}</span>
-          <span>No: {countSuggestionsOfType(student.id, 'no')}</span>
-        </div>
-      </Pane>
-    </button>
-  </li>
-);
 
 StudentCard.propTypes = {
-  student: PropTypes.instanceOf(Student),
-  isDragging: PropTypes.bool.isRequired,
-  connectDragSource: PropTypes.func.isRequired
+  student: PropTypes.instanceOf(Student)
 };
 
-export default DragSource('student', { beginDrag, endDrag }, collect)(StudentCard);
+export default StudentCard;
