@@ -52,7 +52,8 @@ const App = () => {
       <BrowserRouter>
         <Header user={currentUser} logout={logout} />
         <Switch>
-          <PrivateRoute path="/:path(|index|home|start)" guarded component={Dashboard} />
+          <PrivateRoute path="/:path(|index|home|start)" exact guarded component={Dashboard} />
+          <PrivateRoute path="/student/:id/:name" guarded component={Dashboard} />
           <PrivateRoute
             path="/manage-users"
             admin
