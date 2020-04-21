@@ -30,6 +30,11 @@ ExternalLink.propTypes = {
   children: PropTypes.node.isRequired
 };
 
+/* TODO:
+  This component can be a lot more dynamic since we're rendering
+  a lot based a fixed 3 statuses: yes, maybe, no
+  Refactor required
+*/
 const StudentDetail = ({ selectedStudent: student }) => {
   const { user } = useContext(AuthContext);
   const { suggestions } = useContext(StudentContext);
@@ -180,7 +185,6 @@ const StudentDetail = ({ selectedStudent: student }) => {
           </div>
         )}
       </header>
-
       <section>
         <h3>Suggestions</h3>
         {[].concat(...$suggestions).length > 0 ? (
@@ -248,6 +252,15 @@ const StudentDetail = ({ selectedStudent: student }) => {
           <li>
             {renderStatusIcon(student.hasLaptop)}
             on their own laptop
+          </li>
+        </ul>
+        <p>Details:</p>
+        <ul>
+          <li>
+            First language: <strong>{student.firstLanguage}</strong>
+          </li>
+          <li>
+            Level of English: <strong>{student.levelOfEnglish}/5</strong>
           </li>
         </ul>
       </section>

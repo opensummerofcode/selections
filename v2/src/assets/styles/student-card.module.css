@@ -54,3 +54,7 @@
   z-index: 10;
   flex: 1;
 }
+
+section ul {
+  padding-left: 2rem;
+}
