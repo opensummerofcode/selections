@@ -46,6 +46,8 @@ const App = () => {
     isLoading
   };
 
+  console.log('oi');
+
   if (isLoading) return <p />;
   return (
     <AuthContext.Provider value={authContext}>
