@@ -90,6 +90,7 @@ const StudentDetail = ({ selectedStudent: student }) => {
   };
 
   const $suggestions = ['yes', 'maybe', 'no'].map(renderSuggestionsPerType);
+  const $applyingFor = student.applyingForRoles.map((r) => <Badge marginRight={8}>{r}</Badge>);
 
   const { firstName, lastName } = student;
   return (
@@ -272,7 +273,7 @@ const StudentDetail = ({ selectedStudent: student }) => {
         <h4>Why do you want to participate in osoc?</h4>
         <p className={styles.newlines}>{student.whyOsoc}</p>
 
-        <h4>Why do you think you&apos;re a good fit</h4>
+        <h4>Why do you think you&apos;re a good fit?</h4>
         <p className={styles.newlines}>{student.whyGoodFit}</p>
 
         <h4>What are the things you want to learn at osoc?</h4>
@@ -288,6 +289,7 @@ const StudentDetail = ({ selectedStudent: student }) => {
           </>
         )}
       </section>
+      <div className={styles.applyingFor}> {$applyingFor}</div>
     </Wrapper>
   );
 };

@@ -1,6 +1,6 @@
 .student-detail {
   position: relative;
-  padding: 0 2rem 2rem;
+  padding: 0 2rem 4rem 2rem;
 }
 
 .student-detail header {
@@ -77,4 +77,16 @@
 
 .icon-container img {
   max-width: 100%;
+}
+
+.applyingFor {
+  position: fixed;
+  background: var(--color-white);
+  right: 2rem;
+  bottom: 0.5rem;
+  z-index: 2;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  padding: 1rem;
 }
