@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import { db } from '../firebase';
 import { Student } from '../models';
 import StudentContext from '../context/students';
@@ -9,12 +11,20 @@ import Filters from '../components/Filters';
 
 import styles from '../assets/styles/dashboard.module.css';
 
-const Dashboard = () => {
+const Dashboard = ({ history, match }) => {
   const [students, setStudents] = useState({});
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [suggestions, setSuggestions] = useState({});
 
-  const selectStudent = (student) => setSelectedStudent(student);
+  const selectedId = match.params.id;
+  useEffect(() => {
+    if (!students[selectedId]) return;
+    setSelectedStudent(students[selectedId]);
+  }, [students, selectedId]);
+
+  const selectStudent = (student) => {
+    history.push(`/student/${student.id}/${student.firstName}-${student.lastName}`);
+  };
 
   useEffect(() => {
     const unsubscribe = db.collection('students').onSnapshot((snapshot) => {
@@ -60,4 +70,13 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+Dashboard.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired
+  }),
+  match: PropTypes.shape({
+    params: PropTypes.shape({ id: PropTypes.string })
+  })
+};
+
+export default withRouter(Dashboard);

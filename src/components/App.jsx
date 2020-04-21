@@ -46,13 +46,16 @@ const App = () => {
     isLoading
   };
 
+  console.log('oi');
+
   if (isLoading) return <p />;
   return (
     <AuthContext.Provider value={authContext}>
       <BrowserRouter>
         <Header user={currentUser} logout={logout} />
         <Switch>
-          <PrivateRoute path="/:path(|index|home|start)" guarded component={Dashboard} />
+          <PrivateRoute path="/:path(|index|home|start)" exact guarded component={Dashboard} />
+          <PrivateRoute path="/student/:id/:name" guarded component={Dashboard} />
           <PrivateRoute
             path="/manage-users"
             admin
