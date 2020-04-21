@@ -66,8 +66,8 @@ class Student {
     return !parseField(this.alum).includes('Yes, but');
   }
 
-  createOrUpdateSuggestion = (userId, status, reason, exists) => {
-    const updated = { [userId]: { status, reason } };
+  createOrUpdateSuggestion = (userName, status, reason, exists) => {
+    const updated = { [userName]: { status, reason } };
     if (!exists) return db.collection('suggestions').doc(this.id).set(updated);
     return db.collection('suggestions').doc(this.id).update(updated);
   };

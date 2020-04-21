@@ -47,29 +47,44 @@ const StudentDetail = ({ selectedStudent: student }) => {
     );
   }
 
-  const renderStatusIcon = (condition) => (
-    <i className={styles.icon} aria-label={`${condition ? 'positive' : 'negative'}`}>
-      {condition ? (
-        <Icon size={16} icon="tick" color="success" />
-      ) : (
-        <Icon size={16} icon="cross" color="danger" />
-      )}
-    </i>
-  );
+  const renderStatusIcon = (condition, status) => {
+    // TODO: make accessible for screen readers
+    let $icon = <Icon size={16} icon="cross" color="danger" />;
+    if (status === 'yes' || condition) $icon = <Icon size={16} icon="tick" color="success" />;
+    else if (status === 'maybe') $icon = <Icon size={16} icon="minus" color="orange" />;
+    return <i className={styles.icon}>{$icon}</i>;
+  };
 
   const makeSuggestion = async () => {
     setSuggestionIsLoading(true);
 
     const exists = !!suggestions[student.id];
-    await student.createOrUpdateSuggestion(user.id, isSuggesting, $inputReason.value, exists);
+    await student.createOrUpdateSuggestion(user.name, isSuggesting, $inputReason.value, exists);
     if ($inputReason) $inputReason.value = '';
     setIsSuggesting(false);
     setSuggestionIsLoading(false);
   };
 
-  const suggest = (type) => {
-    setIsSuggesting(type);
+  const suggest = (type) => setIsSuggesting(type);
+
+  const renderSuggestionsPerType = (type) => {
+    const suggestionsForStudent = suggestions[student.id];
+    if (!suggestionsForStudent) return [];
+    return Object.keys(suggestionsForStudent)
+      .filter((person) => suggestionsForStudent[person].status === type)
+      .map((person) => {
+        const { status, reason } = suggestionsForStudent[person];
+        return (
+          <li>
+            {renderStatusIcon(null, status)}
+            <strong>{person}</strong>
+            {reason ? `: ${reason}` : ''}
+          </li>
+        );
+      });
   };
+
+  const $suggestions = ['yes', 'maybe', 'no'].map(renderSuggestionsPerType);
 
   const { firstName, lastName } = student;
   return (
@@ -165,6 +180,11 @@ const StudentDetail = ({ selectedStudent: student }) => {
           </div>
         )}
       </header>
+
+      <section>
+        <h3>Suggestions</h3>
+        <ul className={styles['true-false']}>{$suggestions}</ul>
+      </section>
 
       <section>
         <h3>Academia</h3>
