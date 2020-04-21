@@ -39,9 +39,7 @@ const reducer = (state, action) => {
     case 'search': {
       const searchQuery = action.payload;
       const availableRoles = searchQuery
-        ? state.availableRoles.filter((role) =>
-            role.toLowerCase().includes(searchQuery.toLowerCase())
-          )
+        ? roles.filter((role) => role.toLowerCase().includes(searchQuery.toLowerCase()))
         : [...roles];
       return { ...state, availableRoles };
     }
@@ -59,7 +57,7 @@ const RoleFilter = ({ setSelectedRoles }) => {
 
   useEffect(() => {
     setSelectedRoles(state.selected);
-  }, [state.selected]);
+  }, [state.selected, setSelectedRoles]);
 
   const { availableRoles, selected, label } = state;
   return (
