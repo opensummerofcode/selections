@@ -80,7 +80,7 @@ const StudentDetail = ({ selectedStudent: student }) => {
       .map((person) => {
         const { status, reason } = suggestionsForStudent[person];
         return (
-          <li>
+          <li key={`${person}-${type}`}>
             {renderStatusIcon(null, status)}
             <strong>{person}</strong>
             {reason ? `: ${reason}` : ''}
@@ -215,9 +215,11 @@ const StudentDetail = ({ selectedStudent: student }) => {
       <section>
         <h3>Experience</h3>
         <ul>
-          <li>
-            <ExternalLink href={student.cv}>CV</ExternalLink>
-          </li>
+          {student.cv && (
+            <li>
+              <ExternalLink href={student.cv}>CV</ExternalLink>
+            </li>
+          )}
           {student.portfolio && (
             <li>
               <ExternalLink href={student.portfolio}>Portfolio</ExternalLink>

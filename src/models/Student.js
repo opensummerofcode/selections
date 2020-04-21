@@ -1,4 +1,4 @@
-import { db } from '../firebase';
+import { db, storage } from '../firebase';
 
 const parseField = (value, other = false) => {
   if (typeof value === 'object' && value !== null) {
@@ -36,6 +36,8 @@ const parseHasLaptop = (value) => {
   return parseField(value).includes('Yes');
 };
 
+const getCV = (value) => storage.ref().child(`cv/${value}`).getDownloadURL();
+
 const capitalizeName = (name) =>
   name
     .split(' ')
@@ -55,9 +57,21 @@ class Student {
       else if (prop === 'typeOfDegree') this[prop] = parseTypeOfDegree(value);
       else if (prop === 'applyingForRoles') this[prop] = parseRoles(value);
       else if (prop === 'ownLaptop') this.hasLaptop = parseHasLaptop(value);
+      else if (prop === 'cv') this.setCV(value);
       else this[prop] = parseField(value);
     });
     this.id = student.id;
+  }
+
+  setCV(value) {
+    getCV(value)
+      .then((url) => {
+        this.cv = url;
+      })
+      .catch((err) => {
+        if (err.code === 'storage/object-not-found') this.cv = null;
+        else console.error(err);
+      });
   }
 
   get isAlum() {
