@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Student } from '../models';
+import { removeDiacritics } from '../util';
 import Filters from './Filters';
 import StudentCard from './StudentCard';
 
@@ -9,10 +10,12 @@ import styles from '../assets/styles/dashboard.module.css';
 const StudentList = ({ students }) => {
   const [filters, setFilters] = useState({});
 
+  const lowerAndParseStr = (str) => removeDiacritics(str.toLowerCase());
+
   const filterBySearchQuery = (student) => {
-    const query = filters.searchQuery.toLowerCase();
-    const firstName = student.firstName.toLowerCase();
-    const lastName = student.lastName.toLowerCase();
+    const query = lowerAndParseStr(filters.searchQuery);
+    const firstName = lowerAndParseStr(student.firstName);
+    const lastName = lowerAndParseStr(student.lastName);
     return (
       firstName.includes(query) ||
       lastName.includes(query) ||
@@ -22,10 +25,14 @@ const StudentList = ({ students }) => {
   };
 
   const sortByFirstNameThenLastName = (a, b) => {
-    if (a.firstName < b.firstName) return -1;
-    if (a.firstName > b.firstName) return 1;
-    if (a.lastName < b.lastName) return -1;
-    if (a.lastName > b.lastName) return 1;
+    const firstNameP1 = lowerAndParseStr(a.firstName);
+    const firstNameP2 = lowerAndParseStr(b.firstName);
+    const lastNameP1 = lowerAndParseStr(a.lastName);
+    const lastNameP2 = lowerAndParseStr(b.lastName);
+    if (firstNameP1 < firstNameP2) return -1;
+    if (firstNameP1 > firstNameP2) return 1;
+    if (lastNameP1 < lastNameP2) return -1;
+    if (lastNameP1 > lastNameP2) return 1;
     return 0;
   };
 
