@@ -24,7 +24,7 @@
   height: calc(100% - var(--height-filters));
   list-style-type: none;
   padding: 0;
-  margin: var(--height-filters) 0 0;
+  margin: calc(var(--height-filters) + 1rem) 0 0;
   font-size: 1.5rem;
   background-color: var(--color-off-white);
   overflow-y: scroll;

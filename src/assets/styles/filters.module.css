@@ -12,4 +12,10 @@
 
 .filters > div {
   margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+}
+
+.filters > div > span {
+  margin-left: 0.8rem;
 }

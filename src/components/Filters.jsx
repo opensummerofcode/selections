@@ -6,7 +6,7 @@ import RoleFilter from './RoleFilter';
 import styles from '../assets/styles/filters.module.css';
 /*
 TODO:
-status filters (no official status, accepted, reject, maybe) - filterlist
+status filters (no official status, accepted, reject, maybe) - filterlist or segmented control
 status is locked-in - yes/no
 */
 const Filters = ({ setFilters }) => {
@@ -14,7 +14,7 @@ const Filters = ({ setFilters }) => {
   const [selectedRoles, setSelectedRoles] = useState([]);
   const [isAlum, setIsAlum] = useState(false);
   const [wantsToCoach, setWantsToCoach] = useState(false);
-  const [hasUsersSuggestion, setHasUserSuggestion] = useState(false);
+  const [includeAlreadySuggested, setIncludeAlreadySuggested] = useState(true);
 
   useEffect(() => {
     setFilters({
@@ -22,9 +22,9 @@ const Filters = ({ setFilters }) => {
       selectedRoles,
       isAlum,
       wantsToCoach,
-      hasUsersSuggestion
+      includeAlreadySuggested
     });
-  }, [searchQuery, selectedRoles, isAlum, wantsToCoach, hasUsersSuggestion]);
+  }, [searchQuery, selectedRoles, isAlum, wantsToCoach, includeAlreadySuggested]);
   return (
     <header className={styles.filters}>
       <div>
@@ -40,15 +40,18 @@ const Filters = ({ setFilters }) => {
       </div>
       <div>
         <Switch checked={isAlum} onChange={(e) => setIsAlum(e.target.checked)} />
+        <span>Only alumni</span>
       </div>
       <div>
         <Switch checked={wantsToCoach} onChange={(e) => setWantsToCoach(e.target.checked)} />
+        <span>Only possible student coaches</span>
       </div>
       <div>
         <Switch
-          checked={hasUsersSuggestion}
-          onChange={(e) => setHasUserSuggestion(e.target.checked)}
+          checked={includeAlreadySuggested}
+          onChange={(e) => setIncludeAlreadySuggested(e.target.checked)}
         />
+        <span>Include students I&apos;ve suggested for</span>
       </div>
     </header>
   );
