@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useContext, memo } from 'react';
+import React, { useEffect, useContext, memo, useReducer } from 'react';
 import PropTypes from 'prop-types';
-import { Switch, SearchInput } from 'evergreen-ui';
+import { Switch, SearchInput, Button } from 'evergreen-ui';
 import { removeDiacritics } from '../util';
 import { Student } from '../models';
 import { roles } from '../constants';
@@ -16,17 +16,38 @@ status filters (no official status, accepted, reject, maybe) - filterlist or seg
 status is locked-in - yes/no
 */
 
+const normalize = (str) => removeDiacritics(str.toLowerCase());
+
+const initialState = {
+  searchQuery: '',
+  selectedRoles: [],
+  isAlum: false,
+  wantsToCoach: false,
+  includeAlreadySuggested: true
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'search':
+      return { ...state, searchQuery: action.payload };
+    case 'show-alum-only':
+      return { ...state, isAlum: action.payload };
+    case 'show-coaches-only':
+      return { ...state, wantsToCoach: action.payload };
+    case 'select-roles':
+      return { ...state, selectedRoles: action.payload };
+    case 'hide-suggested':
+      return { ...state, includeAlreadySuggested: action.payload };
+    case 'reset':
+      return { ...initialState };
+    default:
+      throw new Error(`${action.type} does not exist`);
+  }
+};
+
 const Filters = ({ students: studentObj, setFiltered }) => {
   const { user } = useContext(AuthContext);
   const { suggestions } = useContext(StudentContext);
-
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedRoles, setSelectedRoles] = useState([]);
-  const [isAlum, setIsAlum] = useState(false);
-  const [wantsToCoach, setWantsToCoach] = useState(false);
-  const [includeAlreadySuggested, setIncludeAlreadySuggested] = useState(true);
-
-  const normalize = (str) => removeDiacritics(str.toLowerCase());
 
   const students = Object.keys(studentObj)
     .map((id) => studentObj[id])
@@ -36,36 +57,7 @@ const Filters = ({ students: studentObj, setFiltered }) => {
       return s;
     });
 
-  const filterBySearchQuery = (student) => {
-    const query = normalize(searchQuery);
-    const { firstNameNormalized, lastNameNormalized } = student;
-    return (
-      firstNameNormalized.includes(query) ||
-      lastNameNormalized.includes(query) ||
-      `${firstNameNormalized} ${lastNameNormalized}`.includes(query) ||
-      `${firstNameNormalized} ${lastNameNormalized}`.includes(query)
-    );
-  };
-
-  const filterByIsAlum = (student) => (isAlum ? student.isAlum : true);
-
-  const filterByCoachStatus = (student) =>
-    wantsToCoach ? student.isAlum && student.wantsToCoach : true;
-
-  const filterByRole = (student) => {
-    const hasRoles = roles.filter((role) => {
-      if (selectedRoles.indexOf(role) === -1) return false;
-      if (role === 'Other' && student.hasOtherRole) return true;
-      if (student.applyingForRoles.indexOf(role) > -1) return true;
-      return false;
-    });
-    return hasRoles.length > 0;
-  };
-
-  const filterByHasSuggestion = (student) => {
-    if (includeAlreadySuggested) return true;
-    return !(suggestions[student.id] && !!suggestions[student.id][user.name]);
-  };
+  const [state, dispatch] = useReducer(reducer, { ...initialState });
 
   const sortByFirstNameThenLastName = (a, b) => {
     if (a.firstNameNormalized < b.firstNameNormalized) return -1;
@@ -75,9 +67,40 @@ const Filters = ({ students: studentObj, setFiltered }) => {
     return 0;
   };
 
+  const search = (student) => {
+    const query = normalize(state.searchQuery);
+    const { firstNameNormalized, lastNameNormalized } = student;
+    return (
+      firstNameNormalized.includes(query) ||
+      lastNameNormalized.includes(query) ||
+      `${firstNameNormalized} ${lastNameNormalized}`.includes(query) ||
+      `${firstNameNormalized} ${lastNameNormalized}`.includes(query)
+    );
+  };
+
+  const filterByIsAlum = (student) => (state.isAlum ? student.isAlum : true);
+
+  const filterByCoachStatus = (student) =>
+    state.wantsToCoach ? student.isAlum && student.wantsToCoach : true;
+
+  const filterByRole = (student) => {
+    const hasRoles = roles.filter((role) => {
+      if (state.selectedRoles.indexOf(role) === -1) return false;
+      if (role === 'Other' && student.hasOtherRole) return true;
+      if (student.applyingForRoles.indexOf(role) > -1) return true;
+      return false;
+    });
+    return hasRoles.length > 0;
+  };
+
+  const filterByHasSuggestion = (student) => {
+    if (state.includeAlreadySuggested) return true;
+    return !(suggestions[student.id] && !!suggestions[student.id][user.name]);
+  };
+
   useEffect(() => {
     const filtered = students
-      .filter(filterBySearchQuery)
+      .filter(search)
       .filter(filterByIsAlum)
       .filter(filterByCoachStatus)
       .filter(filterByRole)
@@ -85,7 +108,7 @@ const Filters = ({ students: studentObj, setFiltered }) => {
       .sort(sortByFirstNameThenLastName);
 
     setFiltered(filtered);
-  }, [students, searchQuery, selectedRoles, isAlum, wantsToCoach, includeAlreadySuggested]);
+  }, [students, Object.keys(state).map((key) => state[key])]);
 
   return (
     <header className={styles.filters}>
@@ -93,28 +116,39 @@ const Filters = ({ students: studentObj, setFiltered }) => {
         <SearchInput
           placeholder="Search students by name..."
           width="100%"
-          onChange={(e) => setSearchQuery(e.target.value)}
-          value={searchQuery}
+          onChange={(e) => dispatch({ type: 'search', payload: e.target.value })}
+          value={state.searchQuery}
         />
       </div>
       <div>
-        <RoleFilter setSelectedRoles={setSelectedRoles} />
+        <RoleFilter setSelectedRoles={(r) => dispatch({ type: 'select-roles', payload: r })} />
       </div>
       <div>
-        <Switch checked={isAlum} onChange={(e) => setIsAlum(e.target.checked)} />
+        <Switch
+          checked={state.isAlum}
+          onChange={(e) => dispatch({ type: 'show-alum-only', payload: e.target.checked })}
+        />
         <span>Only alumni</span>
       </div>
       <div>
-        <Switch checked={wantsToCoach} onChange={(e) => setWantsToCoach(e.target.checked)} />
+        <Switch
+          checked={state.wantsToCoach}
+          onChange={(e) => dispatch({ type: 'show-coaches-only', payload: e.target.checked })}
+        />
         <span>Only student coach volunteers</span>
       </div>
       <div>
         <Switch
-          checked={includeAlreadySuggested}
-          onChange={(e) => setIncludeAlreadySuggested(e.target.checked)}
+          checked={state.includeAlreadySuggested}
+          onChange={(e) => dispatch({ type: 'hide-suggested', payload: e.target.checked })}
         />
         <span>Include students you&apos;ve suggested for</span>
       </div>
+      {/*
+      <div>
+        <Button onClick={resetFilters}>Reset filters</Button>
+      </div>
+      */}
     </header>
   );
 };

@@ -43,7 +43,7 @@ const RoleFilter = ({ setSelectedRoles }) => {
 
   useEffect(() => {
     setSelectedRoles(state.selected);
-  }, [state.selected, setSelectedRoles]);
+  }, [state.selected]);
 
   const { availableRoles, selected, label } = state;
   return (
