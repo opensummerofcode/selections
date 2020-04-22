@@ -148,10 +148,10 @@ const Filters = ({ students: studentObj, setFiltered, filteredCount }) => {
         <span>Include students you&apos;ve suggested for</span>
       </div>
       <div className={styles.footer}>
-        <Button onClick={() => dispatch({ type: 'reset' })}>Reset filters</Button>
         <div>
           <Pill>{filteredCount}</Pill> of <Pill>{students.length}</Pill> shown
         </div>
+        <Button onClick={() => dispatch({ type: 'reset' })}>Reset filters</Button>
       </div>
     </header>
   );

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { SelectMenu, Button } from 'evergreen-ui';
+import { SelectMenu, Button, Position } from 'evergreen-ui';
 import { roles } from '../constants';
 
 const determineLabel = (selected) => {
@@ -49,6 +49,7 @@ const RoleFilter = ({ selected, setSelected }) => {
       onDeselect={(r) => deselect(r.value)}
       height={360}
       filterPlaceholder="Search roles..."
+      position={Position.TOP_RIGHT}
     >
       <Button width="100%">{label}</Button>
     </SelectMenu>
