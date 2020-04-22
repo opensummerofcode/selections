@@ -1,63 +1,52 @@
-import React, { useReducer, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { SelectMenu, Button } from 'evergreen-ui';
 import { roles } from '../constants';
 
-const determineRoleLabel = (selectedRoles) => {
-  const amount = selectedRoles.length;
-  if (amount === 1) return `Role: ${selectedRoles.toString()}`;
+const determineLabel = (selected) => {
+  const amount = selected.length;
+  if (amount === 1) return `Role: ${selected.toString()}`;
   if (amount > 1) return `${amount.toString()} roles selected...`;
   return 'Select roles...';
 };
 
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'select': {
-      const selected = [...state.selected, action.payload];
-      return { ...state, selected, label: determineRoleLabel(selected) };
-    }
-    case 'deselect': {
-      const selected = [...state.selected];
-      const deselectedItemIndex = state.selected.indexOf(action.payload);
-      if (deselectedItemIndex > -1) selected.splice(deselectedItemIndex, 1);
-      return { ...state, selected, label: determineRoleLabel(selected) };
-    }
-    case 'search': {
-      const searchQuery = action.payload;
-      const availableRoles = searchQuery
-        ? roles.filter((role) => role.toLowerCase().includes(searchQuery.toLowerCase()))
-        : [...roles];
-      return { ...state, availableRoles };
-    }
-    default:
-      throw new Error();
-  }
-};
+const RoleFilter = ({ selected, setSelected }) => {
+  const [label, setLabel] = useState(determineLabel([...roles]));
+  const [availableRoles, setAvailableRoles] = useState([...roles]);
 
-const RoleFilter = ({ setSelectedRoles }) => {
-  const [state, dispatch] = useReducer(reducer, {
-    selected: [...roles],
-    label: determineRoleLabel([...roles]),
-    availableRoles: [...roles]
-  });
+  const search = (query) => {
+    const available = query
+      ? roles.filter((role) => role.toLowerCase().includes(query.toLowerCase()))
+      : [...roles];
+    setAvailableRoles(available);
+  };
+
+  const select = (role) => setSelected([...selected, role]);
+
+  const deselect = (role) => {
+    const newSelected = [...selected];
+    const deselectedItemIndex = newSelected.indexOf(role);
+    if (deselectedItemIndex > -1) newSelected.splice(deselectedItemIndex, 1);
+    setSelected(newSelected);
+  };
 
   useEffect(() => {
-    setSelectedRoles(state.selected);
-  }, [state.selected]);
+    const newLabel = determineLabel(selected);
+    setLabel(newLabel);
+  }, [selected]);
 
-  const { availableRoles, selected, label } = state;
   return (
     <SelectMenu
       isMultiSelect
       hasTitle={false}
-      onFilterChange={(v) => dispatch({ type: 'search', payload: v })}
+      onFilterChange={search}
       options={availableRoles.map((role) => ({
         label: role,
         value: role
       }))}
       selected={selected}
-      onSelect={(r) => dispatch({ type: 'select', payload: r.value })}
-      onDeselect={(r) => dispatch({ type: 'deselect', payload: r.value })}
+      onSelect={(r) => select(r.value)}
+      onDeselect={(r) => deselect(r.value)}
       height={360}
       filterPlaceholder="Search roles..."
     >
@@ -67,7 +56,8 @@ const RoleFilter = ({ setSelectedRoles }) => {
 };
 
 RoleFilter.propTypes = {
-  setSelectedRoles: PropTypes.func.isRequired
+  selected: PropTypes.arrayOf(PropTypes.string).isRequired,
+  setSelected: PropTypes.func.isRequired
 };
 
 export default RoleFilter;
