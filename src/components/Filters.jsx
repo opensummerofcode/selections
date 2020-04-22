@@ -1,10 +1,12 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect, useContext, memo } from 'react';
 import PropTypes from 'prop-types';
 import { Switch, SearchInput } from 'evergreen-ui';
 import { removeDiacritics } from '../util';
 import { Student } from '../models';
 import { roles } from '../constants';
 import RoleFilter from './RoleFilter';
+import AuthContext from '../context/auth';
+import StudentContext from '../context/students';
 
 import styles from '../assets/styles/filters.module.css';
 
@@ -15,6 +17,9 @@ status is locked-in - yes/no
 */
 
 const Filters = ({ students: studentObj, setFiltered }) => {
+  const { user } = useContext(AuthContext);
+  const { suggestions } = useContext(StudentContext);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedRoles, setSelectedRoles] = useState([]);
   const [isAlum, setIsAlum] = useState(false);
@@ -57,6 +62,11 @@ const Filters = ({ students: studentObj, setFiltered }) => {
     return hasRoles.length > 0;
   };
 
+  const filterByHasSuggestion = (student) => {
+    if (includeAlreadySuggested) return true;
+    return !(suggestions[student.id] && !!suggestions[student.id][user.name]);
+  };
+
   const sortByFirstNameThenLastName = (a, b) => {
     if (a.firstNameNormalized < b.firstNameNormalized) return -1;
     if (a.firstNameNormalized > b.firstNameNormalized) return 1;
@@ -71,10 +81,11 @@ const Filters = ({ students: studentObj, setFiltered }) => {
       .filter(filterByIsAlum)
       .filter(filterByCoachStatus)
       .filter(filterByRole)
+      .filter(filterByHasSuggestion)
       .sort(sortByFirstNameThenLastName);
 
     setFiltered(filtered);
-  }, [students, searchQuery, selectedRoles, isAlum]);
+  }, [students, searchQuery, selectedRoles, isAlum, wantsToCoach, includeAlreadySuggested]);
 
   return (
     <header className={styles.filters}>
