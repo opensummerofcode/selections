@@ -36,6 +36,8 @@ const reducer = (state, action) => {
       return { ...state, wantsToCoach: action.payload };
     case 'select-roles':
       return { ...state, selectedRoles: action.payload };
+    case 'deselect-all-roles':
+      return { ...state, selectedRoles: [] };
     case 'hide-suggested':
       return { ...state, includeAlreadySuggested: action.payload };
     case 'reset':
@@ -120,11 +122,12 @@ const Filters = ({ students: studentObj, setFiltered, filteredCount }) => {
           value={state.searchQuery}
         />
       </div>
-      <div>
+      <div className={styles.double}>
         <RoleFilter
           selected={state.selectedRoles}
           setSelected={(r) => dispatch({ type: 'select-roles', payload: r })}
         />
+        <Button onClick={() => dispatch({ type: 'deselect-all-roles' })}>Deselect all</Button>
       </div>
       <div>
         <Switch

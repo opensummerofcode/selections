@@ -50,8 +50,9 @@ const RoleFilter = ({ selected, setSelected }) => {
       height={360}
       filterPlaceholder="Search roles..."
       position={Position.TOP_RIGHT}
+      width={200}
     >
-      <Button width="100%">{label}</Button>
+      <Button width="70%">{label}</Button>
     </SelectMenu>
   );
 };

@@ -22,6 +22,11 @@
   margin-left: 0.8rem;
 }
 
+.double {
+  display: flex;
+  justify-content: space-between;
+}
+
 .footer {
   display: flex;
   justify-content: space-between;
