@@ -44,6 +44,9 @@ const Filters = ({ students: studentObj, setFiltered }) => {
 
   const filterByIsAlum = (student) => (isAlum ? student.isAlum : true);
 
+  const filterByCoachStatus = (student) =>
+    wantsToCoach ? student.isAlum && student.wantsToCoach : true;
+
   const filterByRole = (student) => {
     const hasRoles = roles.filter((role) => {
       if (selectedRoles.indexOf(role) === -1) return false;
@@ -66,6 +69,7 @@ const Filters = ({ students: studentObj, setFiltered }) => {
     const filtered = students
       .filter(filterBySearchQuery)
       .filter(filterByIsAlum)
+      .filter(filterByCoachStatus)
       .filter(filterByRole)
       .sort(sortByFirstNameThenLastName);
 
@@ -91,7 +95,7 @@ const Filters = ({ students: studentObj, setFiltered }) => {
       </div>
       <div>
         <Switch checked={wantsToCoach} onChange={(e) => setWantsToCoach(e.target.checked)} />
-        <span>Only possible student coaches</span>
+        <span>Only student coach volunteers</span>
       </div>
       <div>
         <Switch
