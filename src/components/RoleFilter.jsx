@@ -1,21 +1,7 @@
 import React, { useReducer, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { SelectMenu, Button } from 'evergreen-ui';
-
-const roles = [
-  'Front-end developer',
-  'Back-end developer',
-  'UX designer',
-  'UI designer',
-  'Graphic designer',
-  'Business modeler',
-  'Video editor',
-  'Storyteller',
-  'Marketer',
-  'Copywriter',
-  'Photographer',
-  'Other'
-];
+import { roles } from '../constants';
 
 const determineRoleLabel = (selectedRoles) => {
   const amount = selectedRoles.length;

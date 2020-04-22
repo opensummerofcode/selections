@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Switch, SearchInput } from 'evergreen-ui';
 import { removeDiacritics } from '../util';
 import { Student } from '../models';
+import { roles } from '../constants';
 import RoleFilter from './RoleFilter';
 
 import styles from '../assets/styles/filters.module.css';
@@ -12,6 +13,7 @@ TODO:
 status filters (no official status, accepted, reject, maybe) - filterlist or segmented control
 status is locked-in - yes/no
 */
+
 const Filters = ({ students: studentObj, setFiltered }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedRoles, setSelectedRoles] = useState([]);
@@ -48,9 +50,23 @@ const Filters = ({ students: studentObj, setFiltered }) => {
     return 0;
   };
 
+  const filterByRole = (student) => {
+    const hasRoles = roles.filter((role) => {
+      if (selectedRoles.indexOf(role) === -1) return false;
+      if (role === 'Other' && student.hasOtherRole) return true;
+      if (student.applyingForRoles.indexOf(role) > -1) return true;
+      return false;
+    });
+    return hasRoles.length > 0;
+  };
+
   useEffect(() => {
-    setFiltered(students.filter(filterBySearchQuery).sort(sortByFirstNameThenLastName));
-  }, [students, searchQuery]);
+    const filtered = students
+      .filter(filterBySearchQuery)
+      .filter(filterByRole)
+      .sort(sortByFirstNameThenLastName);
+    setFiltered(filtered);
+  }, [students, searchQuery, selectedRoles]);
 
   return (
     <header className={styles.filters}>
