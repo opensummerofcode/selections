@@ -55,19 +55,17 @@ const StudentCard = ({ student }) => {
               <>
                 {suggestionAmounts.yes > 0 && (
                   <span
-                    style={{ flex: suggestionAmounts.total / suggestionAmounts.yes }}
+                    style={{ flex: suggestionAmounts.yes / suggestionAmounts.total }}
                     className={styles['suggestions-yes']}
                   />
                 )}
-                {suggestionAmounts.maybe > 0 && (
-                  <span
-                    style={{ flex: suggestionAmounts.total / suggestionAmounts.maybe }}
-                    className={styles['suggestions-maybe']}
-                  />
-                )}
+                <span
+                  style={{ flex: suggestionAmounts.maybe / suggestionAmounts.total }}
+                  className={styles['suggestions-maybe']}
+                />
                 {suggestionAmounts.no > 0 && (
                   <span
-                    style={{ flex: suggestionAmounts.total / suggestionAmounts.no }}
+                    style={{ flex: suggestionAmounts.no / suggestionAmounts.total }}
                     className={styles['suggestions-no']}
                   />
                 )}
