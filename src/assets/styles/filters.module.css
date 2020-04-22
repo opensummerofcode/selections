@@ -1,6 +1,6 @@
 .filters {
   position: fixed;
-  height: var(--filters-height);
+  height: var(--height-filters);
   width: var(--width-list);
   display: flex;
   flex-direction: column;
@@ -14,8 +14,16 @@
   margin-bottom: 0.8rem;
   display: flex;
   align-items: center;
+  width: 100%;
+  font-size: 1.4rem;
 }
 
 .filters > div > span {
   margin-left: 0.8rem;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }

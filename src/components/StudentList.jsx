@@ -12,7 +12,7 @@ const StudentList = ({ students }) => {
   const renderStudent = (student) => <StudentCard key={student.id} student={student} />;
   return (
     <div className={styles['student-list']}>
-      <Filters students={students} setFiltered={setFiltered} />
+      <Filters students={students} filteredCount={filtered.length} setFiltered={setFiltered} />
       <ol>{students && filtered.map(renderStudent)}</ol>
     </div>
   );

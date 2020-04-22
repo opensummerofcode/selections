@@ -1,6 +1,6 @@
-import React, { useEffect, useContext, memo, useReducer } from 'react';
+import React, { useEffect, useContext, useReducer, memo } from 'react';
 import PropTypes from 'prop-types';
-import { Switch, SearchInput, Button } from 'evergreen-ui';
+import { Switch, SearchInput, Button, Pill } from 'evergreen-ui';
 import { removeDiacritics } from '../util';
 import { Student } from '../models';
 import { roles } from '../constants';
@@ -45,7 +45,7 @@ const reducer = (state, action) => {
   }
 };
 
-const Filters = ({ students: studentObj, setFiltered }) => {
+const Filters = ({ students: studentObj, setFiltered, filteredCount }) => {
   const { user } = useContext(AuthContext);
   const { suggestions } = useContext(StudentContext);
 
@@ -147,8 +147,11 @@ const Filters = ({ students: studentObj, setFiltered }) => {
         />
         <span>Include students you&apos;ve suggested for</span>
       </div>
-      <div>
+      <div className={styles.footer}>
         <Button onClick={() => dispatch({ type: 'reset' })}>Reset filters</Button>
+        <div>
+          <Pill>{filteredCount}</Pill> of <Pill>{students.length}</Pill> shown
+        </div>
       </div>
     </header>
   );
@@ -156,6 +159,7 @@ const Filters = ({ students: studentObj, setFiltered }) => {
 
 Filters.propTypes = {
   setFiltered: PropTypes.func.isRequired,
+  filteredCount: PropTypes.number.isRequired,
   students: PropTypes.objectOf(PropTypes.instanceOf(Student))
 };
 
