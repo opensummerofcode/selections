@@ -7,7 +7,6 @@ import StudentContext from '../context/students';
 
 import StudentList from '../components/StudentList';
 import StudentDetail from '../components/StudentDetail';
-import Filters from '../components/Filters';
 
 import styles from '../assets/styles/dashboard.module.css';
 
@@ -60,7 +59,6 @@ const Dashboard = ({ history, match }) => {
   return (
     <main className={`page-container ${styles.dashboard}`}>
       <StudentContext.Provider value={studentContext}>
-        <Filters />
         <div className={styles['content-wrapper']}>
           <StudentList students={students} />
           <StudentDetail selectedStudent={selectedStudent} />

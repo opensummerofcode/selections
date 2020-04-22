@@ -1,0 +1,29 @@
+.filters {
+  position: fixed;
+  height: var(--height-filters);
+  width: var(--width-list);
+  display: flex;
+  flex-direction: column;
+  background: var(--color-white);
+  z-index: 5;
+  padding: 0 1rem;
+  box-shadow: 0 0.5rem 2rem -2rem rgba(0, 0, 0, 0.8);
+}
+
+.filters > div {
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  font-size: 1.4rem;
+}
+
+.filters > div > span {
+  margin-left: 0.8rem;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

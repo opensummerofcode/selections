@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Button } from 'evergreen-ui';
@@ -12,7 +12,7 @@ const Login = ({ history, isLoggingIn, isLoggedIn, setIsLoggingIn }) => {
     if (!isLoggedIn) return;
     history.push('/');
     setIsLoggingIn(false);
-  }, [isLoggedIn, history]);
+  }, [isLoggedIn, history, setIsLoggingIn]);
 
   const doLogin = () => {
     setIsLoggingIn(true);

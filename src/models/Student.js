@@ -55,8 +55,10 @@ class Student {
       else if (prop === 'nameOfSchool') this.school = parseNameOfSchool(value, student.otherSchool);
       else if (prop === 'fieldOfStudy') this[prop] = parseFieldOfStudy(value);
       else if (prop === 'typeOfDegree') this[prop] = parseTypeOfDegree(value);
-      else if (prop === 'applyingForRoles') this[prop] = parseRoles(value);
-      else if (prop === 'ownLaptop') this.hasLaptop = parseHasLaptop(value);
+      else if (prop === 'applyingForRoles') {
+        this[prop] = parseRoles(value);
+        this.hasOtherRole = !!parseField(value, true);
+      } else if (prop === 'ownLaptop') this.hasLaptop = parseHasLaptop(value);
       else if (prop === 'cv') this.setCV(value);
       else this[prop] = parseField(value);
     });
