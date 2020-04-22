@@ -42,13 +42,7 @@ const Filters = ({ students: studentObj, setFiltered }) => {
     );
   };
 
-  const sortByFirstNameThenLastName = (a, b) => {
-    if (a.firstNameNormalized < b.firstNameNormalized) return -1;
-    if (a.firstNameNormalized > b.firstNameNormalized) return 1;
-    if (a.lastNameNormalized < b.lastNameNormalized) return -1;
-    if (a.lastNameNormalized > b.lastNameNormalized) return 1;
-    return 0;
-  };
+  const filterByIsAlum = (student) => (isAlum ? student.isAlum : true);
 
   const filterByRole = (student) => {
     const hasRoles = roles.filter((role) => {
@@ -60,13 +54,23 @@ const Filters = ({ students: studentObj, setFiltered }) => {
     return hasRoles.length > 0;
   };
 
+  const sortByFirstNameThenLastName = (a, b) => {
+    if (a.firstNameNormalized < b.firstNameNormalized) return -1;
+    if (a.firstNameNormalized > b.firstNameNormalized) return 1;
+    if (a.lastNameNormalized < b.lastNameNormalized) return -1;
+    if (a.lastNameNormalized > b.lastNameNormalized) return 1;
+    return 0;
+  };
+
   useEffect(() => {
     const filtered = students
       .filter(filterBySearchQuery)
+      .filter(filterByIsAlum)
       .filter(filterByRole)
       .sort(sortByFirstNameThenLastName);
+
     setFiltered(filtered);
-  }, [students, searchQuery, selectedRoles]);
+  }, [students, searchQuery, selectedRoles, isAlum]);
 
   return (
     <header className={styles.filters}>
