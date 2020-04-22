@@ -20,7 +20,7 @@ const normalize = (str) => removeDiacritics(str.toLowerCase());
 
 const initialState = {
   searchQuery: '',
-  selectedRoles: [],
+  selectedRoles: [...roles],
   isAlum: false,
   wantsToCoach: false,
   includeAlreadySuggested: true
@@ -121,7 +121,10 @@ const Filters = ({ students: studentObj, setFiltered }) => {
         />
       </div>
       <div>
-        <RoleFilter setSelectedRoles={(r) => dispatch({ type: 'select-roles', payload: r })} />
+        <RoleFilter
+          selected={state.selectedRoles}
+          setSelected={(r) => dispatch({ type: 'select-roles', payload: r })}
+        />
       </div>
       <div>
         <Switch
@@ -144,11 +147,9 @@ const Filters = ({ students: studentObj, setFiltered }) => {
         />
         <span>Include students you&apos;ve suggested for</span>
       </div>
-      {/*
       <div>
-        <Button onClick={resetFilters}>Reset filters</Button>
+        <Button onClick={() => dispatch({ type: 'reset' })}>Reset filters</Button>
       </div>
-      */}
     </header>
   );
 };
