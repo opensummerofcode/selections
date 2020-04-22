@@ -36,6 +36,8 @@ const reducer = (state, action) => {
       return { ...state, wantsToCoach: action.payload };
     case 'select-roles':
       return { ...state, selectedRoles: action.payload };
+    case 'select-all-roles':
+      return { ...state, selectedRoles: [...roles] };
     case 'deselect-all-roles':
       return { ...state, selectedRoles: [] };
     case 'hide-suggested':
@@ -127,7 +129,11 @@ const Filters = ({ students: studentObj, setFiltered, filteredCount }) => {
           selected={state.selectedRoles}
           setSelected={(r) => dispatch({ type: 'select-roles', payload: r })}
         />
-        <Button onClick={() => dispatch({ type: 'deselect-all-roles' })}>Deselect all</Button>
+        {state.selectedRoles.length > 0 ? (
+          <Button onClick={() => dispatch({ type: 'deselect-all-roles' })}>Deselect all</Button>
+        ) : (
+          <Button onClick={() => dispatch({ type: 'select-all-roles' })}>Select all</Button>
+        )}
       </div>
       <div>
         <Switch
