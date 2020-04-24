@@ -5,18 +5,6 @@ service cloud.firestore {
       return get(/databases/$(database)/documents/users/$(request.auth.uid)).data
     }
 
-    function existingData() {
-      return resource.data
-    }
-
-    function incomingData() {
-      return request.resource.data
-    }
-
-    function currentUser() {
-      return request.auth
-    }
-
     function isOwner(userId) {
       return request.auth.uid == userId
     }
