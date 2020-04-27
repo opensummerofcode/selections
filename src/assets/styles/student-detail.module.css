@@ -40,6 +40,7 @@
 
 .actions p {
   font-size: 1.4rem;
+  margin: 0;
 }
 
 .student-detail h4 {
@@ -51,7 +52,7 @@
 }
 
 .student-detail section:first-of-type {
-  margin-top: 8rem;
+  margin-top: 10rem;
 }
 
 .student-detail p {

@@ -15,6 +15,12 @@
   color: var(--color-white);
 }
 
+.active.status-no,
+.active.status-maybe,
+.active.status-yes {
+  color: var(--color-dark-purple);
+}
+
 .suggestions {
   position: absolute;
   bottom: 0;
@@ -29,6 +35,7 @@
   display: flex;
   align-items: center;
 }
+
 .suggestion-amount {
   margin-left: auto;
 }
@@ -38,15 +45,18 @@
   border-radius: 0.2rem;
 }
 
-.suggestions-yes {
+.suggestions-yes,
+.status-yes {
   background-color: var(--color-yes);
 }
 
-.suggestions-maybe {
+.suggestions-maybe,
+.status-maybe {
   background-color: var(--color-maybe);
 }
 
-.suggestions-no {
+.suggestions-no,
+.status-no {
   background-color: var(--color-no);
 }
 

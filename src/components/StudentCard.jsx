@@ -33,7 +33,9 @@ const StudentCard = ({ student }) => {
     <li className={styles.card}>
       <button onClick={() => selectStudent(student)} type="button" className="button--seamless">
         <Pane
-          className={`${styles.wrapper} ${isActive ? styles.active : ''}`}
+          className={`${styles.wrapper} ${isActive ? styles.active : ''} ${
+            styles[`status-${student.statusType}`]
+          }`}
           elevation={isActive ? 2 : 1}
         >
           <div className={styles.name}>
