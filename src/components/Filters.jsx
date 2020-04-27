@@ -23,7 +23,13 @@ const initialState = {
   selectedRoles: [...roles],
   isAlum: false,
   wantsToCoach: false,
-  includeAlreadySuggested: true
+  includeAlreadySuggested: true,
+  statuses: [
+    { label: 'Yes', value: 'yes', selected: true },
+    { label: 'Maybe', value: 'maybe', selected: true },
+    { label: 'No', value: 'no', selected: true },
+    { label: 'Undecided', value: 'no-status', selected: true }
+  ]
 };
 
 const reducer = (state, action) => {
@@ -42,6 +48,14 @@ const reducer = (state, action) => {
       return { ...state, selectedRoles: [] };
     case 'hide-suggested':
       return { ...state, includeAlreadySuggested: action.payload };
+    case 'select-status': {
+      const statuses = state.statuses.map((s) => {
+        const status = { ...s };
+        if (status.value === action.payload) status.selected = !s.selected;
+        return status;
+      });
+      return { ...state, statuses };
+    }
     case 'reset':
       return { ...initialState };
     default:
@@ -82,6 +96,12 @@ const Filters = ({ students: studentObj, setFiltered, filteredCount }) => {
     );
   };
 
+  const filterByStatus = (student) => {
+    const status = student.statusType;
+    const { selected } = state.statuses.find((s) => s.value === status);
+    return selected;
+  };
+
   const filterByIsAlum = (student) => (state.isAlum ? student.isAlum : true);
 
   const filterByCoachStatus = (student) =>
@@ -105,6 +125,7 @@ const Filters = ({ students: studentObj, setFiltered, filteredCount }) => {
   useEffect(() => {
     const filtered = students
       .filter(search)
+      .filter(filterByStatus)
       .filter(filterByIsAlum)
       .filter(filterByCoachStatus)
       .filter(filterByRole)
@@ -114,6 +135,15 @@ const Filters = ({ students: studentObj, setFiltered, filteredCount }) => {
     setFiltered(filtered);
   }, [students, Object.keys(state).map((key) => state[key])]);
 
+  const $statusSelectors = state.statuses.map((status) => (
+    <Button
+      isActive={status.selected}
+      onClick={() => dispatch({ type: 'select-status', payload: status.value })}
+      key={status.value}
+    >
+      {status.label}
+    </Button>
+  ));
   return (
     <header className={styles.filters}>
       <div>
@@ -156,6 +186,7 @@ const Filters = ({ students: studentObj, setFiltered, filteredCount }) => {
         />
         <span>Include students you&apos;ve suggested for</span>
       </div>
+      <div className={styles['status-selectors']}>{$statusSelectors}</div>
       <div className={styles.footer}>
         <div>
           <Pill>{filteredCount}</Pill> of <Pill>{students.length}</Pill> shown

@@ -22,6 +22,15 @@
   margin-left: 0.8rem;
 }
 
+.status-selectors {
+  display: flex;
+  margin: 1rem 0;
+}
+.status-selectors > button {
+  flex: 0.25;
+  justify-content: center;
+}
+
 .double {
   display: flex;
   justify-content: space-between;
