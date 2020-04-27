@@ -11,14 +11,13 @@
 }
 
 .active {
-  background: var(--color-purple);
-  color: var(--color-white);
+  border-left: 0.6rem solid var(--color-purple);
 }
 
 .active.status-no,
 .active.status-maybe,
 .active.status-yes {
-  color: var(--color-dark-purple);
+  color: var(--color-dark-blue);
 }
 
 .suggestions {
