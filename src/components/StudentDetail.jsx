@@ -1,6 +1,6 @@
 import React, { useContext, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { Badge, Icon, Button, Dialog, TextInput } from 'evergreen-ui';
+import { Badge, Icon, Button, Dialog, TextInput, Select } from 'evergreen-ui';
 import AuthContext from '../context/auth';
 import StudentContext from '../context/students';
 import { Student } from '../models';
@@ -71,6 +71,8 @@ const StudentDetail = ({ selectedStudent: student }) => {
   };
 
   const suggest = (type) => setIsSuggesting(type);
+
+  const select = (type) => student.setStatus(type);
 
   const renderSuggestionsPerType = (type) => {
     const suggestionsForStudent = suggestions[student.id];
@@ -161,34 +163,59 @@ const StudentDetail = ({ selectedStudent: student }) => {
             alum
           </Badge>
         )}
-        {!student.confirmed && (
-          <div className={styles.actions}>
-            <Button
-              marginRight={16}
-              onClick={() => suggest('yes')}
-              appearance="primary"
-              intent="success"
-            >
-              Suggest yes
-            </Button>
-            <Button
-              marginRight={16}
-              onClick={() => suggest('maybe')}
-              appearance="primary"
-              intent="warning"
-            >
-              Suggest maybe
-            </Button>
-            <Button
-              marginRight={16}
-              onClick={() => suggest('no')}
-              appearance="primary"
-              intent="danger"
-            >
-              Suggest no
-            </Button>
+        <div className={styles.actions}>
+          <div>
+            {!student.confirmed ? (
+              <>
+                <Button
+                  marginRight={16}
+                  onClick={() => suggest('yes')}
+                  appearance="primary"
+                  intent="success"
+                >
+                  Suggest yes
+                </Button>
+                <Button
+                  marginRight={16}
+                  onClick={() => suggest('maybe')}
+                  appearance="primary"
+                  intent="warning"
+                >
+                  Suggest maybe
+                </Button>
+                <Button
+                  marginRight={16}
+                  onClick={() => suggest('no')}
+                  appearance="primary"
+                  intent="danger"
+                >
+                  Suggest no
+                </Button>
+              </>
+            ) : (
+              <p>
+                {firstName} has received an email from us and cannot receive additional suggestions.
+              </p>
+            )}
           </div>
-        )}
+          {user.isAdmin && (
+            <div>
+              <Select
+                className={styles.selectors}
+                value={student.statusType}
+                onChange={(e) => select(e.target.value)}
+              >
+                <option value="no-status">Undecided</option>
+                <option value="yes">Yes</option>
+                <option value="maybe">Maybe</option>
+                <option value="no">No</option>
+              </Select>
+              <Button marginRight={16} onClick={student.toggleConfirmed} appearance="primary">
+                {student.confirmed ? 'Unconfirm' : 'Confirm'}
+              </Button>
+            </div>
+          )}
+        </div>
       </header>
       <section>
         <h3>Suggestions</h3>

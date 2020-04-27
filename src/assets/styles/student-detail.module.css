@@ -6,7 +6,6 @@
 .student-detail header {
   position: fixed;
   width: 71%;
-  height: 4rem;
   background: var(--color-white);
   display: flex;
   align-items: center;
@@ -14,6 +13,33 @@
 
 .actions {
   margin-left: auto;
+  margin-right: 2rem;
+  flex-flow: column;
+  max-width: 41rem;
+}
+
+.actions > div {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.actions button {
+  width: 12rem;
+  justify-content: center;
+}
+
+.selectors {
+  width: 25.6rem;
+  flex: none;
+}
+
+.actions > div:first-of-type {
+  margin-bottom: 1rem;
+}
+
+.actions p {
+  font-size: 1.4rem;
 }
 
 .student-detail h4 {
@@ -25,7 +51,7 @@
 }
 
 .student-detail section:first-of-type {
-  margin-top: 5rem;
+  margin-top: 8rem;
 }
 
 .student-detail p {

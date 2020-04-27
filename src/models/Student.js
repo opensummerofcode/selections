@@ -89,6 +89,20 @@ class Student {
     if (!exists) return db.collection('suggestions').doc(this.id).set(updated);
     return db.collection('suggestions').doc(this.id).update(updated);
   };
+
+  get statusType() {
+    return this.status || 'no-status';
+  }
+
+  setStatus = (type) => {
+    const status = type === 'no-status' ? null : type;
+    db.collection('students').doc(this.id).update({ status });
+  };
+
+  toggleConfirmed = () => {
+    const current = !!this.confirmed;
+    db.collection('students').doc(this.id).update({ confirmed: !current });
+  };
 }
 
 export default Student;
