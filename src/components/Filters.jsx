@@ -141,7 +141,8 @@ const Filters = ({ students: studentObj, setFiltered, filteredCount }) => {
       onClick={() => dispatch({ type: 'select-status', payload: status.value })}
       key={status.value}
     >
-      {status.label}
+      {status.label}&nbsp;
+      <Pill>{students.filter((s) => s.statusType === status.value).length}</Pill>
     </Button>
   ));
   return (

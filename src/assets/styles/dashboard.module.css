@@ -8,8 +8,7 @@
   display: flex;
   height: 100%;
   align-items: stretch;
-  --width-list: 28%;
-  --width-detail: 72%;
+  --width-list: 38rem;
   --height-filters: 24rem;
 }
 
@@ -32,7 +31,7 @@
 }
 
 .student-detail {
-  width: var(--width-detail);
+  width: calc(100% - var(--width-list));
   height: 100%;
   overflow-y: scroll;
 }
