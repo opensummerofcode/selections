@@ -3,7 +3,8 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { auth, db } from '../firebase';
 import AuthContext from '../context/auth';
 
-import Dashboard from '../pages/Dashboard';
+import Students from '../pages/Students';
+import Projects from '../pages/Projects';
 import Login from '../pages/Login';
 import UserManagement from '../pages/UserManagement';
 import Pending from '../pages/Pending';
@@ -52,8 +53,9 @@ const App = () => {
       <BrowserRouter>
         <Header user={currentUser} logout={logout} />
         <Switch>
-          <PrivateRoute path="/:path(|index|home|start)" exact guarded component={Dashboard} />
-          <PrivateRoute path="/student/:id/:name" guarded component={Dashboard} />
+          <PrivateRoute path="/:path(|students)" exact guarded component={Students} />
+          <PrivateRoute path="/students/:id/:name" guarded component={Students} />
+          <PrivateRoute path="/projects" guarded component={Projects} />
           <PrivateRoute
             path="/manage-users"
             admin

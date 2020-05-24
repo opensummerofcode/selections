@@ -5,6 +5,10 @@ import { db } from '../firebase';
 import { Student } from '../models';
 import StudentContext from '../context/students';
 
+import students from '../students.json';
+import suggestions from '../suggestions.json';
+
+console.log(students);
 export const useStudentData = () => {
   const contextState = React.useContext(StudentContext);
   if (contextState === null) {
@@ -14,9 +18,9 @@ export const useStudentData = () => {
 };
 
 const StudentProvider = ({ children, history, match }) => {
-  const [students, setStudents] = useState({});
+  // const [students, setStudents] = useState({});
   const [selectedStudent, setSelectedStudent] = useState(null);
-  const [suggestions, setSuggestions] = useState({});
+  // const [suggestions, setSuggestions] = useState({});
 
   const selectedId = match.params.id;
   const selectStudent = (student) => {
@@ -29,6 +33,7 @@ const StudentProvider = ({ children, history, match }) => {
   }, [students, selectedId]);
 
   useEffect(() => {
+    /*
     const unsubscribe = db.collection('students').onSnapshot((snapshot) => {
       const data = snapshot.docChanges();
       const newStudents = {};
@@ -40,9 +45,11 @@ const StudentProvider = ({ children, history, match }) => {
       setStudents((s) => ({ ...s, ...newStudents }));
     });
     return unsubscribe;
+    */
   }, []);
 
   useEffect(() => {
+    /*
     return db.collection('suggestions').onSnapshot((snapshot) => {
       const data = snapshot.docChanges();
       const newSuggestions = data.reduce((all, s) => {
@@ -51,7 +58,10 @@ const StudentProvider = ({ children, history, match }) => {
       }, {});
       setSuggestions((s) => ({ ...s, ...newSuggestions }));
     });
+    */
   }, []);
+
+  Object.keys(students).forEach((s) => (students[s] = new Student(students[s])));
 
   const studentContext = {
     students,
