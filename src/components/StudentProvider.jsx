@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Student } from '../models';
 import StudentContext from '../context/students';
@@ -15,13 +14,9 @@ export const useStudentData = () => {
   return contextState;
 };
 
-const StudentProvider = ({ children, history }) => {
+const StudentProvider = ({ children }) => {
   // const [students, setStudents] = useState({});
   // const [suggestions, setSuggestions] = useState({});
-
-  const selectStudent = (student) => {
-    history.push(`/student/${student.id}/${student.firstName}-${student.lastName}`);
-  };
 
   const students = Object.keys(rawStudents).reduce((all, s) => {
     all[s] = new Student(rawStudents[s]);
@@ -59,7 +54,6 @@ const StudentProvider = ({ children, history }) => {
 
   const studentContext = {
     students,
-    selectStudent,
     suggestions
   };
 
@@ -73,4 +67,4 @@ StudentProvider.propTypes = {
   })
 };
 
-export default withRouter(StudentProvider);
+export default StudentProvider;
