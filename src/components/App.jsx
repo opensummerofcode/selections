@@ -79,8 +79,10 @@ const App = () => {
           <PrivateRoute path="/" guarded>
             <DndProvider backend={HTML5Backend}>
               <StudentProvider>
-                <Route path="/projects" exact component={Projects} />
-                <Route path="/(student)?/:id?/:name?" component={Students} />
+                <Switch>
+                  <Route path="/projects" exact component={Projects} />
+                  <Route path="/(student)?/:id?/:name?" component={Students} />
+                </Switch>
               </StudentProvider>
             </DndProvider>
           </PrivateRoute>

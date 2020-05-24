@@ -9,6 +9,10 @@ class Project {
     if (!this.assignedStudents) this.assignedStudents = [];
   }
 
+  startAssigning = (student) => {
+    this.isBeingAssignedTo = student;
+  };
+
   assign = (student) => {
     if (this.assignedStudents.includes(student.id))
       throw new Error(`${student.firstName} is already on this team`);

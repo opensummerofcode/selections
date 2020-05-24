@@ -20,8 +20,7 @@ const endDrag = (props, monitor) => {
 
   const { student } = monitor.getItem();
   const project = monitor.getDropResult();
-  student.setAssignedStatus(true);
-  project.assign(student).catch(() => student.setAssignedStatus(false));
+  project.startAssigning(student);
 };
 
 const StudentCard = ({ student, connectDragSource }) => {
