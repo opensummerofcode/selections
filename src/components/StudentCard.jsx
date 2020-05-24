@@ -1,16 +1,40 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
+import { useParams, useHistory } from 'react-router-dom';
 import { Badge, Pane, Pill } from 'evergreen-ui';
+import { DragSource } from 'react-dnd';
 import { Student } from '../models';
 import StudentContext from '../context/students';
 
 import styles from '../assets/styles/student-card.module.css';
 
-const StudentCard = ({ student }) => {
-  const { firstName, lastName } = student;
-  const { selectedStudent, selectStudent, suggestions } = useContext(StudentContext);
+const collect = (connect, monitor) => ({
+  connectDragSource: connect.dragSource(),
+  isDragging: monitor.isDragging()
+});
 
-  const isActive = selectedStudent && selectedStudent.id === student.id;
+const beginDrag = (props) => ({ ...props });
+
+const endDrag = (props, monitor) => {
+  if (!monitor.didDrop()) return;
+
+  const { student } = monitor.getItem();
+  const project = monitor.getDropResult();
+  student.setAssignedStatus(true);
+  project.assign(student).catch(() => student.setAssignedStatus(false));
+};
+
+const StudentCard = ({ student, connectDragSource }) => {
+  const { firstName, lastName } = student;
+  const { suggestions } = useContext(StudentContext);
+
+  const history = useHistory();
+  const selectStudent = (s) => {
+    history.push(`/student/${s.id}/${s.firstName}-${s.lastName}`);
+  };
+
+  const selectedStudentId = useParams().id;
+  const isActive = selectedStudentId && selectedStudentId === student.id;
 
   const suggestionList = suggestions[student.id];
   const countSuggestionsOfType = (type) => {
@@ -29,7 +53,7 @@ const StudentCard = ({ student }) => {
     { total: 0 }
   );
 
-  return (
+  return connectDragSource(
     <li className={styles.card}>
       <button onClick={() => selectStudent(student)} type="button" className="button--seamless">
         <Pane
@@ -83,7 +107,8 @@ const StudentCard = ({ student }) => {
 };
 
 StudentCard.propTypes = {
-  student: PropTypes.instanceOf(Student)
+  student: PropTypes.instanceOf(Student),
+  connectDragSource: PropTypes.func.isRequired
 };
 
-export default StudentCard;
+export default DragSource('student', { beginDrag, endDrag }, collect)(StudentCard);
