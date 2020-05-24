@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { auth, db } from '../firebase';
+import StudentProvider from './StudentProvider';
 import AuthContext from '../context/auth';
 
 import Students from '../pages/Students';
@@ -53,9 +54,6 @@ const App = () => {
       <BrowserRouter>
         <Header user={currentUser} logout={logout} />
         <Switch>
-          <PrivateRoute path="/:path(|students)" exact guarded component={Students} />
-          <PrivateRoute path="/students/:id/:name" guarded component={Students} />
-          <PrivateRoute path="/projects" guarded component={Projects} />
           <PrivateRoute
             path="/manage-users"
             admin
@@ -76,6 +74,12 @@ const App = () => {
               />
             )}
           />
+          <PrivateRoute path="/" guarded>
+            <StudentProvider>
+              <Route path="/projects" exact component={Projects} />
+              <Route path="/(student)?/:id?/:name?" component={Students} />
+            </StudentProvider>
+          </PrivateRoute>
           <Route render={() => <p>Page not found</p>} />
         </Switch>
       </BrowserRouter>

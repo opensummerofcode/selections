@@ -1,6 +1,7 @@
-import React, { useContext, useState, useRef } from 'react';
+import React, { useContext, useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Badge, Icon, Button, Dialog, TextInput, Select } from 'evergreen-ui';
+import { useParams } from 'react-router-dom';
 import AuthContext from '../context/auth';
 import { useStudentData } from './StudentProvider';
 
@@ -36,10 +37,17 @@ ExternalLink.propTypes = {
 */
 const StudentDetail = () => {
   const { user } = useContext(AuthContext);
-  const { selectedStudent: student, suggestions } = useStudentData();
+  const { students, suggestions } = useStudentData();
 
   const [isSuggesting, setIsSuggesting] = useState(false);
   const [suggestionIsLoading, setSuggestionIsLoading] = useState(false);
+  const [student, setStudent] = useState(null);
+
+  const studentId = useParams().id;
+  useEffect(() => {
+    const newStudent = students[studentId];
+    setStudent(newStudent);
+  }, [studentId]);
 
   let $inputReason = useRef(null);
 
@@ -52,7 +60,7 @@ const StudentDetail = () => {
   }
 
   const renderStatusIcon = (condition, status) => {
-    // TODO: make accessible for screen readers
+    // TODO: make accessible for screen{ match }readers
     let $icon = <Icon size={16} icon="cross" color="danger" />;
     if (status === 'yes' || condition) $icon = <Icon size={16} icon="tick" color="success" />;
     else if (status === 'maybe') $icon = <Icon size={16} icon="minus" color="orange" />;

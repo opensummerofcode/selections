@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { db } from '../firebase';
 import { Student } from '../models';
 import StudentContext from '../context/students';
 
-import students from '../students.json';
+import rawStudents from '../students.json';
 import suggestions from '../suggestions.json';
 
-console.log(students);
 export const useStudentData = () => {
   const contextState = React.useContext(StudentContext);
   if (contextState === null) {
@@ -17,20 +15,18 @@ export const useStudentData = () => {
   return contextState;
 };
 
-const StudentProvider = ({ children, history, match }) => {
+const StudentProvider = ({ children, history }) => {
   // const [students, setStudents] = useState({});
-  const [selectedStudent, setSelectedStudent] = useState(null);
   // const [suggestions, setSuggestions] = useState({});
 
-  const selectedId = match.params.id;
   const selectStudent = (student) => {
-    history.push(`/students/${student.id}/${student.firstName}-${student.lastName}`);
+    history.push(`/student/${student.id}/${student.firstName}-${student.lastName}`);
   };
 
-  useEffect(() => {
-    if (!students[selectedId]) return;
-    setSelectedStudent(students[selectedId]);
-  }, [students, selectedId]);
+  const students = Object.keys(rawStudents).reduce((all, s) => {
+    all[s] = new Student(rawStudents[s]);
+    return all;
+  }, {});
 
   useEffect(() => {
     /*
@@ -61,11 +57,8 @@ const StudentProvider = ({ children, history, match }) => {
     */
   }, []);
 
-  Object.keys(students).forEach((s) => (students[s] = new Student(students[s])));
-
   const studentContext = {
     students,
-    selectedStudent,
     selectStudent,
     suggestions
   };
@@ -77,9 +70,6 @@ StudentProvider.propTypes = {
   children: PropTypes.node.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired
-  }),
-  match: PropTypes.shape({
-    params: PropTypes.shape({ id: PropTypes.string })
   })
 };
 
