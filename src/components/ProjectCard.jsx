@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Pane, Badge, IconButton, Dialog } from 'evergreen-ui';
+import { Pane, Badge, IconButton, Dialog, Tooltip, Icon, Position } from 'evergreen-ui';
 import { DropTarget } from 'react-dnd';
 import ProjectModel from '../models/Project';
 
@@ -22,6 +22,15 @@ const drop = (props, monitor, component) => {
   // if (monitor.didDrop()) return;
   return { ...props.project };
 }; */
+
+const ConditionalTooltip = ({ condition, content, children }) =>
+  condition ? (
+    <Tooltip content={content} position={Position.TOP}>
+      {children}
+    </Tooltip>
+  ) : (
+    children
+  );
 
 const canDrop = () => true;
 const drop = (props) => ({ ...props.project });
@@ -55,30 +64,21 @@ const ProjectCard = ({ students, project, isOverDropZone, connectDropTarget }) =
       ));
   };
 
-  const renderRolesRequired = () => {
-    const roles = project.requiredProfiles.reduce((all, profile) => {
-      const role = Array.isArray(profile.role) ? profile.role.join('/') : profile.role;
-      if (!all[role]) all[role] = profile;
-      const count = all[role].count || 0;
-      all[role] = {
-        ...profile,
-        role,
-        count: count + 1
-      };
-      return all;
-    }, {});
-
-    return Object.keys(roles).map((key) => {
-      const profile = roles[key];
-      return (
-        <li key={profile.role}>
-          <Badge>
-            {profile.count}x {profile.role}
+  const renderRolesRequired = () =>
+    project.requiredProfiles.map((profile) => (
+      <li key={profile.role}>
+        <ConditionalTooltip
+          condition={!!profile.comment}
+          content={profile.comment}
+          position={Position.TOP}
+        >
+          <Badge className={styles.badge}>
+            {profile.comment && <Icon color="info" marginRight={4} size={12} icon="info-sign" />}
+            {profile.amount || 1}x {profile.role}
           </Badge>
-        </li>
-      );
-    });
-  };
+        </ConditionalTooltip>
+      </li>
+    ));
 
   const removeStudent = (studentId) => {
     project.unassign(studentId).then(() => {
@@ -122,7 +122,7 @@ const ProjectCard = ({ students, project, isOverDropZone, connectDropTarget }) =
       <Pane elevation={2} className={styles.wrapper}>
         <Dialog
           isShown={!!isAssigning}
-          title={`Suggest "${isAssigning.firstName}" for ${project.name}`}
+          title={`Suggest ${isAssigning.firstName} for ${project.name}`}
           intent="none"
           onCloseComplete={stopAssigning}
           confirmLabel="Make suggestion"
@@ -139,6 +139,7 @@ const ProjectCard = ({ students, project, isOverDropZone, connectDropTarget }) =
               A reason is not required, but will open up discussion and help us and your fellow
               coaches understand.
             </p>
+            <input type="submit" />
           </form>
         </Dialog>
         <header className={styles.header}>
