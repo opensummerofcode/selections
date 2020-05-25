@@ -1,11 +1,11 @@
 import { db } from '../firebase';
 
 class Project {
-  constructor(project) {
+  constructor(project, id) {
     Object.keys(project).forEach((prop) => {
       this[prop] = project[prop];
     });
-    this.id = project.id;
+    this.id = id;
     if (!this.assignedStudents) this.assignedStudents = [];
   }
 

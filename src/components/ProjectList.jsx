@@ -16,7 +16,7 @@ const ProjectList = () => {
       const newProjects = {};
       data.forEach((change) => {
         const updated = change.doc.data();
-        const project = new Project(updated);
+        const project = new Project(updated, change.doc.id);
         newProjects[project.id] = project;
       });
       setProjects((p) => ({ ...p, ...newProjects }));

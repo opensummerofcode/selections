@@ -46,7 +46,7 @@
 }
 
 .title {
-  margin: 0 0 0.8rem 0;
+  margin: 0;
   font-size: 1.6rem;
 }
 
@@ -78,7 +78,14 @@
   width: 100%;
   display: flex;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 1.4rem;
+}
+
+.students__student > div {
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: flex-start;
 }
 
 .roles {

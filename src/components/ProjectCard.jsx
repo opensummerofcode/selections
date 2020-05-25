@@ -53,6 +53,7 @@ const ProjectCard = ({ students, project, isOverDropZone, connectDropTarget }) =
     setIsAssignLoading(true);
     await project.assign(studentBeingAssigned, selectedRole);
     setIsAssignLoading(false);
+    setSelectedRole(null);
     project.stopAssigning();
   };
 
@@ -109,33 +110,27 @@ const ProjectCard = ({ students, project, isOverDropZone, connectDropTarget }) =
       </ConditionalTooltip>
     ));
 
-  const removeStudent = (studentId) => {
-    project.unassign(studentId).then(() => {
-      students[studentId].setAssignedStatus(false);
-    });
-  };
+  const removeStudent = (studentId) => project.unassign(studentId);
 
-  const renderRole = (role) => (
-    <li key={role}>
-      <Badge>{role}</Badge>
-    </li>
-  );
-
-  const renderStudent = (studentId) => {
+  const renderStudent = ({ role, studentId }) => {
     const student = students[studentId];
-    const $roles = student.roles.map(renderRole);
     return (
       <article key={studentId} className={styles.students__student}>
         <div>
           <span>
-            {student.firstName} {student.lastName}
+            {student.firstName} {student.lastName}{' '}
+            {student.isAlum && (
+              <Badge color="green" marginLeft={4}>
+                alum
+              </Badge>
+            )}
           </span>
-          <ul className={styles['roles-required']}>{$roles}</ul>
+          <Badge>{role}</Badge>
         </div>
         <IconButton
           icon="cross"
           intent="danger"
-          height={24}
+          height={32}
           onClick={() => removeStudent(studentId)}
         />
       </article>
