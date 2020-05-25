@@ -1,18 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { db } from '../firebase';
 import { useStudentData } from './StudentProvider';
 import ProjectCard from './ProjectCard';
 import Project from '../models/Project';
 
-import projectsData from '../projects.json';
 import styles from '../assets/styles/projects.module.css';
 
 const ProjectList = () => {
+  const [projects, setProjects] = useState({});
   const { students } = useStudentData();
 
-  const $projects = Object.keys(projectsData).map((p) => {
-    const project = new Project(projectsData[p]);
-    // TODO: update order to id as the key
-    return <ProjectCard key={p} students={students} project={project} />;
+  useEffect(() => {
+    const unsubscribe = db.collection('projects').onSnapshot((snapshot) => {
+      const data = snapshot.docChanges();
+      const newProjects = {};
+      data.forEach((change) => {
+        const updated = change.doc.data();
+        const project = new Project(updated);
+        newProjects[project.id] = project;
+      });
+      setProjects((p) => ({ ...p, ...newProjects }));
+    });
+    return unsubscribe;
+  }, []);
+
+  const $projects = Object.keys(projects).map((key) => {
+    return <ProjectCard key={key} students={students} project={projects[key]} />;
   });
   return (
     <div className={styles['projects-container']}>
