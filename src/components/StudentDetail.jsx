@@ -211,6 +211,7 @@ const StudentDetail = () => {
                 className={styles.selectors}
                 value={student.statusType}
                 onChange={(e) => select(e.target.value)}
+                disabled={student.confirmed}
               >
                 <option value="no-status">Undecided</option>
                 <option value="yes">Yes</option>
