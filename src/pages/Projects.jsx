@@ -7,7 +7,7 @@ import styles from '../assets/styles/dashboard.module.css';
 const Projects = () => (
   <main className={`page-container ${styles.dashboard}`}>
     <div className={styles['content-wrapper']}>
-      <StudentList />
+      <StudentList showOnly={['yes', 'maybe']} />
       <ProjectList />
     </div>
   </main>
