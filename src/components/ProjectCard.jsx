@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Pane, Badge, IconButton, Dialog, Tooltip, Icon, Position } from 'evergreen-ui';
+import { Pane, Badge, IconButton, Dialog, Tooltip, Icon, Position, toaster } from 'evergreen-ui';
 import { DropTarget } from 'react-dnd';
 import ProjectModel from '../models/Project';
 
@@ -14,15 +14,6 @@ const collectDrag = (connect, monitor) => ({
   itemType: monitor.getItemType()
 });
 
-/* const canDrop = (props, monitor) => {
-  const student = monitor.getItem();
-  return true;
-};
-const drop = (props, monitor, component) => {
-  // if (monitor.didDrop()) return;
-  return { ...props.project };
-}; */
-
 const ConditionalTooltip = ({ condition, content, children }) =>
   condition ? (
     <Tooltip content={content} position={Position.TOP}>
@@ -32,24 +23,36 @@ const ConditionalTooltip = ({ condition, content, children }) =>
     children
   );
 
+ConditionalTooltip.propTypes = {
+  condition: PropTypes.bool.isRequired,
+  content: PropTypes.node,
+  children: PropTypes.node.isRequired
+};
+
 const canDrop = () => true;
 const drop = (props) => ({ ...props.project });
 
 const ProjectCard = ({ students, project, isOverDropZone, connectDropTarget }) => {
-  const [isAssigning, setIsAssigning] = useState(false);
+  const [studentBeingAssigned, setAssignedStudent] = useState(false);
   const [isAssignLoading, setIsAssignLoading] = useState(false);
+  const [selectedRole, setSelectedRole] = useState(null);
 
   useEffect(() => {
-    console.log(project.isBeingAssignedTo);
-    if (project.isBeingAssignedTo) setIsAssigning(project.isBeingAssignedTo);
-  }, [project.isBeingAssignedTo]);
+    if (project.isBeingAssignedTo && project.hasStudent(project.isBeingAssignedTo)) {
+      toaster.danger(`${project.isBeingAssignedTo.firstName} is already on ${project.name}`);
+    } else setAssignedStudent(project.isBeingAssignedTo);
+  }, [project, project.isBeingAssignedTo]);
 
   const stopAssigning = () => {
-    project.isBeingAssignedTo = false;
+    project.stopAssigning();
+    setAssignedStudent(null);
   };
 
-  const doAssign = () => {
-    const student = project.isBeingAssignedTo;
+  const doAssign = async () => {
+    setIsAssignLoading(true);
+    await project.assign(studentBeingAssigned, selectedRole);
+    setIsAssignLoading(false);
+    project.stopAssigning();
   };
 
   const renderCoachesList = () => {
@@ -78,6 +81,27 @@ const ProjectCard = ({ students, project, isOverDropZone, connectDropTarget }) =
           </Badge>
         </ConditionalTooltip>
       </li>
+    ));
+
+  const renderRoleSelectors = () =>
+    project.requiredProfiles.map((profile) => (
+      <ConditionalTooltip
+        condition={!!profile.comment}
+        content={profile.comment}
+        position={Position.TOP}
+        key={profile.role}
+      >
+        <Badge
+          className={styles.badge}
+          color={selectedRole === profile.role ? 'purple' : 'neutral'}
+          isInteractive
+          onClick={() => setSelectedRole(profile.role)}
+          marginRight={8}
+        >
+          {profile.comment && <Icon color="info" marginRight={4} size={16} icon="info-sign" />}
+          {profile.role}
+        </Badge>
+      </ConditionalTooltip>
     ));
 
   const removeStudent = (studentId) => {
@@ -115,32 +139,35 @@ const ProjectCard = ({ students, project, isOverDropZone, connectDropTarget }) =
 
   const $coaches = renderCoachesList();
   const $roles = renderRolesRequired();
+  const $roleSelectors = renderRoleSelectors();
   const $assignedStudents = project.assignedStudents.map(renderStudent);
 
   return connectDropTarget(
     <li className={`${styles.project} ${isOverDropZone ? styles.dropping : ''}`}>
       <Pane elevation={2} className={styles.wrapper}>
         <Dialog
-          isShown={!!isAssigning}
-          title={`Suggest ${isAssigning.firstName} for ${project.name}`}
+          isShown={!!studentBeingAssigned}
+          title={
+            studentBeingAssigned
+              ? `Draft ${studentBeingAssigned.firstName} for ${project.name}`
+              : 'Draft student'
+          }
           intent="none"
           onCloseComplete={stopAssigning}
-          confirmLabel="Make suggestion"
+          confirmLabel={selectedRole ? `Draft as ${selectedRole}` : 'Draft'}
           onConfirm={doAssign}
-          hasCancel={false}
+          hasCancel
           isConfirmLoading={isAssignLoading}
+          isConfirmDisabled={!selectedRole}
         >
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-            }}
-          >
-            <p>
-              A reason is not required, but will open up discussion and help us and your fellow
-              coaches understand.
-            </p>
-            <input type="submit" />
-          </form>
+          <h3 className={styles.title}>
+            Which role are you drafting {studentBeingAssigned && studentBeingAssigned.firstName}{' '}
+            for?
+          </h3>
+          <div className={styles['role-selector']}>{$roleSelectors}</div>
+          <p className={styles['role-selector-disclaimer']}>
+            You can still remove this student from the team later.
+          </p>
         </Dialog>
         <header className={styles.header}>
           <div>

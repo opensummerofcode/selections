@@ -13,20 +13,29 @@ class Project {
     this.isBeingAssignedTo = student;
   };
 
-  assign = (student) => {
-    if (this.assignedStudents.includes(student.id))
-      throw new Error(`${student.firstName} is already on this team`);
-    return db
+  stopAssigning = () => {
+    this.isBeingAssignedTo = null;
+  };
+
+  hasStudent = (student) => this.assignedStudents.find((s) => s.studentId === student.id);
+
+  assign = (student, role) =>
+    db
       .collection('projects')
       .doc(this.id)
       .update({
-        assignedStudents: [...this.assignedStudents, student.id]
+        assignedStudents: [
+          ...this.assignedStudents,
+          {
+            studentId: student.id,
+            role
+          }
+        ]
       });
-  };
 
   unassign = (studentId) => {
     const assignedStudents = [...this.assignedStudents];
-    const index = assignedStudents.indexOf(studentId);
+    const index = assignedStudents.findIndex((s) => s.studentId === studentId);
     if (index !== -1) assignedStudents.splice(index, 1);
     return db.collection('projects').doc(this.id).update({ assignedStudents });
   };
