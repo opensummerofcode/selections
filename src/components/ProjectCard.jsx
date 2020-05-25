@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Pane, Badge, IconButton, Dialog, Tooltip, Icon, Position, toaster } from 'evergreen-ui';
 import { DropTarget } from 'react-dnd';
+import { sortAlphabetically } from '../util';
 import ProjectModel from '../models/Project';
 
 import styles from '../assets/styles/projects.module.css';
@@ -59,7 +60,11 @@ const ProjectCard = ({ students, project, isOverDropZone, connectDropTarget }) =
     if (project.coaches.length === 0)
       return <p className={styles['coach-disclaimer']}>No coaches yet</p>;
     return project.coaches
-      .sort((a) => (a.isLead ? -1 : 1))
+      .sort((a, b) => {
+        if (a.isLead) return -1;
+        if (b.isLead) return 1;
+        return sortAlphabetically(a, b);
+      })
       .map((coach) => (
         <li key={coach.name}>
           <Badge color={coach.isLead ? 'purple' : 'neutral'}>{coach.name}</Badge>

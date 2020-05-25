@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, useReducer, memo } from 'react';
 import PropTypes from 'prop-types';
 import { Switch, SearchInput, Button, Pill } from 'evergreen-ui';
-import { removeDiacritics } from '../util';
+import { normalizeString } from '../util';
 import { Student } from '../models';
 import { roles } from '../constants';
 import RoleFilter from './RoleFilter';
@@ -12,11 +12,8 @@ import styles from '../assets/styles/filters.module.css';
 
 /*
 TODO:
-status filters (no official status, accepted, reject, maybe) - filterlist or segmented control
 status is locked-in - yes/no
 */
-
-const normalize = (str) => removeDiacritics(str.toLowerCase());
 
 const initialState = {
   searchQuery: '',
@@ -70,8 +67,8 @@ const Filters = ({ students: studentObj, setFiltered, filteredCount }) => {
   const students = Object.keys(studentObj)
     .map((id) => studentObj[id])
     .map((s) => {
-      s.firstNameNormalized = normalize(s.firstName);
-      s.lastNameNormalized = normalize(s.lastName);
+      s.firstNameNormalized = normalizeString(s.firstName);
+      s.lastNameNormalized = normalizeString(s.lastName);
       return s;
     });
 
@@ -86,7 +83,7 @@ const Filters = ({ students: studentObj, setFiltered, filteredCount }) => {
   };
 
   const search = (student) => {
-    const query = normalize(state.searchQuery);
+    const query = normalizeString(state.searchQuery);
     const { firstNameNormalized, lastNameNormalized } = student;
     return (
       firstNameNormalized.includes(query) ||
