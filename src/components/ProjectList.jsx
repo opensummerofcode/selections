@@ -29,6 +29,25 @@ const ProjectList = () => {
     return unsubscribe;
   }, []);
 
+  const assignments = Object.keys(projects).reduce((assignedStudents, id) => {
+    const project = projects[id];
+
+    project.assignedStudents.forEach((s) => {
+      const { studentId } = s;
+      const exists = assignedStudents[studentId];
+      assignedStudents[studentId] = {
+        studentId,
+        amount: exists ? exists.amount + 1 : 1,
+        teams: exists ? [...exists.teams, project.id] : [project.id]
+      };
+    });
+    return assignedStudents;
+  }, {});
+
+  const conflicts = Object.keys(assignments)
+    .map((a) => assignments[a])
+    .filter((a) => a.amount > 1);
+
   const $projects = Object.keys(projects)
     .map((id) => projects[id])
     .filter((p) => normalizeString(p.name).includes(normalizeString(searchQuery)))
@@ -37,7 +56,6 @@ const ProjectList = () => {
       return <ProjectCard key={p.id} students={students} project={p} />;
     });
 
-  const conflicts = [];
   return (
     <div className={styles['projects-container']}>
       <header className={styles.actions}>
@@ -48,8 +66,10 @@ const ProjectList = () => {
           value={searchQuery}
         />
         <Conflicts
+          students={students}
           conflicts={conflicts}
           isShown={conflictsShown}
+          projects={projects}
           setConflictsShown={setConflictsShown}
         />
         <Button onClick={() => setConflictsShown(!conflictsShown)}>
