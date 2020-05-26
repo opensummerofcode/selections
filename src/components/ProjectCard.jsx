@@ -117,7 +117,13 @@ const ProjectCard = ({ students, project, isOverDropZone, connectDropTarget }) =
       >
         <Badge
           className={styles.badge}
-          color={selectedRole === profile.role ? 'purple' : 'neutral'}
+          color={
+            selectedRole &&
+            selectedRole.role === profile.role &&
+            selectedRole.comment === profile.comment
+              ? 'purple'
+              : 'neutral'
+          }
           isInteractive
           onClick={() => setSelectedRole(profile)}
           marginRight={8}
