@@ -138,6 +138,7 @@ const ProjectCard = ({ students, project, isOverDropZone, connectDropTarget }) =
 
   const renderStudent = ({ role, studentId, suggester, reason }) => {
     const student = students[studentId];
+    if (!student) return <></>;
     return (
       <article key={studentId} className={styles.students__student}>
         <div>
