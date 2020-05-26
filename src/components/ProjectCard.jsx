@@ -1,9 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import PropTypes from 'prop-types';
-import { Pane, Badge, IconButton, Dialog, Tooltip, Icon, Position, toaster } from 'evergreen-ui';
+import {
+  Pane,
+  Badge,
+  IconButton,
+  Dialog,
+  Tooltip,
+  Icon,
+  Position,
+  TextInputField,
+  toaster,
+  Text
+} from 'evergreen-ui';
 import { DropTarget } from 'react-dnd';
 import { sortAlphabetically } from '../util';
 import ProjectModel from '../models/Project';
+import AuthContext from '../context/auth';
 
 import styles from '../assets/styles/projects.module.css';
 
@@ -34,9 +46,12 @@ const canDrop = () => true;
 const drop = (props) => ({ ...props.project });
 
 const ProjectCard = ({ students, project, isOverDropZone, connectDropTarget }) => {
+  const { user } = useContext(AuthContext);
   const [studentBeingAssigned, setAssignedStudent] = useState(false);
   const [isAssignLoading, setIsAssignLoading] = useState(false);
   const [selectedRole, setSelectedRole] = useState(null);
+
+  let $inputReason = useRef(null);
 
   useEffect(() => {
     if (project.isBeingAssignedTo && project.hasStudent(project.isBeingAssignedTo)) {
@@ -51,7 +66,8 @@ const ProjectCard = ({ students, project, isOverDropZone, connectDropTarget }) =
 
   const doAssign = async () => {
     setIsAssignLoading(true);
-    await project.assign(studentBeingAssigned, selectedRole);
+    await project.assign(studentBeingAssigned, selectedRole, $inputReason.value, user.name);
+    if ($inputReason) $inputReason.value = '';
     setIsAssignLoading(false);
     setSelectedRole(null);
     project.stopAssigning();
@@ -101,7 +117,7 @@ const ProjectCard = ({ students, project, isOverDropZone, connectDropTarget }) =
           className={styles.badge}
           color={selectedRole === profile.role ? 'purple' : 'neutral'}
           isInteractive
-          onClick={() => setSelectedRole(profile.role)}
+          onClick={() => setSelectedRole(profile)}
           marginRight={8}
         >
           {profile.comment && <Icon color="info" marginRight={4} size={16} icon="info-sign" />}
@@ -112,20 +128,37 @@ const ProjectCard = ({ students, project, isOverDropZone, connectDropTarget }) =
 
   const removeStudent = (studentId) => project.unassign(studentId);
 
-  const renderStudent = ({ role, studentId }) => {
+  const renderStudent = ({ role, studentId, suggester, reason }) => {
     const student = students[studentId];
     return (
       <article key={studentId} className={styles.students__student}>
         <div>
-          <span>
+          <div className={styles['student-name']}>
             {student.firstName} {student.lastName}{' '}
             {student.isAlum && (
               <Badge color="green" marginLeft={4}>
                 alum
               </Badge>
             )}
-          </span>
-          <Badge>{role}</Badge>
+            {reason && (
+              <Tooltip content={reason} position={Position.TOP}>
+                <IconButton appearance="minimal" intent="info" icon="comment" />
+              </Tooltip>
+            )}
+          </div>
+          <ConditionalTooltip
+            condition={!!role.comment}
+            content={role.comment}
+            position={Position.TOP}
+          >
+            <Badge className={`${styles.badge} ${styles['student-badge']}`}>
+              {role.role}
+              {role.comment && <Icon color="info" marginLeft={8} size={16} icon="info-sign" />}
+            </Badge>
+          </ConditionalTooltip>
+          <Text size={300} marginTop={4}>
+            Suggested by {suggester}
+          </Text>
         </div>
         <IconButton
           icon="cross"
@@ -154,20 +187,25 @@ const ProjectCard = ({ students, project, isOverDropZone, connectDropTarget }) =
           }
           intent="none"
           onCloseComplete={stopAssigning}
-          confirmLabel={selectedRole ? `Draft as ${selectedRole}` : 'Draft'}
+          confirmLabel={selectedRole ? `Draft as ${selectedRole.role}` : 'Draft'}
           onConfirm={doAssign}
           hasCancel
           isConfirmLoading={isAssignLoading}
           isConfirmDisabled={!selectedRole}
         >
-          <h3 className={styles.title}>
+          <Text size={400}>
             Which role are you drafting {studentBeingAssigned && studentBeingAssigned.firstName}{' '}
             for?
-          </h3>
+          </Text>
           <div className={styles['role-selector']}>{$roleSelectors}</div>
-          <p className={styles['role-selector-disclaimer']}>
-            You can still remove this student from the team later.
-          </p>
+          <TextInputField
+            width="100%"
+            placeholder="Enter reason..."
+            autoFocus
+            innerRef={(c) => ($inputReason = c)}
+            label="Why is this student a good fit for your team? (Optional)"
+          />
+          <Text size={400}>You can still remove this student from the team later.</Text>
         </Dialog>
         <header className={styles.header}>
           <div>

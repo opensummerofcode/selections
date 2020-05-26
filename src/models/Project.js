@@ -19,7 +19,7 @@ class Project {
 
   hasStudent = (student) => this.assignedStudents.find((s) => s.studentId === student.id);
 
-  assign = (student, role) =>
+  assign = (student, role, reason, suggester) =>
     db
       .collection('projects')
       .doc(this.id)
@@ -28,7 +28,9 @@ class Project {
           ...this.assignedStudents,
           {
             studentId: student.id,
-            role
+            role,
+            suggester,
+            reason
           }
         ]
       });

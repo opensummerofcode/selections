@@ -129,17 +129,21 @@
   margin-bottom: 0.8rem;
 }
 
+.student-badge {
+  margin-bottom: 0;
+}
+
+.student-name {
+  display: flex;
+  align-items: center;
+}
+
 .role-selector {
   display: flex;
   flex-wrap: wrap;
-  margin-top: 2rem;
+  margin: 1rem 0 2rem;
 }
 
 .role-selector .badge {
   padding: 1.2rem;
-}
-
-.role-selector-disclaimer {
-  font-size: 1.4rem;
-  line-height: 1;
 }
