@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { db } from '../firebase';
 import { Student } from '../models';
 import StudentContext from '../context/students';
-
-import rawStudents from '../students.json';
-import suggestions from '../suggestions.json';
 
 export const useStudentData = () => {
   const contextState = React.useContext(StudentContext);
@@ -15,16 +13,10 @@ export const useStudentData = () => {
 };
 
 const StudentProvider = ({ children }) => {
-  // const [students, setStudents] = useState({});
-  // const [suggestions, setSuggestions] = useState({});
-
-  const students = Object.keys(rawStudents).reduce((all, s) => {
-    all[s] = new Student(rawStudents[s]);
-    return all;
-  }, {});
+  const [students, setStudents] = useState({});
+  const [suggestions, setSuggestions] = useState({});
 
   useEffect(() => {
-    /*
     const unsubscribe = db.collection('students').onSnapshot((snapshot) => {
       const data = snapshot.docChanges();
       const newStudents = {};
@@ -36,11 +28,9 @@ const StudentProvider = ({ children }) => {
       setStudents((s) => ({ ...s, ...newStudents }));
     });
     return unsubscribe;
-    */
   }, []);
 
   useEffect(() => {
-    /*
     return db.collection('suggestions').onSnapshot((snapshot) => {
       const data = snapshot.docChanges();
       const newSuggestions = data.reduce((all, s) => {
@@ -49,7 +39,6 @@ const StudentProvider = ({ children }) => {
       }, {});
       setSuggestions((s) => ({ ...s, ...newSuggestions }));
     });
-    */
   }, []);
 
   const studentContext = {
