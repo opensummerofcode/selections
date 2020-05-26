@@ -128,7 +128,7 @@ const ProjectCard = ({ students, project, isOverDropZone, connectDropTarget }) =
           onClick={() => setSelectedRole(profile)}
           marginRight={8}
         >
-          {profile.comment && <Icon color="info" marginRight={4} size={16} icon="info-sign" />}
+          {profile.comment && <Icon color="info" marginRight={4} size={12} icon="info-sign" />}
           {profile.role}
         </Badge>
       </ConditionalTooltip>
@@ -162,7 +162,7 @@ const ProjectCard = ({ students, project, isOverDropZone, connectDropTarget }) =
           >
             <Badge className={`${styles.badge} ${styles['student-badge']}`}>
               {role.role}
-              {role.comment && <Icon color="info" marginLeft={8} size={16} icon="info-sign" />}
+              {role.comment && <Icon color="info" marginLeft={8} size={12} icon="info-sign" />}
             </Badge>
           </ConditionalTooltip>
           <Text size={300} marginTop={4}>
