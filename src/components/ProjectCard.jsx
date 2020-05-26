@@ -78,9 +78,9 @@ const ProjectCard = ({ students, project, isOverDropZone, connectDropTarget }) =
       return <p className={styles['coach-disclaimer']}>No coaches yet</p>;
     return project.coaches
       .sort((a, b) => {
-        if (a.isLead) return -1;
-        if (b.isLead) return 1;
-        return sortAlphabetically(a, b);
+        if (a.isLead - b.isLead) return -1;
+        if (b.isLead - a.isLead) return 1;
+        return sortAlphabetically(a.name, b.name);
       })
       .map((coach) => (
         <li key={coach.name}>
@@ -90,8 +90,9 @@ const ProjectCard = ({ students, project, isOverDropZone, connectDropTarget }) =
   };
 
   const renderRolesRequired = () =>
-    project.requiredProfiles.map((profile) => (
-      <li key={profile.role}>
+    project.requiredProfiles.map((profile, i) => (
+      // eslint-disable-next-line react/no-array-index-key
+      <li key={`${profile}-${i}`}>
         <ConditionalTooltip
           condition={!!profile.comment}
           content={profile.comment}
@@ -106,12 +107,13 @@ const ProjectCard = ({ students, project, isOverDropZone, connectDropTarget }) =
     ));
 
   const renderRoleSelectors = () =>
-    project.requiredProfiles.map((profile) => (
+    project.requiredProfiles.map((profile, i) => (
       <ConditionalTooltip
         condition={!!profile.comment}
         content={profile.comment}
         position={Position.TOP}
-        key={profile.role}
+        // eslint-disable-next-line react/no-array-index-key
+        key={`${profile.role}-${i}`}
       >
         <Badge
           className={styles.badge}
