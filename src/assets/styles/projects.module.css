@@ -2,11 +2,18 @@
   width: calc(100% - var(--width-list));
   height: 100%;
   overflow-y: scroll;
-  padding: 1rem;
+  padding: 0 1rem 1rem;
+  position: relative;
 }
 
 .actions {
-  margin-bottom: 2rem;
+  position: sticky;
+  width: 100%;
+  left: 0;
+  top: 0;
+  z-index: 10;
+  background: #fff;
+  height: 5rem;
 }
 
 .projects-list {
