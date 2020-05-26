@@ -5,6 +5,10 @@
   padding: 1rem;
 }
 
+.actions {
+  margin-bottom: 2rem;
+}
+
 .projects-list {
   width: 100%;
   display: grid;
