@@ -1,29 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
 import { db } from '../firebase';
 import { Student } from '../models';
 import StudentContext from '../context/students';
 
-import StudentList from '../components/StudentList';
-import StudentDetail from '../components/StudentDetail';
+export const useStudentData = () => {
+  const contextState = React.useContext(StudentContext);
+  if (contextState === null) {
+    throw new Error('useStudentData must be used within a StudentProvider tag');
+  }
+  return contextState;
+};
 
-import styles from '../assets/styles/dashboard.module.css';
-
-const Dashboard = ({ history, match }) => {
+const StudentProvider = ({ children }) => {
   const [students, setStudents] = useState({});
-  const [selectedStudent, setSelectedStudent] = useState(null);
   const [suggestions, setSuggestions] = useState({});
-
-  const selectedId = match.params.id;
-  useEffect(() => {
-    if (!students[selectedId]) return;
-    setSelectedStudent(students[selectedId]);
-  }, [students, selectedId]);
-
-  const selectStudent = (student) => {
-    history.push(`/student/${student.id}/${student.firstName}-${student.lastName}`);
-  };
 
   useEffect(() => {
     const unsubscribe = db.collection('students').onSnapshot((snapshot) => {
@@ -51,30 +42,18 @@ const Dashboard = ({ history, match }) => {
   }, []);
 
   const studentContext = {
-    selectedStudent,
-    selectStudent,
+    students,
     suggestions
   };
 
-  return (
-    <main className={`page-container ${styles.dashboard}`}>
-      <StudentContext.Provider value={studentContext}>
-        <div className={styles['content-wrapper']}>
-          <StudentList students={students} />
-          <StudentDetail selectedStudent={selectedStudent} />
-        </div>
-      </StudentContext.Provider>
-    </main>
-  );
+  return <StudentContext.Provider value={studentContext}>{children}</StudentContext.Provider>;
 };
 
-Dashboard.propTypes = {
+StudentProvider.propTypes = {
+  children: PropTypes.node.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired
-  }),
-  match: PropTypes.shape({
-    params: PropTypes.shape({ id: PropTypes.string })
   })
 };
 
-export default withRouter(Dashboard);
+export default StudentProvider;

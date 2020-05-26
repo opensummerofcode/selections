@@ -3,7 +3,13 @@ import PropTypes from 'prop-types';
 import { Route, Redirect } from 'react-router-dom';
 import AuthContext from '../context/auth';
 
-const PrivateRoute = ({ component: Component, guarded, admin, ...rest }) => {
+const PrivateRoute = ({
+  component: Component = null,
+  guarded,
+  admin,
+  children = null,
+  ...rest
+}) => {
   const { user } = useContext(AuthContext);
 
   let redirect = null;
@@ -14,13 +20,17 @@ const PrivateRoute = ({ component: Component, guarded, admin, ...rest }) => {
   return (
     <Route
       {...rest}
-      render={(props) => (redirect ? <Redirect to={redirect} /> : <Component {...props} />)}
+      render={(props) => {
+        if (redirect) return <Redirect to={redirect} />;
+        return Component ? <Component {...props} /> : children;
+      }}
     />
   );
 };
 
 PrivateRoute.propTypes = {
-  component: PropTypes.func.isRequired,
+  component: PropTypes.func,
+  children: PropTypes.node,
   guarded: PropTypes.bool,
   admin: PropTypes.bool
 };

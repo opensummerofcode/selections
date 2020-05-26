@@ -11,9 +11,14 @@ const Header = ({ user, logout }) => (
       <h1 className={styles.title}>Selections</h1>
       <ul className={styles.navitems}>
         {user && !user.isPending && (
-          <li>
-            <Link to="/">Select students</Link>
-          </li>
+          <>
+            <li>
+              <Link to="/">Select students</Link>
+            </li>
+            <li>
+              <Link to="/projects">Projects</Link>
+            </li>
+          </>
         )}
         {user && user.isAdmin && (
           <li>

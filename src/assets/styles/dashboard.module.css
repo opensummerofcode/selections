@@ -8,7 +8,7 @@
   display: flex;
   height: 100%;
   align-items: stretch;
-  --width-list: 38rem;
+  --width-list: 40rem;
   --height-filters: 24rem;
 }
 

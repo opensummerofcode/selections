@@ -1,9 +1,9 @@
-import React, { useContext, useState, useRef } from 'react';
+import React, { useContext, useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Badge, Icon, Button, Dialog, TextInput, Select } from 'evergreen-ui';
+import { useParams } from 'react-router-dom';
 import AuthContext from '../context/auth';
-import StudentContext from '../context/students';
-import { Student } from '../models';
+import { useStudentData } from './StudentProvider';
 
 import twitterIcon from '../assets/img/icon-twitter.png';
 import linkedinIcon from '../assets/img/icon-linkedin.png';
@@ -35,12 +35,19 @@ ExternalLink.propTypes = {
   a lot based a fixed 3 statuses: yes, maybe, no
   Refactor required
 */
-const StudentDetail = ({ selectedStudent: student }) => {
+const StudentDetail = () => {
   const { user } = useContext(AuthContext);
-  const { suggestions } = useContext(StudentContext);
+  const { students, suggestions } = useStudentData();
 
   const [isSuggesting, setIsSuggesting] = useState(false);
   const [suggestionIsLoading, setSuggestionIsLoading] = useState(false);
+  const [student, setStudent] = useState(null);
+
+  const studentId = useParams().id;
+  useEffect(() => {
+    const newStudent = students[studentId];
+    setStudent(newStudent);
+  }, [studentId]);
 
   let $inputReason = useRef(null);
 
@@ -53,7 +60,7 @@ const StudentDetail = ({ selectedStudent: student }) => {
   }
 
   const renderStatusIcon = (condition, status) => {
-    // TODO: make accessible for screen readers
+    // TODO: make accessible for screen{ match }readers
     let $icon = <Icon size={16} icon="cross" color="danger" />;
     if (status === 'yes' || condition) $icon = <Icon size={16} icon="tick" color="success" />;
     else if (status === 'maybe') $icon = <Icon size={16} icon="minus" color="orange" />;
@@ -204,6 +211,7 @@ const StudentDetail = ({ selectedStudent: student }) => {
                 className={styles.selectors}
                 value={student.statusType}
                 onChange={(e) => select(e.target.value)}
+                disabled={student.confirmed}
               >
                 <option value="no-status">Undecided</option>
                 <option value="yes">Yes</option>
@@ -323,10 +331,6 @@ const StudentDetail = ({ selectedStudent: student }) => {
       <div className={styles.applyingFor}> {$applyingFor}</div>
     </Wrapper>
   );
-};
-
-StudentDetail.propTypes = {
-  selectedStudent: PropTypes.instanceOf(Student)
 };
 
 export default StudentDetail;

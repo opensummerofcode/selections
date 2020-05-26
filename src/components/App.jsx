@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { DndProvider } from 'react-dnd';
 import { auth, db } from '../firebase';
+import StudentProvider from './StudentProvider';
 import AuthContext from '../context/auth';
 
-import Dashboard from '../pages/Dashboard';
+import Students from '../pages/Students';
+import Projects from '../pages/Projects';
 import Login from '../pages/Login';
 import UserManagement from '../pages/UserManagement';
 import Pending from '../pages/Pending';
@@ -52,8 +56,6 @@ const App = () => {
       <BrowserRouter>
         <Header user={currentUser} logout={logout} />
         <Switch>
-          <PrivateRoute path="/:path(|index|home|start)" exact guarded component={Dashboard} />
-          <PrivateRoute path="/student/:id/:name" guarded component={Dashboard} />
           <PrivateRoute
             path="/manage-users"
             admin
@@ -74,6 +76,16 @@ const App = () => {
               />
             )}
           />
+          <PrivateRoute path="/" guarded>
+            <DndProvider backend={HTML5Backend}>
+              <StudentProvider>
+                <Switch>
+                  <Route path="/projects" exact component={Projects} />
+                  <Route path="/(student)?/:id?/:name?" component={Students} />
+                </Switch>
+              </StudentProvider>
+            </DndProvider>
+          </PrivateRoute>
           <Route render={() => <p>Page not found</p>} />
         </Switch>
       </BrowserRouter>

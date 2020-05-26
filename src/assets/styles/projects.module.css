@@ -1,0 +1,170 @@
+.projects-container {
+  width: calc(100% - var(--width-list));
+  height: 100%;
+  overflow-y: scroll;
+  padding: 0 1rem 1rem;
+  position: relative;
+}
+
+.actions {
+  position: sticky;
+  width: 100%;
+  left: 0;
+  top: 0;
+  z-index: 10;
+  background: #fff;
+  height: 5rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.projects-list {
+  width: 100%;
+  display: grid;
+  padding: 0;
+  margin: 0;
+  grid-template-columns: repeat(auto-fit, minmax(38rem, 1fr));
+  grid-auto-rows: min-content;
+  gap: 4rem 2rem;
+  list-style-type: none;
+}
+
+.project {
+  background-color: #fff;
+  transition: background-color 0.2s linear;
+  height: 100%;
+}
+
+.dropping {
+  background-color: rgba(16, 112, 202, 0.2);
+}
+
+.wrapper {
+  position: relative;
+  height: 100%;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  padding: 1rem;
+  margin-bottom: 2rem;
+  min-height: 14rem;
+  height: 30%;
+  display: flex;
+}
+
+.details {
+  display: flex;
+  flex-flow: column;
+  justify-content: flex-start;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.partner {
+  font-style: italic;
+}
+
+.coaches {
+  display: flex;
+  padding: 0;
+  list-style-type: none;
+  flex-wrap: wrap;
+  margin: 0.4rem 0;
+}
+
+.coaches li {
+  padding: 0 0.5rem 0 0;
+}
+
+.template-link {
+  align-self: flex-end;
+}
+
+.coach-disclaimer {
+  font-size: 1.4rem;
+}
+
+.students {
+  padding: 1rem;
+  flex: 1;
+}
+
+.students__student {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.4rem;
+}
+
+.students__student > div {
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: flex-start;
+}
+
+.roles {
+  width: 20rem;
+  padding: 0;
+  margin: 0;
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.roles li {
+  list-style-type: none;
+  max-width: 100%;
+  margin: 0;
+}
+
+.roles li > strong {
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.students__student > div {
+  display: flex;
+  flex-flow: column;
+  width: 100%;
+}
+
+.students__student > div ul li {
+  margin: 0.2rem;
+  list-style-type: none;
+}
+
+.badge {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem;
+  margin-bottom: 0.8rem;
+}
+
+.student-badge {
+  margin-bottom: 0;
+}
+
+.student-name {
+  display: flex;
+  align-items: center;
+}
+
+.role-selector {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 1rem 0 2rem;
+}
+
+.role-selector .badge {
+  padding: 1.2rem;
+}

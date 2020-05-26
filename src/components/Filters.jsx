@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, useReducer, memo } from 'react';
 import PropTypes from 'prop-types';
 import { Switch, SearchInput, Button, Pill } from 'evergreen-ui';
-import { removeDiacritics } from '../util';
+import { normalizeString } from '../util';
 import { Student } from '../models';
 import { roles } from '../constants';
 import RoleFilter from './RoleFilter';
@@ -12,25 +12,30 @@ import styles from '../assets/styles/filters.module.css';
 
 /*
 TODO:
-status filters (no official status, accepted, reject, maybe) - filterlist or segmented control
 status is locked-in - yes/no
 */
 
-const normalize = (str) => removeDiacritics(str.toLowerCase());
-
-const initialState = {
+const initialState = (showOnly = []) => ({
   searchQuery: '',
   selectedRoles: [...roles],
   isAlum: false,
   wantsToCoach: false,
   includeAlreadySuggested: true,
   statuses: [
-    { label: 'Yes', value: 'yes', selected: true },
-    { label: 'Maybe', value: 'maybe', selected: true },
-    { label: 'No', value: 'no', selected: true },
-    { label: 'Undecided', value: 'no-status', selected: true }
+    { label: 'Yes', value: 'yes', selected: showOnly.length === 0 || showOnly.includes('yes') },
+    {
+      label: 'Maybe',
+      value: 'maybe',
+      selected: showOnly.length === 0 || showOnly.includes('maybe')
+    },
+    { label: 'No', value: 'no', selected: showOnly.length === 0 || showOnly.includes('no') },
+    {
+      label: 'Undecided',
+      value: 'no-status',
+      selected: showOnly.length === 0 || showOnly.includes('no-status')
+    }
   ]
-};
+});
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -57,25 +62,25 @@ const reducer = (state, action) => {
       return { ...state, statuses };
     }
     case 'reset':
-      return { ...initialState };
+      return { ...initialState(action.payload) };
     default:
       throw new Error(`${action.type} does not exist`);
   }
 };
 
-const Filters = ({ students: studentObj, setFiltered, filteredCount }) => {
+const Filters = ({ students: studentObj, setFiltered, filteredCount, showOnly = [] }) => {
   const { user } = useContext(AuthContext);
   const { suggestions } = useContext(StudentContext);
 
   const students = Object.keys(studentObj)
     .map((id) => studentObj[id])
     .map((s) => {
-      s.firstNameNormalized = normalize(s.firstName);
-      s.lastNameNormalized = normalize(s.lastName);
+      s.firstNameNormalized = normalizeString(s.firstName);
+      s.lastNameNormalized = normalizeString(s.lastName);
       return s;
     });
 
-  const [state, dispatch] = useReducer(reducer, { ...initialState });
+  const [state, dispatch] = useReducer(reducer, { ...initialState(showOnly) });
 
   const sortByFirstNameThenLastName = (a, b) => {
     if (a.firstNameNormalized < b.firstNameNormalized) return -1;
@@ -86,7 +91,7 @@ const Filters = ({ students: studentObj, setFiltered, filteredCount }) => {
   };
 
   const search = (student) => {
-    const query = normalize(state.searchQuery);
+    const query = normalizeString(state.searchQuery);
     const { firstNameNormalized, lastNameNormalized } = student;
     return (
       firstNameNormalized.includes(query) ||
@@ -192,7 +197,9 @@ const Filters = ({ students: studentObj, setFiltered, filteredCount }) => {
         <div>
           <Pill>{filteredCount}</Pill> of <Pill>{students.length}</Pill> shown
         </div>
-        <Button onClick={() => dispatch({ type: 'reset' })}>Reset filters</Button>
+        <Button onClick={() => dispatch({ type: 'reset', payload: showOnly })}>
+          Reset filters
+        </Button>
       </div>
     </header>
   );
@@ -201,7 +208,8 @@ const Filters = ({ students: studentObj, setFiltered, filteredCount }) => {
 Filters.propTypes = {
   setFiltered: PropTypes.func.isRequired,
   filteredCount: PropTypes.number.isRequired,
-  students: PropTypes.objectOf(PropTypes.instanceOf(Student))
+  students: PropTypes.objectOf(PropTypes.instanceOf(Student)),
+  showOnly: PropTypes.arrayOf(PropTypes.oneOf(['yes', 'maybe', 'no', 'no-status']))
 };
 
 export default memo(Filters);
