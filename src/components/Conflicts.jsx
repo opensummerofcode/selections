@@ -12,12 +12,15 @@ const Conflicts = ({ conflicts, students, projects, isShown, setConflictsShown }
     const $conflictingTeams = teams
       .map((id) => projects[id].name)
       .sort(sortAlphabetically)
-      .map((name) => <li>{name}</li>);
+      .map((name) => <li key={studentId}>{name}</li>);
 
     return (
-      <li>
-        {students[studentId].firstName} {students[studentId].lastName}:<ul>{$conflictingTeams}</ul>
-      </li>
+      students[studentId] && (
+        <li key={studentId}>
+          {students[studentId].firstName} {students[studentId].lastName}:
+          <ul>{$conflictingTeams}</ul>
+        </li>
+      )
     );
   };
 
