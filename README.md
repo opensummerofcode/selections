@@ -5,7 +5,7 @@
 - Node v10 installed
 - This project uses [Yarn](yarnpkg.org) (quick install: `npm install -g yarn`)
 - You must be added to either the osoc selection tool [Firebase](https://firebase.google.com/) instance, or create your own.
-If you create your own, replace `firebaseConfig` in  `src/firebase.js` with your own values.
+If you create your own, replace `firebaseConfig` in  `src/firebase.js` with your own values. The [data transformer and import scripts](https://github.com/opensummerofcode/selections-data-transformer) can help you transform your data into a format the tool expects.
 
 ### Install dependencies
 
