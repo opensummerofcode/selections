@@ -81,7 +81,13 @@ const ProjectList = () => {
           Conflicts
         </Button>
       </header>
-      <ul className={styles['projects-list']}>{$projects}</ul>
+      {$projects.length > 0 ? (
+        <ul className={styles['projects-list']}>{$projects}</ul>
+      ) : (
+        <span>
+          No projects have been added yet. They will be added before the second selection round.
+        </span>
+      )}
     </div>
   );
 };
