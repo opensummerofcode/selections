@@ -10,7 +10,7 @@ const StudentList = ({ showOnly }) => {
   const [filtered, setFiltered] = useState([]);
   const { students } = useStudentData();
 
-  const renderStudent = (student) => <StudentCard key={student.id} student={student} />;
+  const renderStudent = (student) => <StudentCard key={student.response_id} student={student} />;
   return (
     <div className={styles['student-list']}>
       <Filters
