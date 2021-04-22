@@ -5,7 +5,7 @@
 - Node v12 installed
 - You must be added to either the osoc selection tool [Firebase](https://firebase.google.com/) instance, or create your own.
 If you create your own, replace `firebaseConfig` in  `src/firebase.js` with your own values. The [data transformer and import scripts](https://github.com/opensummerofcode/selections-data-transformer) can help you transform your data into a format the tool expects. Your Firebase instance must have Google authentication enabled, and you must deploy firebase functions for user creation to work: `firebase deploy --only functions`
-- On first sign-in as the first user, you will manually have to set yourself to "`admin` in the `users` collection through a script or the Firebase console.
+- On first sign-in as the first user, you will manually have to set yourself to `admin` in the `users` collection through a script or the Firebase console.
 
 ### Install dependencies
 
@@ -25,7 +25,4 @@ You will also see any lint errors in the console.
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
+Builds the app for production to the `build` folder.<br />. You can deploy the build by running `firebase deploy`
