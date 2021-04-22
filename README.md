@@ -25,4 +25,4 @@ You will also see any lint errors in the console.
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.<br />. You can deploy the build by running `firebase deploy`
+Builds the app for production to the `build` folder. You can deploy the build by running `firebase deploy`
