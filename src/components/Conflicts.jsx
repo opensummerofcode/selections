@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { SideSheet } from 'evergreen-ui';
-import { Project, Student } from '../models';
 
 import styles from '../assets/styles/conflicts.module.css';
 import { sortAlphabetically } from '../util';
 
 // eslint-disable-next-line react/prop-types
 const Conflicts = ({ conflicts, students, projects, isShown, setConflictsShown }) => {
-  const renderConflict = ({ amount, studentId, teams }) => {
+  const renderConflict = ({ studentId, teams }) => {
     const $conflictingTeams = teams
+      // eslint-disable-next-line react/prop-types
       .map((id) => projects[id].name)
       .sort(sortAlphabetically)
       .map((name) => <li key={studentId}>{name}</li>);
@@ -17,6 +17,7 @@ const Conflicts = ({ conflicts, students, projects, isShown, setConflictsShown }
     return (
       students[studentId] && (
         <li key={studentId}>
+          {/* eslint-disable-next-line react/prop-types */}
           {students[studentId].firstName} {students[studentId].lastName}:
           <ul>{$conflictingTeams}</ul>
         </li>

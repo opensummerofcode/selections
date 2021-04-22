@@ -72,6 +72,7 @@ class Student {
       })
       .catch((err) => {
         if (err.code === 'storage/object-not-found') this.cv = null;
+        // eslint-disable-next-line no-console
         else console.error(err);
       });
   }
