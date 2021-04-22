@@ -238,7 +238,7 @@ const StudentDetail = () => {
         <h3>Academia</h3>
         <ul>
           <li>
-            Enrolled at <strong>{student.school}</strong>
+            Enrolled at <strong>{student.nameOfSchool}</strong>
           </li>
           <li>
             Studies: <strong>{student.fieldOfStudy.join(', ')}</strong>
@@ -260,9 +260,21 @@ const StudentDetail = () => {
               <ExternalLink href={student.cv}>CV</ExternalLink>
             </li>
           )}
+          {student.cvSecondary && (
+            <li>
+              <ExternalLink href={student.cvSecondary}>CV (external link)</ExternalLink>
+            </li>
+          )}
           {student.portfolio && (
             <li>
               <ExternalLink href={student.portfolio}>Portfolio</ExternalLink>
+            </li>
+          )}
+          {student.portfolioSecondary && (
+            <li>
+              <ExternalLink href={student.portfolioSecondary}>
+                Portfolio (external link)
+              </ExternalLink>
             </li>
           )}
         </ul>
@@ -292,7 +304,7 @@ const StudentDetail = () => {
             during the month of July, Monday through Thursday
           </li>
           <li>
-            {renderStatusIcon(student.hasLaptop)}
+            {renderStatusIcon(student.ownLaptop)}
             on their own laptop
           </li>
         </ul>
