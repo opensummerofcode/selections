@@ -4,12 +4,12 @@ import 'firebase/firestore';
 import 'firebase/storage';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyDt6eZOw0s_1Dd8Q6qRSAMn_zL_0IxeD3o',
-  authDomain: 'osoc-selections.firebaseapp.com',
-  databaseURL: 'https://osoc-selections.firebaseio.com',
-  projectId: 'osoc-selections',
-  storageBucket: 'osoc-selections.appspot.com',
-  appId: '1:15840760909:web:6a40a8fdd661c998bdf804'
+  apiKey: 'AIzaSyDDEUTpWJ8SFWZ0S7hzoLLFoIyKOgiBVqQ',
+  authDomain: 'osoc-selections-202.firebaseapp.com',
+  projectId: 'osoc-selections-202',
+  storageBucket: 'osoc-selections-202.appspot.com',
+  messagingSenderId: '983468915309',
+  appId: '1:983468915309:web:8face8aae1ac5cdef01d64'
 };
 
 const fire = firebase.initializeApp(firebaseConfig);
