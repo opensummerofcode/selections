@@ -13,7 +13,7 @@ export const useStudentData = () => {
 };
 
 const StudentProvider = ({ children }) => {
-  const [students, setStudents] = useState({});
+  const [students, setStudents] = useState(null);
   const [suggestions, setSuggestions] = useState({});
 
   useEffect(() => {
@@ -46,7 +46,9 @@ const StudentProvider = ({ children }) => {
     suggestions
   };
 
-  return <StudentContext.Provider value={studentContext}>{children}</StudentContext.Provider>;
+  return (
+    <StudentContext.Provider value={studentContext}>{students && children}</StudentContext.Provider>
+  );
 };
 
 StudentProvider.propTypes = {

@@ -37,12 +37,12 @@ class Student {
 
   setStatus = (type) => {
     const status = type === 'no-status' ? null : type;
-    db.collection('students').doc(this.id).update({ status });
+    return db.collection('students').doc(this.id).update({ status });
   };
 
   toggleConfirmed = () => {
     const current = !!this.confirmed;
-    db.collection('students').doc(this.id).update({ confirmed: !current });
+    return db.collection('students').doc(this.id).update({ confirmed: !current });
   };
 }
 
