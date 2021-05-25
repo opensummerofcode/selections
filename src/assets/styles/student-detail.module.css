@@ -27,6 +27,7 @@
 .actions button {
   width: 12rem;
   justify-content: center;
+  white-space: nowrap;
 }
 
 .selectors {
