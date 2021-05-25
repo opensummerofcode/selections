@@ -304,6 +304,11 @@ const StudentDetail = () => {
             during the month of July, Monday through Thursday
           </li>
           <li>
+            {renderStatusIcon(!student.otherTimezone)}
+            in the Brussels time zone{' '}
+            {!!student.otherTimezone && <span>&nbsp;- They are in {student.otherTimezone}</span>}
+          </li>
+          <li>
             {renderStatusIcon(student.ownLaptop)}
             on their own laptop
           </li>
