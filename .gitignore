@@ -21,3 +21,6 @@ yarn-error.log*
 .vscode
 firebase-debug.log*
 .firebase
+
+.next
+*.d.ts
