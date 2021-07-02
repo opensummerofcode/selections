@@ -1,5 +1,10 @@
-import Students from '@/components/Students';
+import StudentDetail from '@/components/StudentDetail';
+import SidebarLayout from '@/components/SidebarLayout';
 
-export default function Index() {
-  return <Students />;
+function Index() {
+  return <StudentDetail />;
 }
+
+Index.getLayout = (page) => <SidebarLayout>{page}</SidebarLayout>;
+
+export default Index;

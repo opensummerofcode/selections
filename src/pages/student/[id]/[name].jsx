@@ -1,8 +1,10 @@
-import { useAuth } from '@/services';
-import Students from '@/components/Students';
+import StudentDetail from '@/components/StudentDetail';
+import SidebarLayout from '@/components/SidebarLayout';
 
-export default function StudentDetail() {
-  useAuth();
-
-  return <Students />;
+function Student() {
+  return <StudentDetail />;
 }
+
+Student.getLayout = (page) => <SidebarLayout>{page}</SidebarLayout>;
+
+export default Student;

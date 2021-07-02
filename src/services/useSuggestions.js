@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { db } from '@/firebase';
 
 export default function useSuggestions() {
-  const [suggestions, setSuggestions] = useState(null);
+  const [suggestions, setSuggestions] = useState({});
 
   useEffect(() => {
     return db.collection('suggestions').onSnapshot((snapshot) => {

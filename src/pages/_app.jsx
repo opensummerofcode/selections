@@ -10,6 +10,7 @@ export default function App({ Component, pageProps }) {
 
   if (isLoading) return <p />;
 
+  const getLayout = Component.getLayout || ((page) => page);
   return (
     <>
       <Head>
@@ -17,7 +18,7 @@ export default function App({ Component, pageProps }) {
         <title>Selections | Open Summer of Code</title>
       </Head>
       <Header user={user} />
-      <Component user={user} {...pageProps} />
+      {getLayout(<Component user={user} {...pageProps} />)}
     </>
   );
 }

@@ -1,19 +1,11 @@
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { DndProvider } from 'react-dnd';
-import StudentList from '@/components/StudentList';
 import ProjectList from '@/components/ProjectList';
 
-import styles from '../assets/styles/dashboard.module.css';
+import SidebarLayout from '../components/SidebarLayout';
 
-export default function Projects() {
-  return (
-    <DndProvider backend={HTML5Backend}>
-      <main className={`page-container ${styles.dashboard}`}>
-        <div className={styles['content-wrapper']}>
-          <StudentList showOnly={['yes', 'maybe']} />
-          <ProjectList />
-        </div>
-      </main>
-    </DndProvider>
-  );
+function Projects() {
+  return <ProjectList />;
 }
+
+Projects.getLayout = (page) => <SidebarLayout>{page}</SidebarLayout>;
+
+export default Projects;
