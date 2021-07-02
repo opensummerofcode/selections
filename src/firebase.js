@@ -1,4 +1,5 @@
 import * as firebase from 'firebase/app';
+/* eslint-disable import/no-duplicates */
 import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/storage';
@@ -12,7 +13,12 @@ const firebaseConfig = {
   appId: '1:445367300630:web:6400beb1254293c2217b37'
 };
 
-const fire = firebase.initializeApp(firebaseConfig);
+let fire;
+if (!firebase.apps.length) {
+  fire = firebase.initializeApp(firebaseConfig);
+} else {
+  fire = firebase.app(); // if already initialized, use that one
+}
 export const authProvider = new firebase.auth.GoogleAuthProvider();
 
 export const db = fire.firestore();

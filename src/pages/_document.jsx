@@ -10,9 +10,8 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <meta charset="utf-8" />
-          <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <meta charSet="utf-8" />
+          <link rel="icon" href="/favicon.ico" />
           <meta name="theme-color" content="#000000" />
           <meta name="description" content="Selection tool for Open Summer of Code" />
           <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
@@ -20,7 +19,6 @@ class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Roboto&family=Montserrat&display=swap"
             rel="stylesheet"
           />
-          <title>Selections | Open Summer of Code</title>
         </Head>
         <body>
           <Main />

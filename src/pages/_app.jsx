@@ -1,22 +1,13 @@
 import { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { DndProvider } from 'react-dnd';
-import { auth, db } from '../firebase';
-import StudentProvider from './StudentProvider';
-import AuthContext from '../context/auth';
+import Head from 'next/head';
+import { auth, db } from '@/firebase';
+import AuthContext from '@/context/auth';
 
-import Students from '../pages/Students';
-import Projects from '../pages/Projects';
-import Login from '../pages/Login';
-import UserManagement from '../pages/UserManagement';
-import Pending from '../pages/Pending';
+import Header from '@/components/Header';
+import { User } from '@/models';
 
-import Header from './Header';
-import PrivateRoute from './PrivateRoute';
-import { User } from '../models';
-
-this.setState({});
+import 'normalize.css';
+import '@/assets/styles/index.css';
 
 const App = ({ Component, pageProps }) => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -54,12 +45,14 @@ const App = ({ Component, pageProps }) => {
 
   return (
     <AuthContext.Provider value={authContext}>
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Selections | Open Summer of Code</title>
+      </Head>
       <Header user={currentUser} logout={logout} />
       <Component {...pageProps} />
     </AuthContext.Provider>
   );
 };
-
-App.propTypes = {};
 
 export default App;

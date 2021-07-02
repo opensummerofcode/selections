@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { useParams, useHistory } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import { Badge, Pane, Pill } from 'evergreen-ui';
 import { DragSource } from 'react-dnd';
-import { Student } from '../models';
+import Student from '../models';
 import StudentContext from '../context/students';
 
 import styles from '../assets/styles/student-card.module.css';
@@ -24,15 +24,16 @@ const endDrag = (props, monitor) => {
 };
 
 const StudentCard = ({ student, connectDragSource }) => {
+  const router = useRouter();
+
   const { firstName, lastName } = student;
   const { suggestions } = useContext(StudentContext);
 
-  const history = useHistory();
   const selectStudent = (s) => {
-    history.push(`/student/${s.id}/${s.firstName}-${s.lastName}`);
+    router.push(`/student/${s.id}/${s.firstName}-${s.lastName}`);
   };
 
-  const selectedStudentId = useParams().id;
+  const selectedStudentId = router.query.id;
   const isActive = selectedStudentId && selectedStudentId === student.id;
 
   const suggestionList = suggestions[student.id];

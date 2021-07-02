@@ -1,7 +1,7 @@
 import React, { useContext, useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useRouter } from 'next/router';
 import { Badge, Icon, Button, Dialog, TextInput, Select } from 'evergreen-ui';
-import { useParams } from 'react-router-dom';
 import AuthContext from '../context/auth';
 import { useStudentData } from './StudentProvider';
 
@@ -43,7 +43,9 @@ const StudentDetail = () => {
   const [suggestionIsLoading, setSuggestionIsLoading] = useState(false);
   const [student, setStudent] = useState(null);
 
-  const studentId = useParams().id;
+  const router = useRouter();
+  const studentId = router.query.id;
+
   useEffect(() => {
     const newStudent = students[studentId];
     setStudent(newStudent);

@@ -25,7 +25,7 @@ const Login = ({ history, isLoggingIn, isLoggedIn, setIsLoggingIn }) => {
       <p>
         Welcome to the Open Summer of Code selections app. <br />
         After you&apos;ve logged in with your Google account, we&apos;ll enable your account so you
-        can get started. Nudge @Astrid for verification!
+        can get started. Nudge @Miet#7556 for verification!
       </p>
       <Button isLoading={isLoggingIn} onClick={doLogin} appearance="primary">
         Log in

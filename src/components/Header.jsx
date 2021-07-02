@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
+import styles from '@/assets/styles/header.module.css';
 import { User } from '../models';
-
-import styles from '../assets/styles/header.module.css';
 
 const Header = ({ user, logout }) => (
   <header className={styles.header}>
@@ -13,28 +12,36 @@ const Header = ({ user, logout }) => (
         {user && !user.isPending && (
           <>
             <li>
-              <Link to="/">Select students</Link>
+              <Link href="/">
+                <a>Select students</a>
+              </Link>
             </li>
             <li>
-              <Link to="/projects">Projects</Link>
+              <Link href="/projects">
+                <a>Projects</a>
+              </Link>
             </li>
           </>
         )}
         {user && user.isAdmin && (
           <li>
-            <Link to="/manage-users">Manage users</Link>
+            <Link href="/manage-users">
+              <a>Manage users</a>
+            </Link>
           </li>
         )}
         {user && (
           <li>
-            <Link to="/" onClick={logout}>
-              Log out
+            <Link href="/" onClick={logout}>
+              <a>Log out</a>
             </Link>
           </li>
         )}
         {!user && (
           <li>
-            <Link to="/login">Log in</Link>
+            <Link href="/login">
+              <a>Log in</a>
+            </Link>
           </li>
         )}
       </ul>
