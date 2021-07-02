@@ -3,8 +3,7 @@ import { useRouter } from 'next/router';
 import { auth, authProvider, db } from '@/firebase';
 import User from '@/models/User';
 
-export default function useAuth(props = { redirectTo: null }) {
-  const { redirectTo = null } = props;
+export default function useAuth() {
   const router = useRouter();
 
   const [isLoggingIn, setIsLoggingIn] = useState(false);
@@ -29,23 +28,7 @@ export default function useAuth(props = { redirectTo: null }) {
         });
     });
     return unsubscribe;
-  }, [auth]);
-
-  useEffect(() => {
-    if (user && user.isPending) {
-      router.push('/pending');
-      return;
-    }
-
-    if (redirectTo && !user) {
-      router.push(redirectTo);
-      return;
-    }
-
-    if (!user) {
-      router.push('/login');
-    }
-  }, [user, redirectTo]);
+  }, []);
 
   const logout = () => {
     setIsLoading(true);

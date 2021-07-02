@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react';
 import { useStudents } from '@/services';
 import Filters from './Filters';
 import StudentCard from './StudentCard';
@@ -7,6 +6,7 @@ import StudentCard from './StudentCard';
 import styles from '../assets/styles/dashboard.module.css';
 
 const StudentList = ({ showOnly }) => {
+  const { students } = useStudents();
   const [filtered, setFiltered] = useState([]);
 
   const renderStudent = (student) => <StudentCard key={student.id} student={student} />;
@@ -21,10 +21,6 @@ const StudentList = ({ showOnly }) => {
       <ol>{students && filtered.map(renderStudent)}</ol>
     </div>
   );
-};
-
-StudentList.propTypes = {
-  showOnly: PropTypes.arrayOf(PropTypes.oneOf(['yes', 'maybe', 'no', 'no-status']))
 };
 
 export default StudentList;

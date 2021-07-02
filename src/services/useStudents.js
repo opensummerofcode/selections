@@ -3,7 +3,7 @@ import { db } from '@/firebase';
 import { Student } from '@/models';
 
 export default function useStudents() {
-  const [students, setStudents] = useState(null);
+  const [students, setStudents] = useState({});
 
   useEffect(() => {
     const unsubscribe = db.collection('students').onSnapshot((snapshot) => {

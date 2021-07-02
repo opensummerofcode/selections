@@ -9,12 +9,16 @@ import styles from '../assets/styles/pending.module.css';
 export default function Login() {
   const router = useRouter();
 
-  const { isLoggingIn, login } = useAuth();
+  const { isLoggingIn, login, user } = useAuth();
 
   useEffect(async () => {
     const result = await auth.getRedirectResult();
     if (result.user) router.push('/');
   }, []);
+
+  useEffect(() => {
+    if (user) router.push('/');
+  }, [user]);
 
   return (
     <div className={styles.pending}>
