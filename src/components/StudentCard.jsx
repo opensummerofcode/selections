@@ -18,7 +18,7 @@ const endDrag = (props, monitor) => {
   if (!monitor.didDrop()) return;
 
   const { student } = monitor.getItem();
-  const project = monitor.getDropResult();
+  const { project } = monitor.getDropResult();
   project.startAssigning(student);
 };
 

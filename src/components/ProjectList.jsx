@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { SearchInput, Button, Pill } from 'evergreen-ui';
+import { Project } from '@/models';
 import { db } from '../firebase';
 import { useStudentData } from './StudentProvider';
 import Conflicts from './Conflicts';
 import ProjectCard from './ProjectCard';
-import Project from '../models/Project';
 
 import styles from '../assets/styles/projects.module.css';
 import { sortAlphabetically, normalizeString } from '../util';

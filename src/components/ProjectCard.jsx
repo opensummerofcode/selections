@@ -43,7 +43,7 @@ ConditionalTooltip.propTypes = {
 };
 
 const canDrop = () => true;
-const drop = (props) => ({ ...props.project });
+const drop = (props) => ({ project: props.project });
 
 const ProjectCard = ({ students, project, isOverDropZone, connectDropTarget }) => {
   const { user } = useContext(AuthContext);
@@ -151,7 +151,7 @@ const ProjectCard = ({ students, project, isOverDropZone, connectDropTarget }) =
             )}
             {reason && (
               <Tooltip content={reason} position={Position.TOP}>
-                <IconButton appearance="minimal" intent="info" icon="comment" />
+                <IconButton appearance="minimal" icon="comment" />
               </Tooltip>
             )}
           </div>
