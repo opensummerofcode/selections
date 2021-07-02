@@ -1,9 +1,8 @@
-import React, { useContext, useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import { Badge, Icon, Button, Dialog, TextInput, Select } from 'evergreen-ui';
-import AuthContext from '../context/auth';
-import { useStudentData } from './StudentProvider';
+import { useStudents, useSuggestions, useAuth } from '@/services';
 
 import dashStyles from '../assets/styles/dashboard.module.css';
 import styles from '../assets/styles/student-detail.module.css';
@@ -33,8 +32,9 @@ ExternalLink.propTypes = {
   Refactor required
 */
 const StudentDetail = () => {
-  const { user } = useContext(AuthContext);
-  const { students, suggestions } = useStudentData();
+  const { user } = useAuth();
+  const { students } = useStudents();
+  const { suggestions } = useSuggestions();
 
   const [isSuggesting, setIsSuggesting] = useState(false);
   const [suggestionIsLoading, setSuggestionIsLoading] = useState(false);

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useStudentData } from './StudentProvider';
+import { useStudents } from '@/services';
 import Filters from './Filters';
 import StudentCard from './StudentCard';
 
@@ -8,7 +8,6 @@ import styles from '../assets/styles/dashboard.module.css';
 
 const StudentList = ({ showOnly }) => {
   const [filtered, setFiltered] = useState([]);
-  const { students } = useStudentData();
 
   const renderStudent = (student) => <StudentCard key={student.id} student={student} />;
   return (

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useContext } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import {
   Pane,
@@ -13,9 +13,9 @@ import {
   Text
 } from 'evergreen-ui';
 import { DropTarget } from 'react-dnd';
+import { useAuth } from '@/services';
 import { sortAlphabetically } from '../util';
 import ProjectModel from '../models/Project';
-import AuthContext from '../context/auth';
 
 import styles from '../assets/styles/projects.module.css';
 
@@ -46,7 +46,7 @@ const canDrop = () => true;
 const drop = (props) => ({ project: props.project });
 
 const ProjectCard = ({ students, project, isOverDropZone, connectDropTarget }) => {
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   const [studentBeingAssigned, setAssignedStudent] = useState(false);
   const [isAssignLoading, setIsAssignLoading] = useState(false);
   const [selectedRole, setSelectedRole] = useState(null);

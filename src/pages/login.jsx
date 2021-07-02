@@ -1,28 +1,20 @@
-import { useEffect, useContext, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { Button } from 'evergreen-ui';
-import AuthContext from '@/context/auth';
-import { authProvider, auth } from '../firebase';
+import { useRouter } from 'next/router';
+import { useAuth } from '@/services';
+import { auth } from '@/firebase';
 
 import styles from '../assets/styles/pending.module.css';
 
-const Login = () => {
+export default function Login() {
   const router = useRouter();
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const { user } = useContext(AuthContext);
 
-  const isLoggedIn = !!user;
+  const { isLoggingIn, login } = useAuth();
 
-  useEffect(() => {
-    if (!isLoggedIn) return;
-    setIsLoggingIn(false);
-    router.push('/');
-  }, [isLoggedIn, setIsLoggingIn]);
-
-  const doLogin = () => {
-    setIsLoggingIn(true);
-    auth.signInWithRedirect(authProvider);
-  };
+  useEffect(async () => {
+    const result = await auth.getRedirectResult();
+    if (result.user) router.push('/');
+  }, []);
 
   return (
     <div className={styles.pending}>
@@ -32,7 +24,7 @@ const Login = () => {
         After you&apos;ve logged in with your Google account, we&apos;ll enable your account so you
         can get started. Nudge @Miet#7556 for verification!
       </p>
-      <Button isLoading={isLoggingIn} onClick={doLogin} appearance="primary">
+      <Button isLoading={isLoggingIn} onClick={login} appearance="primary">
         Log in
       </Button>
       <div className={styles.logo}>
@@ -40,6 +32,4 @@ const Login = () => {
       </div>
     </div>
   );
-};
-
-export default Login;
+}

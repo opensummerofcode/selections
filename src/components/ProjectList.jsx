@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { SearchInput, Button, Pill } from 'evergreen-ui';
 import { Project } from '@/models';
+import { useStudents } from '@/services';
 import { db } from '../firebase';
-import { useStudentData } from './StudentProvider';
 import Conflicts from './Conflicts';
 import ProjectCard from './ProjectCard';
 
@@ -13,7 +13,7 @@ const ProjectList = () => {
   const [projects, setProjects] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
   const [conflictsShown, setConflictsShown] = useState(false);
-  const { students } = useStudentData();
+  const { students } = useStudents();
 
   useEffect(() => {
     const unsubscribe = db.collection('projects').onSnapshot((snapshot) => {

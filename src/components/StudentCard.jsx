@@ -1,9 +1,8 @@
-import { useContext } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Badge, Pane, Pill } from 'evergreen-ui';
 import { DragSource } from 'react-dnd';
-import StudentContext from '../context/students';
+import { useSuggestions } from '../services';
 
 import styles from '../assets/styles/student-card.module.css';
 
@@ -26,7 +25,7 @@ const StudentCard = ({ student, connectDragSource }) => {
   const router = useRouter();
 
   const { firstName, lastName } = student;
-  const { suggestions } = useContext(StudentContext);
+  const { suggestions } = useSuggestions();
 
   const selectedStudentId = router.query.id;
   const isActive = selectedStudentId && selectedStudentId === student.id;

@@ -1,12 +1,11 @@
-import React, { useEffect, useContext, useReducer, memo } from 'react';
+import React, { useEffect, useReducer, memo } from 'react';
 import PropTypes from 'prop-types';
 import { Switch, SearchInput, Button, Pill } from 'evergreen-ui';
+import { useAuth, useSuggestions } from '@/services';
 import { normalizeString } from '../util';
 import { Student } from '../models';
 import { roles } from '../constants';
 import RoleFilter from './RoleFilter';
-import AuthContext from '../context/auth';
-import StudentContext from '../context/students';
 
 import styles from '../assets/styles/filters.module.css';
 
@@ -69,8 +68,8 @@ const reducer = (state, action) => {
 };
 
 const Filters = ({ students: studentObj, setFiltered, filteredCount, showOnly = [] }) => {
-  const { user } = useContext(AuthContext);
-  const { suggestions } = useContext(StudentContext);
+  const { user } = useAuth();
+  const { suggestions } = useSuggestions();
 
   const students = Object.keys(studentObj)
     .map((id) => studentObj[id])

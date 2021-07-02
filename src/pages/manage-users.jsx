@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import { Table, Select } from 'evergreen-ui';
 import { User } from '../models';
@@ -8,7 +7,7 @@ import { sortByRole } from '../util';
 
 import styles from '../assets/styles/user-management.module.css';
 
-const UserManagement = ({ user: currentUser }) => {
+export default function UserManagement({ user: currentUser }) {
   const router = useRouter();
 
   const [users, setUsers] = useState({});
@@ -97,10 +96,4 @@ const UserManagement = ({ user: currentUser }) => {
       </main>
     </div>
   );
-};
-
-UserManagement.propTypes = {
-  user: PropTypes.instanceOf(User)
-};
-
-export default UserManagement;
+}

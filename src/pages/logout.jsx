@@ -1,17 +1,11 @@
-import { useContext, useEffect } from 'react';
-import { useRouter } from 'next/router';
-import AuthContext from '@/context/auth';
-import { auth } from '@/firebase';
+import { useEffect } from 'react';
+import { useAuth } from '@/services';
 
 export default function Logout() {
-  const { setAuthenticatedUser } = useContext(AuthContext);
-  const router = useRouter();
+  const { logout } = useAuth();
 
   useEffect(() => {
-    auth.signOut().then(() => {
-      setAuthenticatedUser(null);
-      router.push('/');
-    });
+    logout();
   }, []);
 
   return <p />;

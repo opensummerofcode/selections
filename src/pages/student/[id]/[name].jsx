@@ -1,13 +1,8 @@
-import { useAuth } from '@/hooks';
+import { useAuth } from '@/services';
 import Students from '@/components/Students';
-import StudentProvider from '@/components/StudentProvider';
 
-export default function Index() {
-  useAuth({});
+export default function StudentDetail() {
+  useAuth();
 
-  return (
-    <StudentProvider>
-      <Students />
-    </StudentProvider>
-  );
+  return <Students />;
 }
