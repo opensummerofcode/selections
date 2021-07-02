@@ -35,15 +35,15 @@ class Student {
     return this.status || 'no-status';
   }
 
-  setStatus = (type) => {
+  setStatus(type) {
     const status = type === 'no-status' ? null : type;
     return db.collection('students').doc(this.id).update({ status });
-  };
+  }
 
-  toggleConfirmed = () => {
+  toggleConfirmed() {
     const current = !!this.confirmed;
     return db.collection('students').doc(this.id).update({ confirmed: !current });
-  };
+  }
 }
 
 export default Student;

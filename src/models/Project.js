@@ -9,18 +9,20 @@ class Project {
     if (!this.assignedStudents) this.assignedStudents = [];
   }
 
-  startAssigning = (student) => {
+  startAssigning(student) {
     this.isBeingAssignedTo = student;
-  };
+  }
 
-  stopAssigning = () => {
+  stopAssigning() {
     this.isBeingAssignedTo = null;
-  };
+  }
 
-  hasStudent = (student) => this.assignedStudents.find((s) => s.studentId === student.id);
+  hasStudent(student) {
+    return this.assignedStudents.find((s) => s.studentId === student.id);
+  }
 
-  assign = (student, role, reason, suggester) =>
-    db
+  assign(student, role, reason, suggester) {
+    return db
       .collection('projects')
       .doc(this.id)
       .update({
@@ -34,13 +36,14 @@ class Project {
           }
         ]
       });
+  }
 
-  unassign = (studentId) => {
+  unassign(studentId) {
     const assignedStudents = [...this.assignedStudents];
     const index = assignedStudents.findIndex((s) => s.studentId === studentId);
     if (index !== -1) assignedStudents.splice(index, 1);
     return db.collection('projects').doc(this.id).update({ assignedStudents });
-  };
+  }
 }
 
 export default Project;

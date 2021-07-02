@@ -1,9 +1,8 @@
-import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
+import { useContext } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Badge, Pane, Pill } from 'evergreen-ui';
 import { DragSource } from 'react-dnd';
-import Student from '../models';
 import StudentContext from '../context/students';
 
 import styles from '../assets/styles/student-card.module.css';
@@ -29,10 +28,6 @@ const StudentCard = ({ student, connectDragSource }) => {
   const { firstName, lastName } = student;
   const { suggestions } = useContext(StudentContext);
 
-  const selectStudent = (s) => {
-    router.push(`/student/${s.id}/${s.firstName}-${s.lastName}`);
-  };
-
   const selectedStudentId = router.query.id;
   const isActive = selectedStudentId && selectedStudentId === student.id;
 
@@ -55,60 +50,57 @@ const StudentCard = ({ student, connectDragSource }) => {
 
   return connectDragSource(
     <li className={styles.card}>
-      <button onClick={() => selectStudent(student)} type="button" className="button--seamless">
-        <Pane
-          className={`${styles.wrapper} ${isActive ? styles.active : ''} ${
-            styles[`status-${student.statusType}`]
-          }`}
-          elevation={isActive ? 2 : 1}
-        >
-          <div className={styles.name}>
-            {firstName}&nbsp;<strong>{lastName}</strong>
-            {student.isAlum && (
-              <Badge color="green" marginLeft={8}>
-                alum
-              </Badge>
-            )}
-            {suggestionAmounts.total > 0 && (
-              <div className={styles['suggestion-amount']}>
-                <Pill>{suggestionAmounts.total}</Pill>
-              </div>
-            )}
-          </div>
-          <div className={styles.suggestions}>
-            {/* TODO: This could be a lot more dynamic */}
-            {suggestionAmounts.total > 0 ? (
-              <>
-                {suggestionAmounts.yes > 0 && (
+      <Link href={`/student/${student.id}/${student.firstName}-${student.lastName}`}>
+        <button type="button" className="button--seamless">
+          <Pane
+            className={`${styles.wrapper} ${isActive ? styles.active : ''} ${
+              styles[`status-${student.statusType}`]
+            }`}
+            elevation={isActive ? 2 : 1}
+          >
+            <div className={styles.name}>
+              {firstName}&nbsp;<strong>{lastName}</strong>
+              {student.isAlum && (
+                <Badge color="green" marginLeft={8}>
+                  alum
+                </Badge>
+              )}
+              {suggestionAmounts.total > 0 && (
+                <div className={styles['suggestion-amount']}>
+                  <Pill>{suggestionAmounts.total}</Pill>
+                </div>
+              )}
+            </div>
+            <div className={styles.suggestions}>
+              {/* TODO: This could be a lot more dynamic */}
+              {suggestionAmounts.total > 0 ? (
+                <>
+                  {suggestionAmounts.yes > 0 && (
+                    <span
+                      style={{ flex: suggestionAmounts.yes / suggestionAmounts.total }}
+                      className={styles['suggestions-yes']}
+                    />
+                  )}
                   <span
-                    style={{ flex: suggestionAmounts.yes / suggestionAmounts.total }}
-                    className={styles['suggestions-yes']}
+                    style={{ flex: suggestionAmounts.maybe / suggestionAmounts.total }}
+                    className={styles['suggestions-maybe']}
                   />
-                )}
-                <span
-                  style={{ flex: suggestionAmounts.maybe / suggestionAmounts.total }}
-                  className={styles['suggestions-maybe']}
-                />
-                {suggestionAmounts.no > 0 && (
-                  <span
-                    style={{ flex: suggestionAmounts.no / suggestionAmounts.total }}
-                    className={styles['suggestions-no']}
-                  />
-                )}
-              </>
-            ) : (
-              <span className={styles['suggestions-empty']} />
-            )}
-          </div>
-        </Pane>
-      </button>
+                  {suggestionAmounts.no > 0 && (
+                    <span
+                      style={{ flex: suggestionAmounts.no / suggestionAmounts.total }}
+                      className={styles['suggestions-no']}
+                    />
+                  )}
+                </>
+              ) : (
+                <span className={styles['suggestions-empty']} />
+              )}
+            </div>
+          </Pane>
+        </button>
+      </Link>
     </li>
   );
-};
-
-StudentCard.propTypes = {
-  student: PropTypes.instanceOf(Student),
-  connectDragSource: PropTypes.func.isRequired
 };
 
 export default DragSource('student', { beginDrag, endDrag }, collect)(StudentCard);

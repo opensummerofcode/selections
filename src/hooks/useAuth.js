@@ -2,7 +2,7 @@ import { useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 import AuthContext from '@/context/auth';
 
-export default function useAuth({ redirectTo = false }) {
+export default function useAuth({ redirectTo = null }) {
   const { user } = useContext(AuthContext);
   const router = useRouter();
 
@@ -12,14 +12,12 @@ export default function useAuth({ redirectTo = false }) {
       return;
     }
 
-    if (!redirectTo || !user) return;
-
     if (redirectTo && !user) {
       router.push(redirectTo);
       return;
     }
 
-    if (redirectTo && !user) {
+    if (!user) {
       router.push('/login');
     }
   }, [user, redirectTo]);

@@ -50,7 +50,7 @@ const App = ({ Component, pageProps }) => {
         <title>Selections | Open Summer of Code</title>
       </Head>
       <Header user={currentUser} logout={logout} />
-      <Component {...pageProps} />
+      <Component user={currentUser} {...pageProps} />
     </AuthContext.Provider>
   );
 };

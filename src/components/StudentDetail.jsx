@@ -5,9 +5,6 @@ import { Badge, Icon, Button, Dialog, TextInput, Select } from 'evergreen-ui';
 import AuthContext from '../context/auth';
 import { useStudentData } from './StudentProvider';
 
-import twitterIcon from '../assets/img/icon-twitter.png';
-import linkedinIcon from '../assets/img/icon-linkedin.png';
-import githubIcon from '../assets/img/icon-github.png';
 import dashStyles from '../assets/styles/dashboard.module.css';
 import styles from '../assets/styles/student-detail.module.css';
 
@@ -148,21 +145,21 @@ const StudentDetail = () => {
           {student.twitter && (
             <ExternalLink href={student.twitter}>
               <div className={styles['icon-container']}>
-                <img src={twitterIcon} alt="Twitter" />
+                <img src="/img/icon-twitter.png" alt="Twitter" />
               </div>
             </ExternalLink>
           )}
           {student.github && (
             <ExternalLink href={student.github}>
               <div className={styles['icon-container']}>
-                <img src={githubIcon} alt="GitHub" />
+                <img src="/img/icon-github.png" alt="GitHub" />
               </div>
             </ExternalLink>
           )}
           {student.linkedin && (
             <ExternalLink href={student.linkedin}>
               <div className={styles['icon-container']}>
-                <img src={linkedinIcon} alt="LinkedIn" />
+                <img src="/img/icon-linkedin.png" alt="LinkedIn" />
               </div>
             </ExternalLink>
           )}
