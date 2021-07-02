@@ -13,10 +13,6 @@ const App = ({ Component, pageProps }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const logout = () => {
-    auth.signOut().then(() => setCurrentUser(null));
-  };
-
   const authContext = {
     user: currentUser,
     setAuthenticatedUser: setCurrentUser,
@@ -49,7 +45,7 @@ const App = ({ Component, pageProps }) => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Selections | Open Summer of Code</title>
       </Head>
-      <Header user={currentUser} logout={logout} />
+      <Header user={currentUser} />
       <Component user={currentUser} {...pageProps} />
     </AuthContext.Provider>
   );

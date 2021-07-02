@@ -4,7 +4,7 @@ import Link from 'next/link';
 import styles from '@/assets/styles/header.module.css';
 import { User } from '../models';
 
-const Header = ({ user, logout }) => (
+const Header = ({ user }) => (
   <header className={styles.header}>
     <nav className={styles.navigation}>
       <h1 className={styles.title}>Selections</h1>
@@ -32,7 +32,7 @@ const Header = ({ user, logout }) => (
         )}
         {user && (
           <li>
-            <Link href="/" onClick={logout}>
+            <Link href="/logout">
               <a>Log out</a>
             </Link>
           </li>
@@ -50,8 +50,7 @@ const Header = ({ user, logout }) => (
 );
 
 Header.propTypes = {
-  user: PropTypes.instanceOf(User),
-  logout: PropTypes.func.isRequired
+  user: PropTypes.instanceOf(User)
 };
 
 export default Header;
