@@ -21,3 +21,4 @@ yarn-error.log*
 .vscode
 firebase-debug.log*
 .firebase
+firestore.rules
