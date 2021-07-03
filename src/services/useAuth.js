@@ -1,19 +1,27 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import create from 'zustand';
 import { auth, authProvider, db } from '@/firebase';
 import User from '@/models/User';
 
+const useStore = create((set) => ({
+  user: null,
+  isLoggingIn: false,
+  isLoading: true,
+  finishLoading: () => set({ isLogging: false, isLoading: false }),
+  startLoading: () => set({ isLoading: true }),
+  setUser: (user) => set({ user: new User(user) }),
+  login: () => auth.signInWithRedirect(authProvider)
+}));
+
 export default function useAuth() {
   const router = useRouter();
-
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const { user, isLoggingIn, finishLoading, setUser, startLoading, login, isLoading } = useStore();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((rawUser) => {
       if (!rawUser) {
-        setIsLoading(false);
+        finishLoading();
         return setUser(null);
       }
       return db
@@ -22,26 +30,20 @@ export default function useAuth() {
         .onSnapshot((doc) => {
           const userData = doc.data();
           if (!userData) return null;
-          setUser(new User(userData));
-          setIsLoggingIn(false);
-          return setIsLoading(false);
+          setUser(userData);
+          return finishLoading();
         });
     });
     return unsubscribe;
   }, []);
 
   const logout = () => {
-    setIsLoading(true);
+    startLoading();
     auth.signOut().then(() => {
       setUser(null);
-      setIsLoading(false);
+      finishLoading();
       router.push('/');
     });
-  };
-
-  const login = async () => {
-    setIsLoggingIn(true);
-    return auth.signInWithRedirect(authProvider);
   };
 
   return { user, logout, isLoading, login, isLoggingIn };
