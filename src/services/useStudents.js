@@ -1,21 +1,30 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import create from 'zustand';
 import { db } from '@/firebase';
 import { Student } from '@/models';
 
+const useStore = create((set, get) => ({
+  students: {},
+  isLoading: true,
+  setIsLoading: (val) => set({ isLoading: val }),
+  addStudent: (studentData) => {
+    const student = new Student(studentData);
+    const students = get().students || {};
+    students[student.id] = student;
+    set({ students });
+  }
+}));
+
 export default function useStudents() {
-  const [students, setStudents] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
+  const { isLoading, students, setIsLoading, addStudent } = useStore();
 
   useEffect(() => {
     const unsubscribe = db.collection('students').onSnapshot((snapshot) => {
       const data = snapshot.docChanges();
-      const newStudents = {};
       data.forEach((change) => {
         const updated = change.doc.data();
-        const student = new Student(updated);
-        newStudents[student.id] = student;
+        addStudent(updated);
       });
-      setStudents({ ...students, ...newStudents });
       setIsLoading(false);
     });
     return () => unsubscribe();

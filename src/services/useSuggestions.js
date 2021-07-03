@@ -1,17 +1,25 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import create from 'zustand';
 import { db } from '@/firebase';
 
+const useStore = create((set, get) => ({
+  suggestions: {},
+  addSuggestion: (id, suggestion) => {
+    const suggestions = get().suggestions || {};
+    suggestions[id] = suggestion;
+    set({ suggestions });
+  }
+}));
+
 export default function useSuggestions() {
-  const [suggestions, setSuggestions] = useState({});
+  const { suggestions, addSuggestion } = useStore();
 
   useEffect(() => {
     return db.collection('suggestions').onSnapshot((snapshot) => {
       const data = snapshot.docChanges();
-      const newSuggestions = data.reduce((all, s) => {
-        all[s.doc.id] = s.doc.data();
-        return all;
-      }, {});
-      setSuggestions({ ...suggestions, ...newSuggestions });
+      data.forEach((suggestion) => {
+        addSuggestion(suggestion.doc.id, suggestion.doc.data());
+      });
     });
   }, []);
 
