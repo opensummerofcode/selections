@@ -1,0 +1,24 @@
+{
+  "name": "selections",
+  "version": "2.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/opensummerofcode/selections.git"
+  },
+  "author": "Open Summer of Code <info@osoc.be>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/opensummerofcode/selections/issues"
+  },
+  "homepage": "https://github.com/opensummerofcode/selections#readme",
+  "workspaces": [
+    "./common",
+    "./server",
+    "./client"
+  ]
+}
