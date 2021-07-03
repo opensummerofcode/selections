@@ -11,7 +11,7 @@ export default function useSuggestions() {
         all[s.doc.id] = s.doc.data();
         return all;
       }, {});
-      setSuggestions((s) => ({ ...s, ...newSuggestions }));
+      setSuggestions({ ...suggestions, ...newSuggestions });
     });
   }, []);
 

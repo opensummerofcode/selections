@@ -4,6 +4,7 @@ import { Student } from '@/models';
 
 export default function useStudents() {
   const [students, setStudents] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = db.collection('students').onSnapshot((snapshot) => {
@@ -14,10 +15,11 @@ export default function useStudents() {
         const student = new Student(updated);
         newStudents[student.id] = student;
       });
-      setStudents((s) => ({ ...s, ...newStudents }));
+      setStudents({ ...students, ...newStudents });
+      setIsLoading(false);
     });
-    return unsubscribe;
+    return () => unsubscribe();
   }, []);
 
-  return { students };
+  return { students, isLoading };
 }

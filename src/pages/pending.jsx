@@ -1,6 +1,8 @@
+import { useAuth } from '@/services';
 import styles from '@/assets/styles/pending.module.css';
 
-export default function Pending({ user }) {
+export default function Pending() {
+  const { user } = useAuth();
   return (
     <div className={styles.pending}>
       <h2 className={styles.title}>Hey {user && user.name} :)</h2>

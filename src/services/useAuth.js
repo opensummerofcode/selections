@@ -21,10 +21,10 @@ export default function useAuth() {
         .doc(rawUser.uid)
         .onSnapshot((doc) => {
           const userData = doc.data();
-          setIsLoggingIn(false);
-          setIsLoading(false);
           if (!userData) return null;
-          return setUser(new User(userData));
+          setUser(new User(userData));
+          setIsLoggingIn(false);
+          return setIsLoading(false);
         });
     });
     return unsubscribe;

@@ -33,7 +33,7 @@ ExternalLink.propTypes = {
 */
 const StudentDetail = () => {
   const { user } = useAuth();
-  const { students } = useStudents();
+  const { students, isLoading: studentsAreLoading } = useStudents();
   const { suggestions } = useSuggestions();
 
   const [isSuggesting, setIsSuggesting] = useState(false);
@@ -44,12 +44,12 @@ const StudentDetail = () => {
   const studentId = router.query.id;
 
   useEffect(() => {
+    if (studentsAreLoading) return;
     const newStudent = students[studentId];
     setStudent(newStudent);
-  }, [studentId]);
+  }, [studentsAreLoading, studentId]);
 
   let $inputReason = useRef(null);
-
   if (!student) {
     return (
       <Wrapper>

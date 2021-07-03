@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Table, Select } from 'evergreen-ui';
-import { User } from '../models';
-import { db } from '../firebase';
-import { sortByRole } from '../util';
+import { useAuth } from '@/services';
+import { User } from '@/models';
+import { db } from '@/firebase';
+import { sortByRole } from '@/util';
 
 import styles from '../assets/styles/user-management.module.css';
 
-export default function UserManagement({ user: currentUser }) {
+export default function UserManagement() {
   const router = useRouter();
-
+  const { user: currentUser } = useAuth();
   const [users, setUsers] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
 
