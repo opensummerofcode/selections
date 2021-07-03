@@ -11,12 +11,13 @@ const useStore = create((set, get) => ({
     const student = new Student(studentData);
     const students = get().students || {};
     students[student.id] = student;
-    set({ students });
+    // create new object so diffing doesn't happen shallowly
+    set({ students: { ...students } });
   }
 }));
 
 export default function useStudents() {
-  const { isLoading, students, setIsLoading, addStudent } = useStore();
+  const { isLoading, setIsLoading, students, addStudent } = useStore();
 
   useEffect(() => {
     const unsubscribe = db.collection('students').onSnapshot((snapshot) => {

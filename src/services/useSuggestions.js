@@ -7,7 +7,8 @@ const useStore = create((set, get) => ({
   addSuggestion: (id, suggestion) => {
     const suggestions = get().suggestions || {};
     suggestions[id] = suggestion;
-    set({ suggestions });
+    // create new object so diffing doesn't happen shallowly
+    set({ suggestions: { ...suggestions } });
   }
 }));
 
