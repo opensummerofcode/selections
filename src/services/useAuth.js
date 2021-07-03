@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { useRouter } from 'next/router';
 import create from 'zustand';
+import { useRouter } from 'next/router';
 import { auth, authProvider, db } from '@/firebase';
 import User from '@/models/User';
 
@@ -9,20 +9,20 @@ const useStore = create((set) => ({
   isLoggingIn: false,
   isLoading: true,
   finishLoading: () => set({ isLogging: false, isLoading: false }),
-  startLoading: () => set({ isLoading: true }),
-  setUser: (user) => set({ user: new User(user) }),
+  setUser: (user) => set({ user: user ? new User(user) : null }),
   login: () => auth.signInWithRedirect(authProvider)
 }));
 
 export default function useAuth() {
+  const { user, isLoggingIn, finishLoading, setUser, login, isLoading } = useStore();
   const router = useRouter();
-  const { user, isLoggingIn, finishLoading, setUser, startLoading, login, isLoading } = useStore();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((rawUser) => {
       if (!rawUser) {
-        finishLoading();
-        return setUser(null);
+        router.push('/login');
+        setUser(null);
+        return finishLoading();
       }
       return db
         .collection('users')
@@ -37,14 +37,14 @@ export default function useAuth() {
     return unsubscribe;
   }, []);
 
-  const logout = () => {
-    startLoading();
-    auth.signOut().then(() => {
-      setUser(null);
-      finishLoading();
-      router.push('/');
-    });
+  useEffect(() => {
+    if (user && user.isPending) router.push('/pending');
+  }, [user, isLoading]);
+
+  const logout = async () => {
+    await auth.signOut();
+    router.push('/login');
   };
 
-  return { user, logout, isLoading, login, isLoggingIn };
+  return { user, logout, login, isLoading, isLoggingIn };
 }

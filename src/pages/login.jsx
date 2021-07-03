@@ -11,13 +11,14 @@ export default function Login() {
 
   const { isLoggingIn, login, user } = useAuth();
 
-  useEffect(async () => {
-    const result = await auth.getRedirectResult();
-    if (result.user) router.push('/');
+  useEffect(() => {
+    auth.getRedirectResult().then((result) => {
+      if (result.user) router.push('/');
+    });
   }, []);
 
   useEffect(() => {
-    if (user) router.push('/');
+    if (user && !user.isPending) router.push('/');
   }, [user]);
 
   return (
