@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import { Badge, Icon, Button, Dialog, TextInput, Select } from 'evergreen-ui';
 import { useStudents, useSuggestions, useAuth } from '@/services';
@@ -12,19 +11,12 @@ const Wrapper = ({ children }) => (
     {children}
   </section>
 );
-Wrapper.propTypes = {
-  children: PropTypes.node.isRequired
-};
 
 const ExternalLink = ({ href, children, ...rest }) => (
   <a href={href} {...rest} target="_blank" rel="noopener noreferrer">
     {children}
   </a>
 );
-ExternalLink.propTypes = {
-  href: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired
-};
 
 /* TODO:
   This component can be a lot more dynamic since we're rendering
