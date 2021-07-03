@@ -3,14 +3,14 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { StudentsModule } from './students/students.module';
+import { ApplicantsModule } from './applicants/applicants.module';
 
 @Module({
   imports: [
     GraphQLModule.forRoot({
       autoSchemaFile: join(process.cwd(), 'src/schema.gql')
     }),
-    StudentsModule
+    ApplicantsModule
   ],
   controllers: [AppController],
   providers: [AppService]
