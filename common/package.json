@@ -2,10 +2,15 @@
   "name": "common",
   "version": "0.0.1",
   "description": "Common selection tool code",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
   },
+  "files": [
+    "/dist"
+  ],
   "author": "",
   "license": "MIT"
 }
