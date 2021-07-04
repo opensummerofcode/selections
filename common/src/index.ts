@@ -1,1 +1,2 @@
-export * as Applicant from './types/Applicant';
+export * from './types/Applicant';
+export * from './types/User';
