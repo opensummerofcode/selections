@@ -74,13 +74,13 @@ model Draft {
 }
 
 model Project {
-  id                        String           @id @default(cuid())
-  createdAt                 DateTime         @default(now())
-  updatedAt                 DateTime         @updatedAt
-  name                      String
-  client                    String?
-  coaching                  User[]           @relation("Coach", fields: [id], references: [id])
-  leadCoaching              User[]           @relation("LeadCoach", fields: [id], references: [id])
-  requiredApplicantProfiles ProjectProfile[]
-  drafts                    Draft[]
+  id               String           @id @default(cuid())
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  name             String
+  client           String?
+  coaching         User[]           @relation("Coach", fields: [id], references: [id])
+  leadCoaching     User[]           @relation("LeadCoach", fields: [id], references: [id])
+  requiredProfiles ProjectProfile[]
+  drafts           Draft[]
 }
