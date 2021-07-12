@@ -6,6 +6,9 @@ services:
       - ./server/.env
     volumes:
       - postgres:/var/lib/postgresql/data
+    restart: always
+    ports:
+      - 5432:5432
 
 volumes:
   postgres:
