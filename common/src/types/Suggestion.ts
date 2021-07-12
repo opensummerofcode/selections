@@ -1,1 +1,3 @@
-import { ApplicantStatus } from './Applicant';
+export interface ISuggestion {
+  id?: string;
+}

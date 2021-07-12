@@ -1,3 +1,5 @@
+import { ISuggestion } from './Suggestion';
+
 export enum ApplicantStatus {
   UNDECIDED = 'UNDECIDED',
   YES = 'YES',
@@ -11,5 +13,5 @@ export interface IApplicant {
   updatedAt: Date;
   response: any;
   status: ApplicantStatus;
-  suggestions?: [];
+  suggestions?: ISuggestion[];
 }
