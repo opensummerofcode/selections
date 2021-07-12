@@ -1,6 +1,5 @@
 import { ObjectType, registerEnumType } from '@nestjs/graphql';
 import { IApplicant, ApplicantStatus } from 'common';
-import { Suggestion } from '../suggestions/suggestion.model';
 
 registerEnumType(ApplicantStatus, {
   name: 'ApplicantStatus',
@@ -14,5 +13,4 @@ export class Applicant implements IApplicant {
   updatedAt: Date;
   response: any;
   status: ApplicantStatus;
-  suggestions?: Suggestion[];
 }
