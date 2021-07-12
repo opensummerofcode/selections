@@ -1,9 +1,4 @@
-export enum ApplicantStatus {
-  UNDECIDED = 'UNDECIDED',
-  YES = 'YES',
-  MAYBE = 'MAYBE',
-  NO = 'NO'
-}
+export type ApplicantStatus = 'UNDECIDED' | 'YES' | 'MAYBE' | 'NO';
 
 export interface IApplicant {
   id: string;
