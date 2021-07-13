@@ -19,5 +19,4 @@ node_modules/
 .npm
 
 # dotenv environment variables file
-.env*
-!.env.example
+.env.*
