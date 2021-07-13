@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prisma:generate": "npm run -w server prisma:generate"
+    "client:dev": "npm run -w client dev",
+    "server:dev": "npm run -w server start:dev",
+    "common:build": "npm run -w common build",
+    "prisma:generate": "npm run -w server prisma:generate",
+    "prisma:migrate": "npm run -w server prisma:migrate"
   },
   "repository": {
     "type": "git",
