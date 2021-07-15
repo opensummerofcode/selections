@@ -8,79 +8,174 @@ generator client {
 }
 
 enum Role {
-  PENDING
+  USER
   COACH
   ADMIN
 }
 
-model User {
-  id          String       @id @default(cuid())
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  email       String       @unique
-  password    String
-  firstname   String?
-  lastname    String?
-  role        Role         @default(PENDING)
-  coachOn     Project[]    @relation("Coach")
-  leadCoachOn Project[]    @relation("LeadCoach")
-  suggestions Suggestion[]
-  drafts      Draft[]
-}
-
 enum Status {
-  UNDECIDED
   YES
   MAYBE
   NO
 }
 
-model Suggestion {
-  id          Int       @id @default(autoincrement())
-  applicant   Applicant @relation(fields: [applicantId], references: [id])
-  applicantId String
-  suggester   User      @relation(fields: [suggesterId], references: [id])
-  suggesterId String
-  rationale   String
-  status      Status
-}
-
-model Applicant {
-  id          String       @id @default(uuid())
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  response    Json
-  status      Status       @default(UNDECIDED)
+model User {
+  id          Int               @id @default(autoincrement())
+  uuid        String            @default(uuid())
+  email       String            @unique
+  firstname   String
+  lastname    String
+  imageUrl    String?
+  role        Role              @default(USER)
+  leadCoachOn Project[]
+  coachOn     UsersOnProjects[]
   suggestions Suggestion[]
-}
-
-model ProjectProfile {
-  id        Int     @id @default(autoincrement())
-  name      String
-  project   Project @relation(fields: [projectId], references: [id])
-  projectId String
-  draft     Draft?
-}
-
-model Draft {
-  id        Int             @id @default(autoincrement())
-  rationale String
-  Project   Project         @relation(fields: [projectId], references: [id])
-  projectId String
-  drafter   User            @relation(fields: [drafterId], references: [id])
-  drafterId String
-  profile   ProjectProfile? @relation(fields: [profileId], references: [id])
-  profileId Int?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
 }
 
 model Project {
-  id               String           @id @default(cuid())
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
-  name             String
-  client           String?
-  coaching         User[]           @relation("Coach", fields: [id], references: [id])
-  leadCoaching     User[]           @relation("LeadCoach", fields: [id], references: [id])
-  requiredProfiles ProjectProfile[]
-  drafts           Draft[]
+  id           Int               @id @default(autoincrement())
+  uuid         String            @default(uuid())
+  name         String
+  description  String?
+  client       String?
+  template_url String?
+  leadCoach    User              @relation(fields: [leadCoachId], references: [id])
+  leadCoachId  Int
+  coaches      UsersOnProjects[]
+  members      Applicant[]
+  profiles     ProjectProfile[]
+  skills       ProjectSkill[]
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+}
+
+model UsersOnProjects {
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  project    Project  @relation(fields: [projectId], references: [id])
+  projectId  Int
+  assignedAt DateTime @default(now())
+
+  @@id([userId, projectId])
+}
+
+model Applicant {
+  id          Int                @id @default(autoincrement())
+  uuid        String             @default(uuid())
+  email       String             @unique
+  firstname   String
+  lastname    String
+  callname    String
+  gender      String
+  nationality String
+  address     Address            @relation(fields: [addressId], references: [id])
+  addressId   Int
+  Phone       String
+  isAlumni    Boolean
+  project     Project?           @relation(fields: [projectId], references: [id])
+  projectId   Int?
+  suggestions Suggestion[]
+  profiles    ApplicantProfile[]
+  skillset    ApplicantSkill[]
+  answers     Answer[]
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+}
+
+model Address {
+  id          Int       @id @default(autoincrement())
+  addressLine String
+  postalCode  String
+  city        String
+  state       String
+  country     String
+  applicant   Applicant?
+}
+
+model Suggestion {
+  id          Int       @id @default(autoincrement())
+  status      Status
+  Comment     String
+  applicant   Applicant @relation(fields: [applicantId], references: [id])
+  applicantId Int
+  suggester   User      @relation(fields: [suggesterId], references: [id])
+  suggesterId Int
+}
+
+model Profile {
+  id         Int                @id @default(autoincrement())
+  name       String
+  image_url  String
+  applicants ApplicantProfile[]
+  projects   ProjectProfile[]
+}
+
+model ApplicantProfile {
+  applicant   Applicant @relation(fields: [applicantId], references: [id])
+  applicantId Int
+  profile     Profile   @relation(fields: [profileId], references: [id])
+  profileId   Int
+
+  @@id([applicantId, profileId])
+}
+
+model ProjectProfile {
+  project   Project @relation(fields: [projectId], references: [id])
+  projectId Int
+  profile   Profile @relation(fields: [profileId], references: [id])
+  profileId Int
+
+  @@id([projectId, profileId])
+}
+
+model Skill {
+  id         Int              @id @default(autoincrement())
+  name       String
+  applicants ApplicantSkill[]
+  projects   ProjectSkill[]
+}
+
+model SkillLevel {
+  id             Int              @id @default(autoincrement())
+  level          String           @unique
+  ApplicantSkill ApplicantSkill[]
+}
+
+model ApplicantSkill {
+  applicant   Applicant  @relation(fields: [applicantId], references: [id])
+  applicantId Int
+  skill       Skill      @relation(fields: [skillId], references: [id])
+  skillId     Int
+  level       SkillLevel @relation(fields: [levelId], references: [id])
+  levelId     Int
+
+  @@id([applicantId, skillId, levelId])
+}
+
+model ProjectSkill {
+  project   Project @relation(fields: [projectId], references: [id])
+  projectId Int
+  skill     Skill   @relation(fields: [skillId], references: [id])
+  skillId   Int
+
+  @@id([projectId, skillId])
+}
+
+model Answer {
+  id          Int       @id @default(autoincrement())
+  text        String
+  question    Question  @relation(fields: [questionId], references: [id])
+  questionId  Int
+  applicant   Applicant @relation(fields: [applicantId], references: [id])
+  applicantId Int
+}
+
+model Question {
+  id        Int      @id @default(autoincrement())
+  reference String
+  text      String
+  type      String
+  answers   Answer[]
 }
