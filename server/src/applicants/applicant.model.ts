@@ -1,21 +1,37 @@
-import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { IApplicant, ApplicantStatus } from 'common';
-import graphqlTypeJson from 'graphql-type-json';
+import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
+import { IApplicant } from 'common';
 
 @ObjectType()
 export class Applicant implements IApplicant {
-  @Field(() => ID)
-  id: string;
+    @Field(type => Int)
+    id: number;
 
-  @Field()
-  createdAt: Date;
+    @Field()
+    uuid: string;
 
-  @Field()
-  updatedAt: Date;
+    @Field()
+    email: string;
 
-  @Field(() => graphqlTypeJson, { nullable: true })
-  response: any;
+    @Field()
+    lastname: string;
 
-  @Field()
-  status: ApplicantStatus;
+    @Field()
+    callname?: string;
+
+    @Field()
+    gender: string;
+
+    @Field()
+    phone: string;
+
+    @Field()
+    nationality: string;
+
+    @Field()
+    isAlumni: boolean;
+
+    @Field(type => String)
+    createdAt: Date;
+    
+    updatedAt: Date;
 }
