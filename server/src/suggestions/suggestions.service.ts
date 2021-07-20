@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreateSuggestionInput } from './dto/createSuggestion.input';
+import { UpdateSuggestionInput } from './dto/updateSuggestion.input';
 import { Suggestion } from './model/suggestion.model';
 
 @Injectable()
@@ -39,5 +40,28 @@ export class SuggestionsService {
         }
       }
     });
+  }
+
+  async update(id: number, updateSuggestionData: UpdateSuggestionInput): Promise<Suggestion> {
+    return this.prisma.suggestion.update({
+      where: {
+        id: id
+      },
+      data: {
+        ...updateSuggestionData
+      }
+    });
+  }
+
+  async delete(id: number) {
+    const suggestion = this.findOneById(id);
+
+    if (suggestion) {
+      return await this.prisma.suggestion.delete({
+        where: { id: id }
+      });
+    }
+
+    throw new NotFoundException(`Suggestion with id ${id} cannot be`);
   }
 }
