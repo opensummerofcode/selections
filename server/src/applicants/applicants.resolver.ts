@@ -18,6 +18,7 @@ export class ApplicantsResolver {
     return this.applicantsService.findAll();
   }
 
+  @Query(() => Applicant)
   async applicant(@Args('uuid', { type: () => String }) uuid: string) {
     return this.applicantsService.findOneByUuid(uuid);
   }
