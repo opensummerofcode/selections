@@ -17,8 +17,8 @@ export class ApplicantsService {
   }
 
   async findOneById(id: number): Promise<Applicant> {
-    return this.prisma.applicant.findUnique({ 
-      where: { id: id }, 
+    return this.prisma.applicant.findUnique({
+      where: { id: id },
       include: {
         address: true
       }
@@ -26,8 +26,8 @@ export class ApplicantsService {
   }
 
   async findOneByUuid(uuid: string): Promise<Applicant> {
-    return this.prisma.applicant.findFirst({ 
-      where: { uuid: uuid }, 
+    return this.prisma.applicant.findFirst({
+      where: { uuid: uuid },
       include: {
         address: true
       }
@@ -50,13 +50,13 @@ export class ApplicantsService {
     return this.prisma.applicant.create({
       data: {
         uuid: uuidv4(),
-        email: createApplicantData.email,              
+        email: createApplicantData.email,
         firstname: createApplicantData.firstname,
         lastname: createApplicantData.lastname,
         callname: createApplicantData.callname,
         gender: createApplicantData.gender,
         nationality: createApplicantData.nationality,
-        phone: createApplicantData.phone,   
+        phone: createApplicantData.phone,
         isAlumni: createApplicantData.isAlumni,
         address: {
           create: createApplicantData['address']
@@ -70,7 +70,7 @@ export class ApplicantsService {
       where: {
         uuid: uuid
       },
-      data: { 
+      data: {
         ...updateApplicantData,
         address: {
           update: updateApplicantData['address']
@@ -84,7 +84,7 @@ export class ApplicantsService {
 
     if (applicant) {
       return await this.prisma.applicant.delete({
-        where: {uuid: uuid}
+        where: { uuid: uuid }
       });
     }
 
