@@ -1,7 +1,4 @@
 import { IAddress } from "./Address";
-
-export type ApplicantStatus = 'UNDECIDED' | 'YES' | 'MAYBE' | 'NO';
-
 export interface IApplicant {
   readonly id: number;
   readonly uuid: string;

@@ -1,45 +1,49 @@
 import { Field, ObjectType, Int } from '@nestjs/graphql';
 import { IApplicant } from 'common';
 import { Address } from 'src/addresses/models/address.model';
+import { Suggestion } from 'src/suggestions/model/suggestion.model';
 
 @ObjectType()
 export class Applicant implements IApplicant {
-    @Field(type => Int)
-    id: number;
+  @Field((type) => Int)
+  id: number;
 
-    @Field()
-    uuid: string;
+  @Field()
+  uuid: string;
 
-    @Field()
-    email: string;
+  @Field()
+  email: string;
 
-    @Field()
-    firstname: string;
+  @Field()
+  firstname: string;
 
-    @Field()
-    lastname: string;
-  
-    @Field({ nullable: true })
-    callname?: string;
+  @Field()
+  lastname: string;
 
-    @Field()
-    gender: string;
+  @Field({ nullable: true })
+  callname?: string;
 
-    @Field()
-    phone: string;
+  @Field()
+  gender: string;
 
-    @Field()
-    nationality: string;
+  @Field()
+  phone: string;
 
-    @Field()
-    address?: Address;
+  @Field()
+  nationality: string;
 
-    @Field()
-    isAlumni: boolean;
+  @Field()
+  address?: Address;
 
-    @Field()
-    createdAt: Date;
+  @Field()
+  isAlumni: boolean;
 
-    @Field()
-    updatedAt: Date;
+  @Field()
+  createdAt: Date;
+
+  @Field()
+  updatedAt: Date;
+
+  @Field((type) => [Suggestion], { nullable: true })
+  suggestions?: Suggestion[];
 }

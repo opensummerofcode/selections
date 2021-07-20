@@ -11,7 +11,8 @@ export class ApplicantsService {
   async findAll(): Promise<Applicant[]> {
     return this.prisma.applicant.findMany({
       include: {
-        address: true
+        address: true,
+        suggestions: true
       }
     });
   }
@@ -20,7 +21,8 @@ export class ApplicantsService {
     return this.prisma.applicant.findUnique({
       where: { id: id },
       include: {
-        address: true
+        address: true,
+        suggestions: true
       }
     });
   }
@@ -29,7 +31,8 @@ export class ApplicantsService {
     return this.prisma.applicant.findFirst({
       where: { uuid: uuid },
       include: {
-        address: true
+        address: true,
+        suggestions: true
       }
     });
   }
