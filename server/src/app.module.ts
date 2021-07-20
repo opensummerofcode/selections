@@ -10,7 +10,7 @@ import { ApplicantsModule } from './applicants/applicants.module';
     GraphQLModule.forRoot({
       autoSchemaFile: join(process.cwd(), 'src/schema.gql')
     }),
-    ApplicantsModule
+    ApplicantsModule,
   ],
   controllers: [AppController],
   providers: [AppService]

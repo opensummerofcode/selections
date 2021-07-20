@@ -1,5 +1,6 @@
-import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType, Int } from '@nestjs/graphql';
 import { IApplicant } from 'common';
+import { Address } from 'src/addresses/models/address.model';
 
 @ObjectType()
 export class Applicant implements IApplicant {
@@ -13,9 +14,12 @@ export class Applicant implements IApplicant {
     email: string;
 
     @Field()
-    lastname: string;
+    firstname: string;
 
     @Field()
+    lastname: string;
+  
+    @Field({ nullable: true })
     callname?: string;
 
     @Field()
@@ -28,10 +32,14 @@ export class Applicant implements IApplicant {
     nationality: string;
 
     @Field()
+    address?: Address;
+
+    @Field()
     isAlumni: boolean;
 
-    @Field(type => String)
+    @Field()
     createdAt: Date;
-    
+
+    @Field()
     updatedAt: Date;
 }

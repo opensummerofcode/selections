@@ -1,3 +1,5 @@
+import { IAddress } from "./Address";
+
 export type ApplicantStatus = 'UNDECIDED' | 'YES' | 'MAYBE' | 'NO';
 
 export interface IApplicant {
@@ -8,6 +10,7 @@ export interface IApplicant {
   callname?: string;
   gender: string;
   nationality: string;
+  address?: IAddress;
   phone: string;
   isAlumni: boolean;
   createdAt: Date;

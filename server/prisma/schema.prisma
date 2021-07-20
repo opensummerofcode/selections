@@ -4,7 +4,8 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialActions"]
 }
 
 enum Role {
@@ -21,7 +22,7 @@ enum Status {
 
 model User {
   id          Int               @id @default(autoincrement())
-  uuid        String            @default(uuid()) @unique
+  uuid        String            @unique @default(uuid())
   email       String            @unique
   firstname   String
   lastname    String
@@ -63,14 +64,13 @@ model UsersOnProjects {
 
 model Applicant {
   id          Int                    @id @default(autoincrement())
-  uuid        String                 @default(uuid())
+  uuid        String                 @default(uuid()) @unique
   email       String                 @unique
   firstname   String
   lastname    String
   callname    String?
   gender      String
   nationality String
-  timezone    String
   address     Address                @relation(fields: [addressId], references: [id])
   addressId   Int                    @unique
   phone       String
