@@ -83,3 +83,7 @@ input UpdateAddressInput {
   state: String
   country: String
 }
+
+type Subscription {
+  applicantAdded: Applicant!
+}

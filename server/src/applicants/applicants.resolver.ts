@@ -4,7 +4,6 @@ import { Applicant } from './models/applicant.model';
 import { PubSub } from 'graphql-subscriptions';
 import { CreateApplicantInput } from 'src/applicants/dto/createApplicant.input';
 import { UpdateApplicantInput } from './dto/updateApplicant.input';
-import { CreateAddressInput } from 'src/addresses/dto/createAddress.input';
 
 @Resolver(of => Applicant)
 export class ApplicantsResolver {
@@ -31,7 +30,10 @@ export class ApplicantsResolver {
 
   @Mutation(() => Applicant)
   async createApplicant(@Args('input') createApplicantData: CreateApplicantInput) : Promise<Applicant>{
-    return this.applicantsService.create(createApplicantData);
+    const applicant = await this.applicantsService.create(createApplicantData);
+    this.pubSub.publish('applicantAdded', { applicantAdded: applicant });
+
+    return applicant;
   }
 
   @Mutation(() => Applicant)
@@ -43,4 +45,13 @@ export class ApplicantsResolver {
   async deleteApplicant(@Args('uuid', { type: () => String }) uuid: string) : Promise<Applicant>{
     return this.applicantsService.delete(uuid);
   }
+
+  @Subscription(returns => Applicant, {
+    name: 'applicantAdded'
+  })
+
+  addApplicantHandler() {
+    return this.pubSub.asyncIterator('applicantAdded');
+  }
+
 }
