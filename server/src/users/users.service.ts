@@ -14,13 +14,13 @@ export class UsersService {
   }
 
   async findOneById(id: number): Promise<User> {
-    return this.prisma.user.findUnique({ 
+    return this.prisma.user.findUnique({
       where: { id: id }
     });
   }
 
   async findOneByUuid(uuid: string): Promise<User> {
-    return this.prisma.user.findFirst({ 
+    return this.prisma.user.findFirst({
       where: { uuid: uuid }
     });
   }
@@ -39,19 +39,18 @@ export class UsersService {
       where: {
         uuid: uuid
       },
-      data: { 
-        ...updateUserData,
+      data: {
+        ...updateUserData
       }
     });
   }
-
 
   async delete(uuid: string) {
     const user = this.findOneByUuid(uuid);
 
     if (user) {
       return await this.prisma.user.delete({
-        where: {uuid: uuid}
+        where: { uuid: uuid }
       });
     }
 

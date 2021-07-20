@@ -107,7 +107,7 @@ model Address {
 model Suggestion {
   id          Int       @id @default(autoincrement())
   status      Status
-  Comment     String
+  comment     String
   applicant   Applicant @relation(fields: [applicantId], references: [id])
   applicantId Int
   suggester   User      @relation(fields: [suggesterId], references: [id])
