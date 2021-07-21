@@ -9,7 +9,69 @@ services:
     restart: always
     ports:
       - 5432:5432
+    networks:
+      - default
+
+  common:
+    build:
+      context: .
+    networks:
+      - default
+    volumes:
+      - ./client:/usr/src/app
+
+  client:
+    build:
+      context: .
+    networks:
+      - default
+    volumes:
+      - ./client:/usr/src/app
+    ports:
+      - 3000:3000
+
+  common:
+    build:
+      context: .
+    networks:
+      - default
+    volumes:
+      - ./common:/usr/src/app
+
+  server:
+    build:
+      context: .
+    networks:
+      - default
+    volumes:
+      - ./server:/usr/src/app
+    ports:
+      - 4000:4000
+
+  nginx:
+    image: nginx:1.21.1
+    depends_on:
+      - client
+      - server
+    links:
+      - client:client
+      - server:server
+    restart: on-failure:30
+    volumes:
+      - ./infra/nginx.conf:/etc/nginx/conf.d/default.conf
+    env_file:
+      - ./server/.env
+    networks:
+      - default
+    expose:
+      - 443
+    ports:
+      - 443:443
 
 volumes:
   postgres:
     name: selections-db
+
+networks:
+  default:
+    driver: bridge
