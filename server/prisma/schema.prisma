@@ -64,7 +64,7 @@ model UsersOnProjects {
 
 model Applicant {
   id          Int                    @id @default(autoincrement())
-  uuid        String                 @default(uuid()) @unique
+  uuid        String                 @unique @default(uuid())
   email       String                 @unique
   firstname   String
   lastname    String
@@ -107,7 +107,7 @@ model Address {
 model Suggestion {
   id          Int       @id @default(autoincrement())
   status      Status
-  Comment     String
+  comment     String
   applicant   Applicant @relation(fields: [applicantId], references: [id])
   applicantId Int
   suggester   User      @relation(fields: [suggesterId], references: [id])
