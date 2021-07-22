@@ -2,7 +2,7 @@ import { Resolver, Query, Args, Subscription, Mutation, Int } from '@nestjs/grap
 import { ApplicantsService } from './applicants.service';
 import { Applicant } from './models/applicant.model';
 import { PubSub } from 'graphql-subscriptions';
-import { CreateApplicantInput } from 'src/applicants/dto/createApplicant.input';
+import { CreateApplicantInput } from './dto/createApplicant.input';
 import { UpdateApplicantInput } from './dto/updateApplicant.input';
 
 @Resolver((of) => Applicant)
@@ -45,7 +45,7 @@ export class ApplicantsResolver {
   }
 
   @Mutation(() => Boolean)
-  async deleteApplicant(@Args('uuid', { type: () => String }) uuid: string): Promise<Boolean> {
+  async deleteApplicant(@Args('uuid', { type: () => String }) uuid: string): Promise<boolean> {
     this.applicantsService.delete(uuid);
     return true;
   }

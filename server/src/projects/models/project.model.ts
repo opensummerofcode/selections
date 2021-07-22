@@ -1,7 +1,7 @@
 import { Field, ObjectType, Int } from '@nestjs/graphql';
 import { IProject } from 'common';
-import { Applicant } from 'src/applicants/models/applicant.model';
-import { User } from 'src/users/models/user.model';
+import { Applicant } from '../../applicants/models/applicant.model';
+import { User } from '../../users/models/user.model';
 
 @ObjectType()
 export class Project implements IProject {
