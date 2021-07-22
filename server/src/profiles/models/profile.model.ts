@@ -1,6 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { IProfile } from 'common';
-import { Applicant } from 'src/applicants/models/applicant.model';
+import { Applicant } from '../../applicants/models/applicant.model';
 
 @ObjectType()
 export class Profile implements IProfile {
