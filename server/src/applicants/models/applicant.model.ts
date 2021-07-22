@@ -1,6 +1,7 @@
 import { Field, ObjectType, Int } from '@nestjs/graphql';
 import { IApplicant } from 'common';
 import { Address } from 'src/addresses/models/address.model';
+import { Project } from 'src/projects/models/project.model';
 import { Suggestion } from 'src/suggestions/model/suggestion.model';
 
 @ObjectType()
@@ -46,4 +47,7 @@ export class Applicant implements IApplicant {
 
   @Field((type) => [Suggestion], { nullable: true })
   suggestions?: Suggestion[];
+
+  @Field((type) => [Project], { nullable: true })
+  projects?: Project[];
 }

@@ -8,23 +8,28 @@ import { Suggestion } from './model/suggestion.model';
 export class SuggestionsService {
   constructor(private prisma: PrismaService) {}
 
+  private readonly suggestionIncludes = {
+    applicant: true,
+    suggester: true
+  };
+
   async findAll(): Promise<Suggestion[]> {
     return this.prisma.suggestion.findMany({
-      include: {
-        applicant: true,
-        suggester: true
-      }
+      include: this.suggestionIncludes
     });
   }
 
   async findOneById(id: number): Promise<Suggestion> {
-    return this.prisma.suggestion.findUnique({
+    const suggestion = await this.prisma.suggestion.findUnique({
       where: { id: id },
-      include: {
-        applicant: true,
-        suggester: true
-      }
+      include: this.suggestionIncludes
     });
+
+    if (!suggestion) {
+      throw new NotFoundException(`Suggestion with id ${id} not found!`);
+    }
+
+    return suggestion;
   }
 
   async create(createSuggestionData: CreateSuggestionInput): Promise<Suggestion> {

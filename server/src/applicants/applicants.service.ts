@@ -8,46 +8,47 @@ import { UpdateApplicantInput } from './dto/updateApplicant.input';
 export class ApplicantsService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll(): Promise<Applicant[]> {
-    return this.prisma.applicant.findMany({
+  private readonly applicantIncludes = {
+    address: true,
+    suggestions: {
       include: {
-        address: true,
-        suggestions: true
+        suggester: true
       }
+    },
+    projects: {
+      include: {
+        project: true
+      }
+    }
+  };
+
+  async findAll(): Promise<Applicant[]> {
+    const applicants = await this.prisma.applicant.findMany({
+      include: this.applicantIncludes
+    });
+
+    return applicants.map((applicant) => {
+      return { ...applicant, projects: applicant.projects.map((projects) => projects.project) };
     });
   }
 
   async findOneById(id: number): Promise<Applicant> {
-    return this.prisma.applicant.findUnique({
+    const applicant = await this.prisma.applicant.findUnique({
       where: { id: id },
-      include: {
-        address: true,
-        suggestions: true
-      }
+      include: this.applicantIncludes
     });
+
+    return { ...applicant, projects: applicant.projects.map((projects) => projects.project) };
   }
 
   async findOneByUuid(uuid: string): Promise<Applicant> {
-    return this.prisma.applicant.findFirst({
+    const applicant = await this.prisma.applicant.findFirst({
       where: { uuid: uuid },
-      include: {
-        address: true,
-        suggestions: true
-      }
+      include: this.applicantIncludes
     });
-  }
 
-  // async create(createApplicantData: CreateApplicantInput, createAddressData: CreateAddressInput): Promise<Applicant> {
-  //   return this.prisma.applicant.create({
-  //     data: {
-  //       uuid: uuidv4(),
-  //       ...createApplicantData,
-  //       address: {
-  //         create: createAddressData
-  //       }
-  //     }
-  //   });
-  // }
+    return { ...applicant, projects: applicant.projects.map((projects) => projects.project) };
+  }
 
   async create(createApplicantData: CreateApplicantInput): Promise<Applicant> {
     return this.prisma.applicant.create({
@@ -62,7 +63,7 @@ export class ApplicantsService {
         phone: createApplicantData.phone,
         isAlumni: createApplicantData.isAlumni,
         address: {
-          create: createApplicantData['address']
+          create: createApplicantData.address
         }
       }
     });
@@ -76,7 +77,7 @@ export class ApplicantsService {
       data: {
         ...updateApplicantData,
         address: {
-          update: updateApplicantData['address']
+          update: updateApplicantData.address
         }
       }
     });
@@ -92,5 +93,30 @@ export class ApplicantsService {
     }
 
     throw new NotFoundException(`Applicant with uuid ${uuid} cannot be`);
+  }
+
+  async addToProject(applicantId: number, projectId: number): Promise<Boolean> {
+    await this.prisma.applicantsOnProjects.create({
+      data: {
+        applicant: {
+          connect: { id: applicantId }
+        },
+        project: {
+          connect: { id: projectId }
+        }
+      }
+    });
+
+    return true;
+  }
+
+  async removeFromProject(applicantId: number, projectId: number): Promise<Boolean> {
+    await this.prisma.applicantsOnProjects.delete({
+      where: {
+        applicantId_projectId: { applicantId, projectId }
+      }
+    });
+
+    return true;
   }
 }

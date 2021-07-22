@@ -1,4 +1,4 @@
-import { Resolver, Query, Args, Subscription, Mutation } from '@nestjs/graphql';
+import { Resolver, Query, Args, Subscription, Mutation, Int } from '@nestjs/graphql';
 import { ApplicantsService } from './applicants.service';
 import { Applicant } from './models/applicant.model';
 import { PubSub } from 'graphql-subscriptions';
@@ -44,9 +44,28 @@ export class ApplicantsResolver {
     return applicant;
   }
 
-  @Mutation(() => Applicant)
-  async deleteApplicant(@Args('uuid', { type: () => String }) uuid: string): Promise<Applicant> {
-    return this.applicantsService.delete(uuid);
+  @Mutation(() => Boolean)
+  async deleteApplicant(@Args('uuid', { type: () => String }) uuid: string): Promise<Boolean> {
+    this.applicantsService.delete(uuid);
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  async addApplicantToProject(
+    @Args('applicantId', { type: () => Int }) applicantId: number,
+    @Args('projectId', { type: () => Int }) projectId: number
+  ) {
+    await this.applicantsService.addToProject(applicantId, projectId);
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  async removeApplicantFromProject(
+    @Args('applicantId', { type: () => Int }) applicantId: number,
+    @Args('projectId', { type: () => Int }) projectId: number
+  ) {
+    await this.applicantsService.removeFromProject(applicantId, projectId);
+    return true;
   }
 
   @Subscription((returns) => Applicant, {
