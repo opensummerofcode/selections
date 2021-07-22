@@ -38,7 +38,7 @@ export class ApplicantsResolver {
     @Args('uuid', { type: () => String }) uuid: string,
     @Args('input') updateApplicantData: UpdateApplicantInput
   ): Promise<Applicant> {
-    const applicant = this.applicantsService.update(uuid, updateApplicantData);
+    const applicant = await this.applicantsService.update(uuid, updateApplicantData);
     this.pubSub.publish('applicantsChanged', { applicantsChanged: applicant });
 
     return applicant;
