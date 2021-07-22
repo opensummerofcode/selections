@@ -1,6 +1,6 @@
 import { Field, ObjectType, Int } from '@nestjs/graphql';
 import { IUser, Role } from 'common';
-import { Project } from 'src/projects/models/project.model';
+import { Project } from '../../projects/models/project.model';
 
 @ObjectType()
 export class User implements IUser {

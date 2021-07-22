@@ -1,6 +1,6 @@
-import { Field, InputType, Int } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
 import { IsEmail } from 'class-validator';
-import { UpdateAddressInput } from 'src/addresses/dto/updateAdress.input';
+import { UpdateAddressInput } from '../../addresses/dto/updateAdress.input';
 
 @InputType()
 export class UpdateApplicantInput {

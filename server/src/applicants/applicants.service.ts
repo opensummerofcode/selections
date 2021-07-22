@@ -2,8 +2,9 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { PrismaService } from '../prisma.service';
 import { Applicant } from './models/applicant.model';
-import { CreateApplicantInput } from 'src/applicants/dto/createApplicant.input';
+import { CreateApplicantInput } from './dto/createApplicant.input';
 import { UpdateApplicantInput } from './dto/updateApplicant.input';
+
 @Injectable()
 export class ApplicantsService {
   constructor(private prisma: PrismaService) {}
@@ -112,7 +113,7 @@ export class ApplicantsService {
     throw new NotFoundException(`Applicant with uuid ${uuid} cannot be`);
   }
 
-  async addToProject(applicantId: number, projectId: number): Promise<Boolean> {
+  async addToProject(applicantId: number, projectId: number): Promise<boolean> {
     await this.prisma.applicantsOnProjects.create({
       data: {
         applicant: {
@@ -127,7 +128,7 @@ export class ApplicantsService {
     return true;
   }
 
-  async removeFromProject(applicantId: number, projectId: number): Promise<Boolean> {
+  async removeFromProject(applicantId: number, projectId: number): Promise<boolean> {
     await this.prisma.applicantsOnProjects.delete({
       where: {
         applicantId_projectId: { applicantId, projectId }
