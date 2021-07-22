@@ -1,5 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { IProfile } from 'common';
+import { Applicant } from 'src/applicants/models/applicant.model';
 
 @ObjectType()
 export class Profile implements IProfile {
@@ -11,4 +12,7 @@ export class Profile implements IProfile {
 
   @Field({ nullable: true })
   image_url?: string;
+
+  @Field((type) => [Applicant], { nullable: true })
+  applicants?: Applicant[];
 }

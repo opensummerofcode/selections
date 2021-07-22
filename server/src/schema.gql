@@ -11,6 +11,13 @@ type Address {
   country: String!
 }
 
+type Profile {
+  id: Float!
+  name: String!
+  image_url: String
+  applicants: [Applicant!]
+}
+
 type User {
   id: Int!
   uuid: String!
@@ -68,6 +75,7 @@ type Applicant {
   updatedAt: DateTime!
   suggestions: [Suggestion!]
   projects: [Project!]
+  profiles: [Profile!]
 }
 
 type Query {
@@ -78,6 +86,8 @@ type Query {
   suggestions: [Suggestion!]!
   projects: [Project!]!
   project(uuid: String!): Project!
+  profiles: [Profile!]!
+  profile(id: Float!): Profile!
 }
 
 type Mutation {
@@ -97,6 +107,11 @@ type Mutation {
   createProject(input: CreateProjectInput!): Project!
   updateProject(input: UpdateProjectInput!, uuid: String!): Project!
   deleteProject(uuid: String!): Boolean!
+  createProfile(input: CreateProfileInput!): Profile!
+  updateProfile(input: UpdateProfileInput!, id: Float!): Profile!
+  deleteProfile(id: Float!): Boolean!
+  addProfileToApplicant(projectId: Int!, applicantId: Int!): Boolean!
+  removeProfileToApplicant(projectId: Int!, applicantId: Int!): Boolean!
 }
 
 input CreateApplicantInput {
@@ -183,6 +198,16 @@ input UpdateProjectInput {
   leadCoachId: Float
 }
 
+input CreateProfileInput {
+  name: String!
+  image_url: String
+}
+
+input UpdateProfileInput {
+  image_url: String
+}
+
 type Subscription {
   applicantsChanged: Applicant!
+  projectsChanged: Project!
 }

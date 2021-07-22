@@ -35,4 +35,22 @@ export class ProfilesResolver {
     this.profilesService.delete(id);
     return true;
   }
+
+  @Mutation(() => Boolean)
+  async addProfileToApplicant(
+    @Args('applicantId', { type: () => Int }) applicantId: number,
+    @Args('projectId', { type: () => Int }) projectId: number
+  ) {
+    await this.profilesService.addToApplicant(applicantId, projectId);
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  async removeProfileToApplicant(
+    @Args('applicantId', { type: () => Int }) applicantId: number,
+    @Args('projectId', { type: () => Int }) projectId: number
+  ) {
+    await this.profilesService.removeFromApplicant(applicantId, projectId);
+    return true;
+  }
 }

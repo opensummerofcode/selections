@@ -1,6 +1,7 @@
 import { Field, ObjectType, Int } from '@nestjs/graphql';
 import { IApplicant } from 'common';
 import { Address } from 'src/addresses/models/address.model';
+import { Profile } from 'src/profiles/models/profile.model';
 import { Project } from 'src/projects/models/project.model';
 import { Suggestion } from 'src/suggestions/model/suggestion.model';
 
@@ -50,4 +51,7 @@ export class Applicant implements IApplicant {
 
   @Field((type) => [Project], { nullable: true })
   projects?: Project[];
+
+  @Field((type) => [Profile], { nullable: true })
+  profiles?: Profile[];
 }

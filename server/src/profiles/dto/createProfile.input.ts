@@ -7,4 +7,6 @@ export class CreateProfileInput {
 
   @Field({ nullable: true })
   image_url?: string;
+
+  
 }

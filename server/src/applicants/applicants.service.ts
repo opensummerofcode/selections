@@ -19,6 +19,11 @@ export class ApplicantsService {
       include: {
         project: true
       }
+    },
+    profiles: {
+      include: {
+        profile: true
+      }
     }
   };
 
@@ -28,7 +33,11 @@ export class ApplicantsService {
     });
 
     return applicants.map((applicant) => {
-      return { ...applicant, projects: applicant.projects.map((projects) => projects.project) };
+      return {
+        ...applicant,
+        projects: applicant.projects.map((projects) => projects.project),
+        profiles: applicant.profiles.map((profiles) => profiles.profile)
+      };
     });
   }
 
@@ -38,7 +47,11 @@ export class ApplicantsService {
       include: this.applicantIncludes
     });
 
-    return { ...applicant, projects: applicant.projects.map((projects) => projects.project) };
+    return {
+      ...applicant,
+      projects: applicant.projects.map((projects) => projects.project),
+      profiles: applicant.profiles.map((profiles) => profiles.profile)
+    };
   }
 
   async findOneByUuid(uuid: string): Promise<Applicant> {
@@ -47,7 +60,11 @@ export class ApplicantsService {
       include: this.applicantIncludes
     });
 
-    return { ...applicant, projects: applicant.projects.map((projects) => projects.project) };
+    return {
+      ...applicant,
+      projects: applicant.projects.map((projects) => projects.project),
+      profiles: applicant.profiles.map((profiles) => profiles.profile)
+    };
   }
 
   async create(createApplicantData: CreateApplicantInput): Promise<Applicant> {
