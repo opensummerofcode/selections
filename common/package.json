@@ -12,5 +12,8 @@
     "/dist"
   ],
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "typescript": "^4.3.5"
+  }
 }

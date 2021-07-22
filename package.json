@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently \"npm start -w server\" \"npm start -w client\"",
     "client:dev": "npm run -w client dev",
     "server:dev": "npm run -w server start:dev",
     "common:build": "npm run -w common build",
@@ -25,5 +26,12 @@
     "./common",
     "./server",
     "./client"
-  ]
+  ],
+  "dependencies": {
+    "concurrently": "^6.2.0"
+  },
+  "engines": {
+    "npm": "^7.20.0",
+    "node": "14.x"
+  }
 }

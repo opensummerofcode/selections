@@ -9,6 +9,8 @@ services:
     restart: always
     ports:
       - 5432:5432
+    networks:
+      - default
 
 volumes:
   postgres:
