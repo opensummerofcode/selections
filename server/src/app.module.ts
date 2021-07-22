@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { ApplicantsModule } from './applicants/applicants.module';
 import { UsersModule } from './users/users.module';
 import { SuggestionsModule } from './suggestions/suggestions.module';
+import { ProjectsModule } from './projects/projects.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { SuggestionsModule } from './suggestions/suggestions.module';
     ApplicantsModule,
     UsersModule,
     SuggestionsModule,
+    ProjectsModule,
   ],
   controllers: [AppController],
   providers: [AppService]
