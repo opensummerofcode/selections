@@ -1,4 +1,4 @@
-import { Resolver, Query, Args, Subscription, Mutation, Int } from '@nestjs/graphql';
+import { Resolver, Query, Args, Mutation, Int } from '@nestjs/graphql';
 import { ProfilesService } from './profiles.service';
 import { Profile } from './models/profile.model';
 import { CreateProfileInput } from './dto/createProfile.input';
@@ -39,18 +39,36 @@ export class ProfilesResolver {
   @Mutation(() => Boolean)
   async addProfileToApplicant(
     @Args('applicantId', { type: () => Int }) applicantId: number,
-    @Args('projectId', { type: () => Int }) projectId: number
+    @Args('profileId', { type: () => Int }) profileId: number
   ) {
-    await this.profilesService.addToApplicant(applicantId, projectId);
+    await this.profilesService.addToApplicant(applicantId, profileId);
     return true;
   }
 
   @Mutation(() => Boolean)
   async removeProfileToApplicant(
     @Args('applicantId', { type: () => Int }) applicantId: number,
-    @Args('projectId', { type: () => Int }) projectId: number
+    @Args('profileId', { type: () => Int }) profileId: number
   ) {
-    await this.profilesService.removeFromApplicant(applicantId, projectId);
+    await this.profilesService.removeFromApplicant(applicantId, profileId);
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  async addProfileToProject(
+    @Args('projectId', { type: () => Int }) projectId: number,
+    @Args('profileId', { type: () => Int }) profileId: number
+  ) {
+    await this.profilesService.addToProject(projectId, profileId);
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  async removeProfileToProject(
+    @Args('projectId', { type: () => Int }) projectId: number,
+    @Args('profileId', { type: () => Int }) profileId: number
+  ) {
+    await this.profilesService.removeFromProject(projectId, profileId);
     return true;
   }
 }

@@ -1,4 +1,4 @@
-import { Resolver, Query, Args, Mutation, Subscription } from '@nestjs/graphql';
+import { Resolver, Query, Args, Mutation, Subscription, ResolveField } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
 import { CreateProjectInput } from './dto/createProject.input';
 import { UpdateProjectInput } from './dto/updateProject.input';

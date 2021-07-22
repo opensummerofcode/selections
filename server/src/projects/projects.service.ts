@@ -20,6 +20,11 @@ export class ProjectsService {
       include: {
         applicant: true
       }
+    },
+    profiles: {
+      include: {
+        profile: true
+      }
     }
   };
 
@@ -32,7 +37,8 @@ export class ProjectsService {
       return {
         ...project,
         coaches: project.coaches.map((coaches) => coaches.user),
-        applicants: project.applicants.map((applicants) => applicants.applicant)
+        applicants: project.applicants.map((applicants) => applicants.applicant),
+        profiles: project.profiles.map((profiles) => profiles.profile)
       };
     });
   }
@@ -50,7 +56,8 @@ export class ProjectsService {
     return {
       ...project,
       coaches: project.coaches.map((coaches) => coaches.user),
-      applicants: project.applicants.map((applicants) => applicants.applicant)
+      applicants: project.applicants.map((applicants) => applicants.applicant),
+      profiles: project.profiles.map((profiles) => profiles.profile)
     };
   }
 
@@ -67,7 +74,8 @@ export class ProjectsService {
     return {
       ...project,
       coaches: project.coaches.map((coaches) => coaches.user),
-      applicants: project.applicants.map((applicants) => applicants.applicant)
+      applicants: project.applicants.map((applicants) => applicants.applicant),
+      profiles: project.profiles.map((profiles) => profiles.profile)
     };
   }
 

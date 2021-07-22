@@ -1,6 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsEmail, IsNotEmpty } from 'class-validator';
-
+import { IsNotEmpty } from 'class-validator';
+import { IsUrl } from 'class-validator';
 @InputType()
 export class CreateProjectInput {
   @Field()
@@ -14,6 +14,7 @@ export class CreateProjectInput {
   readonly client?: string;
 
   @Field({ nullable: true })
+  @IsUrl()
   readonly templateUrl?: string;
 
   @Field({ nullable: true })
