@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { triggerAsyncId } from 'async_hooks';
 import { v4 as uuidv4 } from 'uuid';
 import { PrismaService } from '../prisma.service';
 import { CreateProjectInput } from './dto/createProject.input';

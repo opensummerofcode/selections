@@ -117,7 +117,7 @@ model Suggestion {
 model Profile {
   id         Int                @id @default(autoincrement())
   name       String
-  image_url  String
+  image_url  String?
   applicants ApplicantProfile[]
   projects   ProjectProfile[]
 }
