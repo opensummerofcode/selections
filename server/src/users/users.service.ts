@@ -9,20 +9,49 @@ import { User } from './models/user.model';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
+  private readonly userIncludes = {
+    leadCoachOn: true,
+    coachOn: {
+      include: {
+        project: true
+      }
+    }
+  };
+
   async findAll(): Promise<User[]> {
-    return this.prisma.user.findMany();
+    const users = await this.prisma.user.findMany({
+      include: this.userIncludes
+    });
+
+    return users.map((user) => {
+      return { ...user, coachOn: user.coachOn.map((projects) => projects.project) };
+    });
   }
 
   async findOneById(id: number): Promise<User> {
-    return this.prisma.user.findUnique({
-      where: { id: id }
+    const user = await this.prisma.user.findUnique({
+      where: { id: id },
+      include: this.userIncludes
     });
+
+    if (!user) {
+      throw new NotFoundException(`User with id ${id} not found!`);
+    }
+
+    return { ...user, coachOn: user.coachOn.map((projects) => projects.project) };
   }
 
   async findOneByUuid(uuid: string): Promise<User> {
-    return this.prisma.user.findFirst({
-      where: { uuid: uuid }
+    const user = await this.prisma.user.findFirst({
+      where: { uuid: uuid },
+      include: this.userIncludes
     });
+
+    if (!user) {
+      throw new NotFoundException(`User with uuid ${uuid} not found!`);
+    }
+
+    return { ...user, coachOn: user.coachOn.map((projects) => projects.project) };
   }
 
   async create(createUserData: CreateUserInput): Promise<User> {
@@ -55,5 +84,30 @@ export class UsersService {
     }
 
     throw new NotFoundException(`User with uuid ${uuid} cannot be`);
+  }
+
+  async addToProject(userId: number, projectId: number): Promise<Boolean> {
+    await this.prisma.usersOnProjects.create({
+      data: {
+        user: {
+          connect: { id: userId }
+        },
+        project: {
+          connect: { id: projectId }
+        }
+      }
+    });
+
+    return true;
+  }
+
+  async removeFromProject(userId: number, projectId: number): Promise<Boolean> {
+    await this.prisma.usersOnProjects.delete({
+      where: {
+        userId_projectId: { userId, projectId }
+      }
+    });
+
+    return true;
   }
 }

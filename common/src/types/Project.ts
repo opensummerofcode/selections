@@ -4,9 +4,9 @@ export interface IProject {
   readonly id: number;
   readonly uuid: string;
   name: string;
-  description: string;
-  client: string;
-  template_url?: string;
+  description?: string;
+  client?: string;
+  templateUrl?: string;
   leadCoach?: IUser;
   createdAt: Date;
   updatedAt: Date;

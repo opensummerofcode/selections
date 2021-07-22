@@ -19,6 +19,8 @@ type User {
   lastname: String!
   imageUrl: String!
   role: String!
+  leadCoachOn: [Project!]
+  coachOn: [Project!]
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -27,6 +29,20 @@ type User {
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+type Project {
+  id: Int!
+  uuid: String!
+  name: String!
+  description: String
+  client: String
+  templateUrl: String
+  leadCoach: User
+  coaches: [User!]
+  applicants: [Applicant!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
 
 type Suggestion {
   id: Int!
@@ -51,6 +67,7 @@ type Applicant {
   createdAt: DateTime!
   updatedAt: DateTime!
   suggestions: [Suggestion!]
+  projects: [Project!]
 }
 
 type Query {
@@ -59,16 +76,27 @@ type Query {
   users: [User!]!
   user(uuid: String!): User!
   suggestions: [Suggestion!]!
+  projects: [Project!]!
+  project(uuid: String!): Project!
 }
 
 type Mutation {
   createApplicant(input: CreateApplicantInput!): Applicant!
   updateApplicant(input: UpdateApplicantInput!, uuid: String!): Applicant!
-  deleteApplicant(uuid: String!): Applicant!
+  deleteApplicant(uuid: String!): Boolean!
+  addApplicantToProject(projectId: Int!, applicantId: Int!): Boolean!
+  removeApplicantFromProject(projectId: Int!, applicantId: Int!): Boolean!
   createUser(input: CreateUserInput!): User!
   updateUser(input: UpdateUserInput!, uuid: String!): User!
-  deleteUser(uuid: String!): User!
+  deleteUser(uuid: String!): Boolean!
+  addUserToProject(projectId: Int!, userId: Int!): Boolean!
+  removeUserFromProject(projectId: Int!, userId: Int!): Boolean!
   createSuggestion(input: CreateSuggestionInput!): Suggestion!
+  updateSuggestion(input: UpdateSuggestionInput!, id: Float!): Suggestion!
+  deleteSuggestion(id: Float!): Boolean!
+  createProject(input: CreateProjectInput!): Project!
+  updateProject(input: UpdateProjectInput!, uuid: String!): Project!
+  deleteProject(uuid: String!): Boolean!
 }
 
 input CreateApplicantInput {
@@ -132,6 +160,27 @@ input CreateSuggestionInput {
   comment: String!
   applicantId: Float!
   suggesterId: Float!
+}
+
+input UpdateSuggestionInput {
+  status: String
+  comment: String
+}
+
+input CreateProjectInput {
+  name: String!
+  description: String
+  client: String
+  templateUrl: String
+  leadCoachId: Float
+}
+
+input UpdateProjectInput {
+  name: String
+  description: String
+  client: String
+  templateUrl: String
+  leadCoachId: Float
 }
 
 type Subscription {

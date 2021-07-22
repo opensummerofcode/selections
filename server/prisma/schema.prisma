@@ -37,26 +37,26 @@ model User {
 }
 
 model Project {
-  id           Int                    @id @default(autoincrement())
-  uuid         String                 @default(uuid())
-  name         String
-  description  String?
-  client       String?
-  template_url String?
-  leadCoach    User                   @relation(fields: [leadCoachId], references: [id])
-  leadCoachId  Int
-  coaches      UsersOnProjects[]
-  applicants   ApplicantsOnProjects[]
-  profiles     ProjectProfile[]
-  skills       ProjectSkill[]
-  createdAt    DateTime               @default(now())
-  updatedAt    DateTime               @updatedAt
+  id          Int                    @id @default(autoincrement())
+  uuid        String                 @unique @default(uuid())
+  name        String
+  description String?
+  client      String?
+  templateUrl String?
+  leadCoach   User?                  @relation(fields: [leadCoachId], references: [id], onDelete: SetNull)
+  leadCoachId Int?
+  coaches     UsersOnProjects[]
+  applicants  ApplicantsOnProjects[]
+  profiles    ProjectProfile[]
+  skills      ProjectSkill[]
+  createdAt   DateTime               @default(now())
+  updatedAt   DateTime               @updatedAt
 }
 
 model UsersOnProjects {
-  user       User     @relation(fields: [userId], references: [id])
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     Int
-  project    Project  @relation(fields: [projectId], references: [id])
+  project    Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId  Int
   assignedAt DateTime @default(now())
 
@@ -86,9 +86,9 @@ model Applicant {
 }
 
 model ApplicantsOnProjects {
-  applicant   Applicant @relation(fields: [applicantId], references: [id])
+  applicant   Applicant @relation(fields: [applicantId], references: [id], onDelete: Cascade)
   applicantId Int
-  project     Project   @relation(fields: [projectId], references: [id])
+  project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId   Int
   assignedAt  DateTime  @default(now())
 
@@ -109,9 +109,9 @@ model Suggestion {
   id          Int       @id @default(autoincrement())
   status      Status
   comment     String
-  applicant   Applicant @relation(fields: [applicantId], references: [id])
+  applicant   Applicant @relation(fields: [applicantId], references: [id], onDelete: Cascade)
   applicantId Int
-  suggester   User      @relation(fields: [suggesterId], references: [id])
+  suggester   User      @relation(fields: [suggesterId], references: [id], onDelete: Cascade)
   suggesterId Int
 }
 

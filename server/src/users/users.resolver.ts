@@ -1,10 +1,10 @@
-import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
+import { Resolver, Query, Args, Mutation, Int } from '@nestjs/graphql';
 import { CreateUserInput } from './dto/CreateUser.input';
 import { UpdateUserInput } from './dto/UpdateUser.input';
 import { User } from './models/user.model';
 import { UsersService } from './users.service';
 
-@Resolver()
+@Resolver((of) => User)
 export class UsersResolver {
   constructor(private usersService: UsersService) {}
 
@@ -29,11 +29,29 @@ export class UsersResolver {
     @Args('input') updateUserData: UpdateUserInput
   ): Promise<User> {
     return this.usersService.update(uuid, updateUserData);
-
   }
 
-  @Mutation(() => User)
-  async deleteUser(@Args('uuid', { type: () => String }) uuid: string): Promise<User> {
-    return this.usersService.delete(uuid);
+  @Mutation(() => Boolean)
+  async deleteUser(@Args('uuid', { type: () => String }) uuid: string): Promise<Boolean> {
+    this.usersService.delete(uuid);
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  async addUserToProject(
+    @Args('userId', { type: () => Int }) userId: number,
+    @Args('projectId', { type: () => Int }) projectId: number
+  ) {
+    await this.usersService.addToProject(userId, projectId);
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  async removeUserFromProject(
+    @Args('userId', { type: () => Int }) userId: number,
+    @Args('projectId', { type: () => Int }) projectId: number
+  ) {
+    await this.usersService.removeFromProject(userId, projectId);
+    return true;
   }
 }

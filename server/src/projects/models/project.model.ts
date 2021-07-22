@@ -1,5 +1,6 @@
 import { Field, ObjectType, Int } from '@nestjs/graphql';
 import { IProject } from 'common';
+import { Applicant } from 'src/applicants/models/applicant.model';
 import { User } from 'src/users/models/user.model';
 
 @ObjectType()
@@ -13,17 +14,23 @@ export class Project implements IProject {
   @Field()
   name: string;
 
-  @Field()
-  description: string;
-
-  @Field()
-  client: string;
+  @Field({ nullable: true })
+  description?: string;
 
   @Field({ nullable: true })
-  template_url?: string;
+  client?: string;
 
-  @Field()
+  @Field({ nullable: true })
+  templateUrl?: string;
+
+  @Field((type) => User, { nullable: true })
   leadCoach?: User;
+
+  @Field((type) => [User], { nullable: true })
+  coaches?: User[];
+
+  @Field((type) => [Applicant], { nullable: true })
+  applicants?: Applicant[];
 
   @Field()
   createdAt: Date;
