@@ -11,13 +11,6 @@ type Address {
   country: String!
 }
 
-type Profile {
-  id: Float!
-  name: String!
-  image_url: String
-  applicants: [Applicant!]
-}
-
 type User {
   id: Int!
   uuid: String!
@@ -47,8 +40,17 @@ type Project {
   leadCoach: User
   coaches: [User!]
   applicants: [Applicant!]
+  profiles: [Profile!]
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+type Profile {
+  id: Float!
+  name: String!
+  image_url: String
+  applicants: [Applicant!]
+  projects: [Project!]
 }
 
 type Suggestion {
@@ -110,8 +112,10 @@ type Mutation {
   createProfile(input: CreateProfileInput!): Profile!
   updateProfile(input: UpdateProfileInput!, id: Float!): Profile!
   deleteProfile(id: Float!): Boolean!
-  addProfileToApplicant(projectId: Int!, applicantId: Int!): Boolean!
-  removeProfileToApplicant(projectId: Int!, applicantId: Int!): Boolean!
+  addProfileToApplicant(profileId: Int!, applicantId: Int!): Boolean!
+  removeProfileToApplicant(profileId: Int!, applicantId: Int!): Boolean!
+  addProfileToProject(profileId: Int!, projectId: Int!): Boolean!
+  removeProfileToProject(profileId: Int!, projectId: Int!): Boolean!
 }
 
 input CreateApplicantInput {
