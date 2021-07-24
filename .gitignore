@@ -19,6 +19,7 @@ node_modules/
 .npm
 
 # dotenv environment variables file
-.env.*
+.env*
+!.env.example
 
 next-env.d.ts
