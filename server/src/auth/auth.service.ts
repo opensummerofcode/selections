@@ -2,6 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { User } from '../users/models/user.model';
 import { IExternalUserInput } from 'common';
+import { CookieOptions } from 'express';
+
+const cookieOptions: CookieOptions = {
+  domain: process.env.HOST || 'localhost',
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'strict',
+  httpOnly: true,
+  path: '/'
+};
 
 @Injectable()
 export class AuthService {
@@ -23,5 +32,10 @@ export class AuthService {
       }
     }
     return user;
+  }
+
+  async logout(context) {
+    context.res.cookie('token', '', { ...cookieOptions, maxAge: 0 });
+    return null;
   }
 }

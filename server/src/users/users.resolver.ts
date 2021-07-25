@@ -3,7 +3,7 @@ import { UpdateUserInput } from './dto/UpdateUser.input';
 import { User } from './models/user.model';
 import { UsersService } from './users.service';
 
-@Resolver((of) => User)
+@Resolver(() => User)
 export class UsersResolver {
   constructor(private usersService: UsersService) {}
 
