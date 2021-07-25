@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '@/services';
-import { auth } from '@/firebase';
+import { API_URL } from '@/constants';
 import SocialButton from '../components/SocialButton';
 
 import styles from '../assets/styles/pending.module.css';
@@ -9,13 +9,7 @@ import styles from '../assets/styles/pending.module.css';
 export default function Login() {
   const router = useRouter();
 
-  const { login, user } = useAuth();
-
-  useEffect(() => {
-    auth.getRedirectResult().then((result) => {
-      if (result.user) router.push('/');
-    });
-  }, []);
+  const { user } = useAuth();
 
   useEffect(() => {
     if (user && !user.isPending) router.push('/');
@@ -29,7 +23,7 @@ export default function Login() {
         After you&apos;ve logged in with your social account of choice, we&apos;ll enable your
         account so you can get started. Nudge @Miet#7556 for verification!
       </p>
-      <SocialButton github onClick={login}>
+      <SocialButton href={`${API_URL}/auth/github`} github>
         Log in with GitHub
       </SocialButton>
 
