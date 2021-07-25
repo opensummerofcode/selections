@@ -18,7 +18,7 @@ export class AuthService {
     try {
       user = await this.userService.findOneByExternalId(details.externalId);
     } catch (ex) {
-      if (ex.statusCode === 404) {
+      if (ex.status === 404) {
         return this.userService.createFromExternal(details);
       }
     }
