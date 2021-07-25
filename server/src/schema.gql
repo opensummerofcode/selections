@@ -21,6 +21,7 @@ type Profile {
 type User {
   id: Int!
   uuid: String!
+  provider: String
   externalId: String
   email: String!
   displayName: String!

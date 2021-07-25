@@ -21,10 +21,15 @@ enum Status {
   NO
 }
 
+enum OAuthProvider {
+  GITHUB
+}
+
 model User {
   id          Int               @id @default(autoincrement())
   uuid        String            @unique @default(uuid())
   externalId  String?           @unique
+  provider    OAuthProvider?
   email       String            @unique
   displayName String
   firstname   String?
