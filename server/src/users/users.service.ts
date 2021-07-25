@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { PrismaService } from '../prisma.service';
-import { CreateUserInput } from './dto/CreateUser.input';
 import { UpdateUserInput } from './dto/UpdateUser.input';
 import { User } from './models/user.model';
+import { IExternalUserInput } from 'common';
 
 @Injectable()
 export class UsersService {
@@ -54,7 +54,19 @@ export class UsersService {
     return { ...user, coachOn: user.coachOn.map((projects) => projects.project) };
   }
 
-  async create(createUserData: CreateUserInput): Promise<User> {
+  async findOneByExternalId(externalId: string): Promise<User> {
+    const user = await this.prisma.user.findFirst({
+      where: { externalId }
+    });
+
+    if (!user) {
+      throw new NotFoundException(`User with external id ${externalId} not found!`);
+    }
+
+    return { ...user };
+  }
+
+  async createFromExternal(createUserData: IExternalUserInput): Promise<User> {
     return this.prisma.user.create({
       data: {
         uuid: uuidv4(),
@@ -86,7 +98,7 @@ export class UsersService {
     throw new NotFoundException(`User with uuid ${uuid} cannot be`);
   }
 
-  async addToProject(userId: number, projectId: number): Promise<Boolean> {
+  async addToProject(userId: number, projectId: number): Promise<boolean> {
     await this.prisma.usersOnProjects.create({
       data: {
         user: {
@@ -101,7 +113,7 @@ export class UsersService {
     return true;
   }
 
-  async removeFromProject(userId: number, projectId: number): Promise<Boolean> {
+  async removeFromProject(userId: number, projectId: number): Promise<boolean> {
     await this.prisma.usersOnProjects.delete({
       where: {
         userId_projectId: { userId, projectId }

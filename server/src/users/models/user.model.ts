@@ -10,13 +10,19 @@ export class User implements IUser {
   @Field()
   uuid: string;
 
+  @Field({ nullable: true })
+  externalId: string;
+
   @Field()
   email: string;
 
   @Field()
+  displayName: string;
+
+  @Field({ nullable: true })
   firstname: string;
 
-  @Field()
+  @Field({ nullable: true })
   lastname: string;
 
   @Field()

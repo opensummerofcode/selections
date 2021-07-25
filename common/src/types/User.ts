@@ -12,3 +12,10 @@ export interface IUser {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface IExternalUserInput {
+  readonly externalId: string;
+  email: string;
+  displayName: string;
+  imageUrl: string;
+}

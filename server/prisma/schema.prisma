@@ -24,8 +24,9 @@ enum Status {
 model User {
   id          Int               @id @default(autoincrement())
   uuid        String            @unique @default(uuid())
+  externalId  String?           @unique
   email       String            @unique
-  displayname String
+  displayName String
   firstname   String?
   lastname    String?
   imageUrl    String?
