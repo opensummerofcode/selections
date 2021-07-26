@@ -2,6 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Skillset {
+  id: Int!
+  name: String!
+  level: String!
+}
+
 type Address {
   id: Int!
   addressLine: String!
@@ -78,11 +84,19 @@ type Applicant {
   suggestions: [Suggestion!]
   projects: [Project!]
   profiles: [Profile!]
+  skillset: [Skillset!]
+}
+
+type Skill {
+  id: Int!
+  name: String!
 }
 
 type Query {
   applicants: [Applicant!]!
   applicant(uuid: String!): Applicant!
+  skills: [Skill!]!
+  skill(id: Float!): Skill!
   users: [User!]!
   user(uuid: String!): User!
   suggestions: [Suggestion!]!
@@ -98,6 +112,7 @@ type Mutation {
   deleteApplicant(uuid: String!): Boolean!
   addApplicantToProject(projectId: Int!, applicantId: Int!): Boolean!
   removeApplicantFromProject(projectId: Int!, applicantId: Int!): Boolean!
+  addSkillToApplicant(level: String!, skill: String!, applicantId: Int!): Boolean!
   createUser(input: CreateUserInput!): User!
   updateUser(input: UpdateUserInput!, uuid: String!): User!
   deleteUser(uuid: String!): Boolean!

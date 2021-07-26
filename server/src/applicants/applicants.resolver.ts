@@ -1,15 +1,24 @@
-import { Resolver, Query, Args, Subscription, Mutation, Int } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Args,
+  Subscription,
+  Mutation,
+  Int,
+  ResolveField,
+  Parent
+} from '@nestjs/graphql';
 import { ApplicantsService } from './applicants.service';
 import { Applicant } from './models/applicant.model';
 import { PubSub } from 'graphql-subscriptions';
 import { CreateApplicantInput } from './dto/createApplicant.input';
 import { UpdateApplicantInput } from './dto/updateApplicant.input';
-
+import { SkillsService } from '../skills/skills.service';
 @Resolver((of) => Applicant)
 export class ApplicantsResolver {
   private pubSub: PubSub;
 
-  constructor(private applicantsService: ApplicantsService) {
+  constructor(private applicantsService: ApplicantsService, private skillsService: SkillsService) {
     this.pubSub = new PubSub();
   }
 
@@ -21,6 +30,11 @@ export class ApplicantsResolver {
   @Query(() => Applicant)
   async applicant(@Args('uuid', { type: () => String }) uuid: string) {
     return this.applicantsService.findOneByUuid(uuid);
+  }
+
+  @ResolveField()
+  async skillset(@Parent() applicant: Applicant) {
+    return this.skillsService.findApplicantSkills(applicant);
   }
 
   @Mutation(() => Applicant)
@@ -65,6 +79,17 @@ export class ApplicantsResolver {
     @Args('projectId', { type: () => Int }) projectId: number
   ) {
     await this.applicantsService.removeFromProject(applicantId, projectId);
+    return true;
+  }
+
+  // test
+  @Mutation(() => Boolean)
+  async addSkillToApplicant(
+    @Args('applicantId', { type: () => Int }) applicantId: number,
+    @Args('skill', { type: () => String }) skill: string,
+    @Args('level', { type: () => String }) level: string
+  ) {
+    await this.applicantsService.addSkill(applicantId, skill, level);
     return true;
   }
 
