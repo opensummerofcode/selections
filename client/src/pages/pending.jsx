@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useAuth } from '@/services';
+import { useAuth } from '@/hooks';
 import { useRouter } from 'next/router';
 import styles from '@/assets/styles/pending.module.css';
 

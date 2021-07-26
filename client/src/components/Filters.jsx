@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, memo } from 'react';
 import PropTypes from 'prop-types';
 import { Switch, SearchInput, Button, Pill } from 'evergreen-ui';
-import { useAuth, useSuggestions } from '@/services';
+import { useAuth, useSuggestions } from '@/hooks';
 import { normalizeString } from '../util';
 import { Student } from '../models';
 import { roles } from '../constants';

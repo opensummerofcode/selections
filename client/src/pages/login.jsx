@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useAuth } from '@/services';
+import { useAuth } from '@/hooks';
 import { API_URL } from '@/constants';
 import { useQuery } from 'urql';
 import { queries } from 'common';

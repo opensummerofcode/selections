@@ -13,7 +13,7 @@ import {
   Text
 } from 'evergreen-ui';
 import { DropTarget } from 'react-dnd';
-import { useAuth } from '@/services';
+import { useAuth } from '@/hooks';
 import { sortAlphabetically } from '../util';
 import ProjectModel from '../models/Project';
 

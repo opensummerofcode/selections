@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useStudents } from '@/services';
+import { useStudents } from '@/hooks';
 import Filters from './Filters';
 import StudentCard from './StudentCard';
 

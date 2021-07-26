@@ -1,4 +1,4 @@
-import { useAuth } from '@/services';
+import { useAuth } from '@/hooks';
 
 const AppWrapper = ({ children }) => {
   const { isLoading } = useAuth();
