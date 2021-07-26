@@ -36,6 +36,11 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Skill {
+  id: Int!
+  name: String!
+}
+
 type Project {
   id: Int!
   uuid: String!
@@ -47,6 +52,7 @@ type Project {
   coaches: [User!]
   applicants: [Applicant!]
   profiles: [Profile!]
+  skills: [Skill!]
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -87,11 +93,6 @@ type Applicant {
   skillset: [Skillset!]
 }
 
-type Skill {
-  id: Int!
-  name: String!
-}
-
 type Query {
   applicants: [Applicant!]!
   applicant(uuid: String!): Applicant!
@@ -124,6 +125,7 @@ type Mutation {
   createProject(input: CreateProjectInput!): Project!
   updateProject(input: UpdateProjectInput!, uuid: String!): Project!
   deleteProject(uuid: String!): Boolean!
+  addSkillToProject(skill: String!, projectId: Int!): Boolean!
   createProfile(input: CreateProfileInput!): Profile!
   updateProfile(input: UpdateProfileInput!, id: Float!): Profile!
   deleteProfile(id: Float!): Boolean!

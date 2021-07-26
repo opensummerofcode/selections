@@ -87,9 +87,11 @@ export class ProjectsService {
         description: createProjectData.description,
         client: createProjectData.client,
         templateUrl: createProjectData.templateUrl,
-        leadCoach: {
-          connect: { id: createProjectData.leadCoachId }
-        }
+        leadCoach: createProjectData.leadCoachId
+          ? {
+              connect: { id: createProjectData.leadCoachId }
+            }
+          : undefined
       }
     });
   }
@@ -115,5 +117,39 @@ export class ProjectsService {
     }
 
     throw new NotFoundException(`Project with uuid ${uuid} cannot be`);
+  }
+
+  async addSkill(projectId: number, skill: string): Promise<boolean> {
+    await this.prisma.projectSkill.create({
+      data: {
+        project: {
+          connect: {
+            id: projectId
+          }
+        },
+        skill: {
+          connectOrCreate: {
+            where: {
+              name: skill
+            },
+            create: {
+              name: skill
+            }
+          }
+        }
+      }
+    });
+
+    return true;
+  }
+
+  async removeSkill(projectId: number, skillId: number): Promise<boolean> {
+    await this.prisma.projectSkill.delete({
+      where: {
+        projectId_skillId: { projectId, skillId }
+      }
+    });
+
+    return true;
   }
 }

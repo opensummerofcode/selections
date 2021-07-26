@@ -3,6 +3,7 @@ import { IProject } from 'common';
 import { Profile } from '../../profiles/models/profile.model';
 import { Applicant } from '../../applicants/models/applicant.model';
 import { User } from '../../users/models/user.model';
+import { Skill } from '../../skills/models/skill.model';
 
 @ObjectType()
 export class Project implements IProject {
@@ -35,6 +36,9 @@ export class Project implements IProject {
 
   @Field((type) => [Profile], { nullable: true })
   profiles?: Profile[];
+
+  @Field((type) => [Skill], { nullable: true })
+  skills?: Skill[];
 
   @Field()
   createdAt: Date;

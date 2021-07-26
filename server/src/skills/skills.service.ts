@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Project } from '@prisma/client';
+import { Project } from '../projects/models/project.model';
 import { Applicant } from '../applicants/models/applicant.model';
 import { PrismaService } from '../prisma.service';
 import { Skill } from './models/skill.model';
@@ -39,6 +39,26 @@ export class SkillsService {
         id: skillset.skill.id,
         name: skillset.skill.name,
         level: skillset.level.name
+      };
+    });
+  }
+
+  async findProjectSkills(project: Project): Promise<Skill[]> {
+    const { id } = project;
+
+    const skillsets = await this.prisma.projectSkill.findMany({
+      where: {
+        projectId: id
+      },
+      include: {
+        skill: true
+      }
+    });
+
+    return skillsets.map((skillset) => {
+      return {
+        id: skillset.skill.id,
+        name: skillset.skill.name
       };
     });
   }

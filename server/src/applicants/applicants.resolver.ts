@@ -82,7 +82,7 @@ export class ApplicantsResolver {
     return true;
   }
 
-  // test
+  // todo: refactor
   @Mutation(() => Boolean)
   async addSkillToApplicant(
     @Args('applicantId', { type: () => Int }) applicantId: number,
