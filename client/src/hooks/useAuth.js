@@ -29,10 +29,6 @@ export default function useAuth() {
     if (data) setUser(data.me);
   }, [fetching, data]);
 
-  useEffect(() => {
-    if (user && user.isPending) router.push('/pending');
-  }, [user, isLoading]);
-
   const logout = async () => {
     await auth.signOut();
     router.push('/login');
