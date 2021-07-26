@@ -34,6 +34,18 @@ export class AuthService {
     return user;
   }
 
+  async loginWithGithub(context) {
+    if (!context.user) {
+      return 'No user from GitHub';
+    }
+
+    console.log(context);
+    // todo set access token
+    context.res.cookie('token', 'id', cookieOptions);
+
+    return context.user;
+  }
+
   async logout(context) {
     context.res.cookie('token', '', { ...cookieOptions, maxAge: 0 });
     return null;

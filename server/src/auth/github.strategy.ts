@@ -26,9 +26,9 @@ export class GithubStrategy extends PassportStrategy(Strategy) {
       await this.authService.validateGitHubUser(user);
     } catch (ex) {
       console.log(ex);
-      throw new UnauthorizedException();
+      return done(new UnauthorizedException(), false);
     }
 
-    done(null, user);
+    return done(null, user);
   }
 }

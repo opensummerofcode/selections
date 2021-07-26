@@ -91,6 +91,8 @@ type Query {
   project(uuid: String!): Project!
   profiles: [Profile!]!
   profile(id: Float!): Profile!
+  me: User
+  logout: User
 }
 
 type Mutation {
