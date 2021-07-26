@@ -9,7 +9,10 @@ const Header = () => {
   return (
     <header className={styles.header}>
       <nav className={styles.navigation}>
-        <h1 className={styles.title}>Selections</h1>
+        <Link href="/">
+            <a className={styles.title}>Selections</a>
+        </Link>
+
         <ul className={styles.navitems}>
           {user && !user.isPending && (
             <>
@@ -28,7 +31,7 @@ const Header = () => {
           {user && user.isAdmin && (
             <li>
               <Link href="/manage-users">
-                <a>Manage users</a>
+                <a>Admin panel</a>
               </Link>
             </li>
           )}

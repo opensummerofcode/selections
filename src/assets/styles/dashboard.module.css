@@ -1,5 +1,5 @@
 .dashboard {
-  /* account for height of header */
+  /* account for height of header, use more padding in stead of fixed heights */
   min-height: calc(100% - 10rem) !important;
   height: calc(100% - 10rem);
 }

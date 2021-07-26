@@ -6,7 +6,7 @@ import { db } from '../firebase';
 import Conflicts from './Conflicts';
 import ProjectCard from './ProjectCard';
 
-import styles from '../assets/styles/projects.module.css';
+import styles from '../assets/styles/projects.module.scss';
 import { sortAlphabetically, normalizeString } from '../util';
 
 const ProjectList = () => {

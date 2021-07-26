@@ -1,6 +1,6 @@
-import React, { useEffect, useReducer, memo } from 'react';
+import React, { useEffect, useReducer, memo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Switch, SearchInput, Button, Pill } from 'evergreen-ui';
+import { Switch, SearchInput, Button, Pill, FilterListIcon } from 'evergreen-ui';
 import { useAuth, useSuggestions } from '@/services';
 import { normalizeString } from '../util';
 import { Student } from '../models';
@@ -151,12 +151,13 @@ const Filters = ({ students: studentObj, setFiltered, filteredCount, showOnly = 
   ));
   return (
     <header className={styles.filters}>
-      <div>
+      <div className={styles.double}>
         <SearchInput
           placeholder="Search students by name..."
           width="100%"
           onChange={(e) => dispatch({ type: 'search', payload: e.target.value })}
           value={state.searchQuery}
+          className={styles.studentSearch}
         />
       </div>
       <div className={styles.double}>

@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Table, Select } from 'evergreen-ui';
+import { 
+    Table, 
+    Select,
+    FilePicker,
+    Combobox } from 'evergreen-ui';
 import { useAuth } from '@/services';
 import { User } from '@/models';
 import { db } from '@/firebase';

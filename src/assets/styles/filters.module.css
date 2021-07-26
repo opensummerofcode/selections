@@ -41,3 +41,18 @@
   justify-content: space-between;
   align-items: center;
 }
+
+.filterstoggle {
+  box-sizing: border-box;
+  /* margin-left: 1rem; */
+  display: block;
+}
+
+
+.studentSearch {
+  margin-right: 1rem;
+}
+
+.relative {
+  position: relative;
+}

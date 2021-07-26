@@ -164,3 +164,24 @@
   flex-wrap: wrap;
   margin: 1rem 0 2rem;
 }
+
+.goToDetail {
+  margin-left: auto;
+  padding-right: 1rem;
+  
+  > button {
+    display: flex;
+    text-align: end;
+
+    > svg {
+      margin-left: .5rem;
+      transition: all .15s ease-in-out;
+    }
+
+    &:hover {
+      > svg {
+        transform: translateX(.5rem);
+      }
+    }
+  } 
+}

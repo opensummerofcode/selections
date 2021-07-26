@@ -14,13 +14,13 @@ const StudentList = ({ showOnly }) => {
     <div className={styles['student-list']}>
       {!isLoading && (
         <>
-          <Filters
-            students={students}
-            showOnly={showOnly}
-            filteredCount={filtered.length}
-            setFiltered={setFiltered}
-          />
-          <ol>{!isLoading && filtered.map(renderStudent)}</ol>
+            <Filters
+                students={students}
+                showOnly={showOnly}
+                filteredCount={filtered.length}
+                setFiltered={setFiltered}
+            />
+            <ol>{!isLoading && filtered.map(renderStudent)}</ol>
         </>
       )}
     </div>

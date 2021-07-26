@@ -1,10 +1,17 @@
+import React, {useState, useEffect} from 'react';
+
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Badge, Pane, Pill } from 'evergreen-ui';
+import { Badge, 
+    Pane, 
+    Pill, 
+    ChevronDownIcon, 
+     } from 'evergreen-ui';
 import { DragSource } from 'react-dnd';
 import { useSuggestions } from '../services';
 
-import styles from '../assets/styles/student-card.module.css';
+import styles from '../assets/styles/student-card.module.scss';
+import StudentCardCollapsable from './StudentCardCollapsable';
 
 const collect = (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
@@ -27,6 +34,8 @@ const StudentCard = ({ student, connectDragSource }) => {
   const { firstName, lastName } = student;
   const { suggestions } = useSuggestions();
 
+  const [isOpen, setIsOpen] = useState(false);
+  
   const selectedStudentId = router.query.id;
   const isActive = selectedStudentId && selectedStudentId === student.id;
 
@@ -48,56 +57,79 @@ const StudentCard = ({ student, connectDragSource }) => {
   );
 
   return connectDragSource(
-    <li className={styles.card}>
-      <Link href={`/student/${student.id}/${student.firstName}-${student.lastName}`}>
-        <button type="button" className="button--seamless">
-          <Pane
+    <li className={styles.card}>        
+        <button type="button" className={`button--seamless ${styles['button--flex']}`} >
+            <Pane 
             className={`${styles.wrapper} ${isActive ? styles.active : ''} ${
-              styles[`status-${student.statusType}`]
+                styles[`status-${student.statusType}`]
             }`}
             elevation={isActive ? 2 : 1}
-          >
-            <div className={styles.name}>
-              {firstName}&nbsp;<strong>{lastName}</strong>
-              {student.isAlum && (
-                <Badge color="green" marginLeft={8}>
-                  alum
-                </Badge>
-              )}
-              {suggestionAmounts.total > 0 && (
-                <div className={styles['suggestion-amount']}>
-                  <Pill>{suggestionAmounts.total}</Pill>
+            >
+                <Link href={`/student/${student.id}/${student.firstName}-${student.lastName}`}>
+                    <div className={styles.preview}>
+                        <div className={styles.name}>
+                            {firstName}&nbsp;<strong>{lastName}</strong>
+                            
+                            {student.isAlum && (
+                            <Badge color="green" marginLeft={8}>
+                                alum
+                            </Badge>
+                            )}
+
+                            {suggestionAmounts.total > 0 && (
+                                <div className={styles['suggestion-amount']}>
+                                    <Pill>{suggestionAmounts.total}</Pill>
+                                </div>
+                            )}
+                        </div>
+                    
+                        <div className ={styles.projectDetails} >
+                            <span className={styles.role}>
+                                {/* ROLE PLACEHOLDER*/}
+                                Front-end developer
+                            </span>
+                            <span className={styles.assignedProject}>
+                                {/* OPTIONAL project name PLACEHOLDER */}
+                                Deloitte
+                            </span>
+                        </div>
+                    </div>
+                </Link>
+
+                <div className={`${styles.dropDownToggle} ${ isOpen ? styles.open : '' } `} onClick={() => setIsOpen(!isOpen)} >
+                    <ChevronDownIcon size={22}/>
                 </div>
-              )}
-            </div>
-            <div className={styles.suggestions}>
-              {/* TODO: This could be a lot more dynamic */}
-              {suggestionAmounts.total > 0 ? (
-                <>
-                  {suggestionAmounts.yes > 0 && (
+
+                <div className={styles.suggestions}>
+                {/* TODO: This could be a lot more dynamic */} 
+                {suggestionAmounts.total > 0 ? (
+                    <>
+                    {suggestionAmounts.yes > 0 && (
+                        <span
+                        style={{ flex: suggestionAmounts.yes / suggestionAmounts.total }}
+                        className={styles['suggestions-yes']}
+                        />
+                    )}
                     <span
-                      style={{ flex: suggestionAmounts.yes / suggestionAmounts.total }}
-                      className={styles['suggestions-yes']}
+                        style={{ flex: suggestionAmounts.maybe / suggestionAmounts.total }}
+                        className={styles['suggestions-maybe']}
                     />
-                  )}
-                  <span
-                    style={{ flex: suggestionAmounts.maybe / suggestionAmounts.total }}
-                    className={styles['suggestions-maybe']}
-                  />
-                  {suggestionAmounts.no > 0 && (
-                    <span
-                      style={{ flex: suggestionAmounts.no / suggestionAmounts.total }}
-                      className={styles['suggestions-no']}
-                    />
-                  )}
-                </>
-              ) : (
-                <span className={styles['suggestions-empty']} />
-              )}
-            </div>
-          </Pane>
+                    {suggestionAmounts.no > 0 && (
+                        <span
+                        style={{ flex: suggestionAmounts.no / suggestionAmounts.total }}
+                        className={styles['suggestions-no']}
+                        />
+                    )}
+                    </>
+                ) : (
+                    <span className={styles['suggestions-empty']} />
+                )}
+                </div>
+            </Pane>
         </button>
-      </Link>
+
+        { isOpen && <StudentCardCollapsable student={student} isOpen={isOpen}/>}
+
     </li>
   );
 };

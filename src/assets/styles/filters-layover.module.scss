@@ -1,0 +1,58 @@
+.modal {
+  position: absolute;
+  display: none;
+  top: 5rem;
+  z-index: 100 !important;
+  left: 0;
+  width: 100vw;
+  width: auto;
+  height: 100vh;
+  background-color: hsla(0, 0%, 0%, 50%);
+  border: solid 2Px red;
+}
+
+.container {
+  display: flex;
+  
+  > div:first-of-type {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    background-color: #FFF;
+    padding: 2rem;
+    width: 40rem;
+  }
+}
+
+
+.closeButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin-left: auto;
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+  display: block;
+  cursor: pointer;
+  background-color: #FFF;
+  background-color: #B0BAC2;
+  
+  &:hover {
+     background-color: #CCD2D6;
+  }
+
+  >svg {
+    color: #000;
+  }
+}
+
+.filters {
+  width: 100%;
+}
+
+.double {
+  display: flex;
+  justify-content: space-between;
+}
