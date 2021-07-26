@@ -1,8 +1,10 @@
 import { useEffect } from 'react';
+import { useQuery } from 'urql';
 import create from 'zustand';
 import { useRouter } from 'next/router';
-import { auth, authProvider, db } from '@/firebase';
+import { auth, authProvider } from '@/firebase';
 import User from '@/models/User';
+import { queries } from 'common';
 
 const useStore = create((set) => ({
   user: null,
@@ -14,27 +16,13 @@ const useStore = create((set) => ({
 }));
 
 export default function useAuth() {
-  const { user, isLoggingIn, finishLoading, setUser, login, isLoading } = useStore();
+  const [result] = useQuery({ query: queries.me });
+
+  const { user, isLoggingIn, finishLoading, login, isLoading } = useStore();
   const router = useRouter();
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((rawUser) => {
-      if (!rawUser) {
-        router.push('/login');
-        setUser(null);
-        return finishLoading();
-      }
-      return db
-        .collection('users')
-        .doc(rawUser.uid)
-        .onSnapshot((doc) => {
-          const userData = doc.data();
-          if (!userData) return null;
-          setUser(userData);
-          return finishLoading();
-        });
-    });
-    return unsubscribe;
+    finishLoading();
   }, []);
 
   useEffect(() => {
