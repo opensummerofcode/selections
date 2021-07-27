@@ -7,18 +7,6 @@ async function main() {
   console.log('seeding...');
 
   for (let i = 0; i < 10; i++) {
-    //   await prisma.user.upsert({
-    //     where: { email: faker.internet.email() },
-    //     update: {},
-    //     create: {
-    //       uuid: faker.datatype.uuid(),
-    //       email: faker.internet.email(),
-    //       firstname: faker.name.firstName(),
-    //       lastname: faker.name.lastName(),
-    //       role: Math.random() < 0.5 ? Role.COACH : Role.USER
-    //     }
-    //   });
-
     const genders = ['male', 'female', 'nonbinary'];
 
     await prisma.applicant.upsert({

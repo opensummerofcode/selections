@@ -1,4 +1,6 @@
-import { IAddress } from "./Address";
+import { IAddress } from './Address';
+
+export type ApplicantStatus = 'ACCEPTED' | 'UNDECIDED' | 'REJECTED';
 export interface IApplicant {
   readonly id: number;
   readonly uuid: string;
@@ -11,6 +13,7 @@ export interface IApplicant {
   address?: IAddress;
   phone: string;
   isAlumni: boolean;
+  status: ApplicantStatus;
   createdAt: Date;
   updatedAt: Date;
 }

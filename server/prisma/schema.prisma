@@ -21,6 +21,12 @@ enum Status {
   NO
 }
 
+enum applicantStatus {
+  ACCEPTED
+  REJECTED
+  UNDECIDED
+}
+
 enum OAuthProvider {
   GITHUB
 }
@@ -83,6 +89,7 @@ model Applicant {
   addressId   Int                    @unique
   phone       String
   isAlumni    Boolean
+  status      applicantStatus        @default(UNDECIDED)
   projects    ApplicantsOnProjects[]
   suggestions Suggestion[]
   profiles    ApplicantProfile[]
