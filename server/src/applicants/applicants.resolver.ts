@@ -14,6 +14,7 @@ import { PubSub } from 'graphql-subscriptions';
 import { CreateApplicantInput } from './dto/createApplicant.input';
 import { UpdateApplicantInput } from './dto/updateApplicant.input';
 import { SkillsService } from '../skills/skills.service';
+import { FilterApplicantInput } from './dto/filterApplicant.input';
 @Resolver((of) => Applicant)
 export class ApplicantsResolver {
   private pubSub: PubSub;
@@ -23,8 +24,10 @@ export class ApplicantsResolver {
   }
 
   @Query(() => [Applicant])
-  async applicants(): Promise<Applicant[]> {
-    return this.applicantsService.findAll();
+  async applicants(
+    @Args('where', { nullable: true }) where?: FilterApplicantInput
+  ): Promise<Applicant[]> {
+    return this.applicantsService.findAll(where);
   }
 
   @Query(() => Applicant)

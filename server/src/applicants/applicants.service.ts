@@ -4,6 +4,7 @@ import { PrismaService } from '../prisma.service';
 import { Applicant } from './models/applicant.model';
 import { CreateApplicantInput } from './dto/createApplicant.input';
 import { UpdateApplicantInput } from './dto/updateApplicant.input';
+import { FilterApplicantInput } from './dto/filterApplicant.input';
 
 @Injectable()
 export class ApplicantsService {
@@ -28,10 +29,31 @@ export class ApplicantsService {
     }
   };
 
-  async findAll(): Promise<Applicant[]> {
-    const applicants = await this.prisma.applicant.findMany({
-      include: this.applicantIncludes
+  async findAll(where?: FilterApplicantInput): Promise<Applicant[]> {
+    const { profiles_every, projects_every, suggestions_every, skills_every, ...whereArgs } =
+      where || {};
+
+    let applicants = await this.prisma.applicant.findMany({
+      include: this.applicantIncludes,
+      where: {
+        ...whereArgs,
+        profiles: {
+          every: { profile: profiles_every }
+        },
+        projects: {
+          every: { project: projects_every }
+        },
+        suggestions: {
+          every: suggestions_every
+        },
+        skillset: {
+          every: { skill: skills_every }
+        }
+      }
     });
+
+    if (projects_every) applicants = applicants.filter((applicant) => applicant.projects.length);
+    if (profiles_every) applicants = applicants.filter((applicant) => applicant.profiles.length);
 
     return applicants.map((applicant) => {
       return {

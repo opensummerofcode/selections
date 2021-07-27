@@ -94,7 +94,7 @@ type Applicant {
 }
 
 type Query {
-  applicants: [Applicant!]!
+  applicants(where: FilterApplicantInput): [Applicant!]!
   applicant(uuid: String!): Applicant!
   skills: [Skill!]!
   skill(id: Float!): Skill!
@@ -105,6 +105,63 @@ type Query {
   project(uuid: String!): Project!
   profiles: [Profile!]!
   profile(id: Float!): Profile!
+}
+
+input FilterApplicantInput {
+  AND: FilterApplicantInput
+  OR: FilterApplicantInput
+  NOT: FilterApplicantInput
+  email: StringFilter
+  firstname: StringFilter
+  lastname: StringFilter
+  callname: StringFilter
+  gender: StringFilter
+  phone: StringFilter
+  nationality: StringFilter
+  address: FilterAddressInput
+  isAlumni: Boolean
+  profiles_every: FilterProfileInput
+  projects_every: FilterProjectInput
+}
+
+input StringFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+}
+
+input FilterAddressInput {
+  AND: FilterAddressInput
+  OR: FilterAddressInput
+  NOT: FilterAddressInput
+  addressLine: StringFilter
+  postalCode: StringFilter
+  city: StringFilter
+  state: StringFilter
+  country: StringFilter
+}
+
+input FilterProfileInput {
+  AND: FilterProfileInput
+  OR: FilterProfileInput
+  NOT: FilterProfileInput
+  name: StringFilter
+}
+
+input FilterProjectInput {
+  AND: FilterProjectInput
+  OR: FilterProjectInput
+  NOT: FilterProjectInput
+  name: StringFilter
+  client: StringFilter
+  leadCoachId: Float
 }
 
 type Mutation {
