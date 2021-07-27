@@ -21,9 +21,12 @@ type Profile {
 type User {
   id: Int!
   uuid: String!
+  provider: String
+  externalId: String
   email: String!
-  firstname: String!
-  lastname: String!
+  displayName: String!
+  firstname: String
+  lastname: String
   imageUrl: String!
   role: String!
   leadCoachOn: [Project!]
@@ -88,6 +91,8 @@ type Query {
   project(uuid: String!): Project!
   profiles: [Profile!]!
   profile(id: Float!): Profile!
+  me: User
+  logout: User
 }
 
 type Mutation {
@@ -96,7 +101,6 @@ type Mutation {
   deleteApplicant(uuid: String!): Boolean!
   addApplicantToProject(projectId: Int!, applicantId: Int!): Boolean!
   removeApplicantFromProject(projectId: Int!, applicantId: Int!): Boolean!
-  createUser(input: CreateUserInput!): User!
   updateUser(input: UpdateUserInput!, uuid: String!): User!
   deleteUser(uuid: String!): Boolean!
   addUserToProject(projectId: Int!, userId: Int!): Boolean!
@@ -154,16 +158,9 @@ input UpdateAddressInput {
   country: String
 }
 
-input CreateUserInput {
-  email: String!
-  firstname: String!
-  lastname: String!
-  imageUrl: String
-  role: String
-}
-
 input UpdateUserInput {
   email: String!
+  displayName: String
   firstname: String
   lastname: String
   imageUrl: String

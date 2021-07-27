@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Badge, Icon, Button, Dialog, TextInput, Select } from 'evergreen-ui';
-import { useStudents, useSuggestions, useAuth } from '@/services';
+import { useStudents, useSuggestions, useAuth } from '@/hooks';
 
 import dashStyles from '../assets/styles/dashboard.module.css';
 import styles from '../assets/styles/student-detail.module.css';

@@ -1,6 +1,6 @@
 {
-  "extends": ["airbnb", "plugin:prettier/recommended"],
-  "plugins": ["prettier"],
+  "extends": ["airbnb", "plugin:prettier/recommended", "plugin:workspaces/recommended"],
+  "plugins": ["prettier", "workspaces"],
   "env": {
     "browser": true,
     "node": true

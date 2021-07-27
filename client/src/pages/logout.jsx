@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useAuth } from '@/services';
+import { useAuth } from '@/hooks';
 
 export default function Logout() {
   const { logout } = useAuth();
