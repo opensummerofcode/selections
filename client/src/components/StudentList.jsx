@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { useStudents } from '@/hooks';
+import { useStudents, useStudentList } from '@/hooks';
 import Filters from './Filters';
 import StudentCard from './StudentCard';
 
 import styles from '../assets/styles/dashboard.module.css';
 
 const StudentList = ({ showOnly }) => {
+  const { applicants, isLoading: applicantsLoading } = useStudentList();
   const { students, isLoading } = useStudents();
   const [filtered, setFiltered] = useState([]);
 

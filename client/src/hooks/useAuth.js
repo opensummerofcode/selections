@@ -16,7 +16,7 @@ const useStore = create((set) => ({
 }));
 
 export default function useAuth() {
-  const [{ data, fetching }] = useQuery({ query: queries.me });
+  const [{ data, fetching }] = useQuery({ query: queries.ME });
 
   const { user, isLoggingIn, setUser, finishLoading, login, isLoading } = useStore();
   const router = useRouter();
