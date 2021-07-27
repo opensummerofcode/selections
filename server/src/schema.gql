@@ -20,9 +20,12 @@ type Address {
 type User {
   id: Int!
   uuid: String!
+  provider: String
+  externalId: String
   email: String!
-  firstname: String!
-  lastname: String!
+  displayName: String!
+  firstname: String
+  lastname: String
   imageUrl: String!
   role: String!
   leadCoachOn: [Project!]
@@ -105,6 +108,8 @@ type Query {
   project(uuid: String!): Project!
   profiles: [Profile!]!
   profile(id: Float!): Profile!
+  me: User
+  logout: User
 }
 
 input FilterApplicantInput {
@@ -232,16 +237,9 @@ input UpdateAddressInput {
   country: String
 }
 
-input CreateUserInput {
-  email: String!
-  firstname: String!
-  lastname: String!
-  imageUrl: String
-  role: String
-}
-
 input UpdateUserInput {
   email: String!
+  displayName: String
   firstname: String
   lastname: String
   imageUrl: String

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { SearchInput, Button, Pill } from 'evergreen-ui';
 import { Project } from '@/models';
-import { useStudents } from '@/services';
+import { useStudents } from '@/hooks';
 import { db } from '../firebase';
 import Conflicts from './Conflicts';
 import ProjectCard from './ProjectCard';

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Badge, Pane, Pill } from 'evergreen-ui';
 import { DragSource } from 'react-dnd';
-import { useSuggestions } from '../services';
+import { useSuggestions } from '@/hooks';
 
 import styles from '../assets/styles/student-card.module.css';
 

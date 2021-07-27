@@ -5,3 +5,4 @@ export * from './types/User';
 export * from './types/Project';
 export * from './types/Profile';
 export * from './types/Skill';
+export * as queries from './graphql/queries';

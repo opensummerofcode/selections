@@ -9,6 +9,9 @@ export class UpdateUserInput {
   readonly email?: string;
 
   @Field({ nullable: true })
+  readonly displayName?: string;
+
+  @Field({ nullable: true })
   readonly firstname?: string;
 
   @Field({ nullable: true })

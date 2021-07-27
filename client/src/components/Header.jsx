@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { useAuth } from '@/services';
+import { useAuth } from '@/hooks';
 
 import styles from '@/assets/styles/header.module.css';
 

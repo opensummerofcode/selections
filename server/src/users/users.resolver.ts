@@ -1,10 +1,9 @@
 import { Resolver, Query, Args, Mutation, Int } from '@nestjs/graphql';
-import { CreateUserInput } from './dto/CreateUser.input';
 import { UpdateUserInput } from './dto/UpdateUser.input';
 import { User } from './models/user.model';
 import { UsersService } from './users.service';
 
-@Resolver((of) => User)
+@Resolver(() => User)
 export class UsersResolver {
   constructor(private usersService: UsersService) {}
 
@@ -19,11 +18,6 @@ export class UsersResolver {
   }
 
   @Mutation(() => User)
-  async createUser(@Args('input') createUserData: CreateUserInput): Promise<User> {
-    return await this.usersService.create(createUserData);
-  }
-
-  @Mutation(() => User)
   async updateUser(
     @Args('uuid', { type: () => String }) uuid: string,
     @Args('input') updateUserData: UpdateUserInput
@@ -32,7 +26,7 @@ export class UsersResolver {
   }
 
   @Mutation(() => Boolean)
-  async deleteUser(@Args('uuid', { type: () => String }) uuid: string): Promise<Boolean> {
+  async deleteUser(@Args('uuid', { type: () => String }) uuid: string): Promise<boolean> {
     this.usersService.delete(uuid);
     return true;
   }

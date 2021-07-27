@@ -1,22 +1,31 @@
 import { Field, ObjectType, Int } from '@nestjs/graphql';
-import { IUser, Role } from 'common';
+import { IUser, Role, TOAuthProvider } from 'common';
 import { Project } from '../../projects/models/project.model';
 
 @ObjectType()
 export class User implements IUser {
-  @Field((type) => Int)
+  @Field(() => Int)
   id: number;
 
   @Field()
   uuid: string;
 
+  @Field({ nullable: true })
+  provider: TOAuthProvider;
+
+  @Field({ nullable: true })
+  externalId: string;
+
   @Field()
   email: string;
 
   @Field()
+  displayName: string;
+
+  @Field({ nullable: true })
   firstname: string;
 
-  @Field()
+  @Field({ nullable: true })
   lastname: string;
 
   @Field()
