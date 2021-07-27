@@ -8,10 +8,11 @@ import { PassportModule } from '@nestjs/passport';
 import { PrismaModule } from '../prisma.module';
 import { JwtAuthModule } from './jwt/jwt-auth.module';
 import { JwtAuthService } from './jwt/jwt-auth.service';
+import { GithubStrategy } from './github.strategy';
 
 @Module({
-  imports: [UsersModule, PassportModule, JwtAuthModule, PrismaModule],
+  imports: [UsersModule, PassportModule, PrismaModule, JwtAuthModule],
   controllers: [AuthController],
-  providers: [AuthService, AuthResolver, UsersService, JwtAuthService]
+  providers: [AuthService, AuthResolver, UsersService, JwtAuthService, GithubStrategy]
 })
 export class AuthModule {}

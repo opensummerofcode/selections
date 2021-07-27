@@ -40,7 +40,7 @@ export class AuthService {
       return 'No user from GitHub';
     }
 
-    const { accessToken } = this.jwtAuthService.login(context.user);
+    const accessToken = this.jwtAuthService.login(context.user);
     context.res.cookie('token', accessToken, cookieOptions);
 
     return context.user;

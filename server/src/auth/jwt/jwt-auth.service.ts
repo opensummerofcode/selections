@@ -7,9 +7,7 @@ export class JwtAuthService {
   constructor(private jwtService: JwtService) {}
 
   login(user) {
-    const payload: JwtPayload = { username: user.username, sub: user.id };
-    return {
-      accessToken: this.jwtService.sign(payload)
-    };
+    const payload: JwtPayload = { externalId: user.externalId, provider: 'GITHUB' };
+    return this.jwtService.sign(payload);
   }
 }
