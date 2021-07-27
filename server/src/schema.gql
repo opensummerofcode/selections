@@ -113,9 +113,9 @@ type Query {
 }
 
 input FilterApplicantInput {
-  AND: FilterApplicantInput
-  OR: FilterApplicantInput
-  NOT: FilterApplicantInput
+  AND: [FilterApplicantInput!]
+  OR: [FilterApplicantInput!]
+  NOT: [FilterApplicantInput!]
   email: StringFilter
   firstname: StringFilter
   lastname: StringFilter
@@ -127,6 +127,8 @@ input FilterApplicantInput {
   isAlumni: Boolean
   profiles_every: FilterProfileInput
   projects_every: FilterProjectInput
+  suggestions_every: FilterSuggestionInput
+  skills_every: FilterSkillInput
 }
 
 input StringFilter {
@@ -154,9 +156,9 @@ input FilterAddressInput {
 }
 
 input FilterProfileInput {
-  AND: FilterProfileInput
-  OR: FilterProfileInput
-  NOT: FilterProfileInput
+  AND: [FilterProfileInput!]
+  OR: [FilterProfileInput!]
+  NOT: [FilterProfileInput!]
   name: StringFilter
 }
 
@@ -169,6 +171,20 @@ input FilterProjectInput {
   leadCoachId: Float
 }
 
+input FilterSuggestionInput {
+  AND: FilterSuggestionInput
+  OR: FilterSuggestionInput
+  NOT: FilterSuggestionInput
+  status: StringFilter
+}
+
+input FilterSkillInput {
+  AND: FilterSkillInput
+  OR: FilterSkillInput
+  NOT: FilterSkillInput
+  name: StringFilter
+}
+
 type Mutation {
   createApplicant(input: CreateApplicantInput!): Applicant!
   updateApplicant(input: UpdateApplicantInput!, uuid: String!): Applicant!
@@ -176,7 +192,6 @@ type Mutation {
   addApplicantToProject(projectId: Int!, applicantId: Int!): Boolean!
   removeApplicantFromProject(projectId: Int!, applicantId: Int!): Boolean!
   addSkillToApplicant(level: String!, skill: String!, applicantId: Int!): Boolean!
-  createUser(input: CreateUserInput!): User!
   updateUser(input: UpdateUserInput!, uuid: String!): User!
   deleteUser(uuid: String!): Boolean!
   addUserToProject(projectId: Int!, userId: Int!): Boolean!

@@ -33,25 +33,34 @@ export class ApplicantsService {
     const { profiles_every, projects_every, suggestions_every, skills_every, ...whereArgs } =
       where || {};
 
+    //todo: filter parents with more than one condition
+
+    const filter = {
+      ...whereArgs,
+      profiles: {
+        some: { profile: profiles_every }
+      },
+      projects: {
+        some: { project: projects_every }
+      },
+      suggestions: {
+        every: suggestions_every
+      },
+      skillset: {
+        every: { skill: skills_every }
+      }
+    };
+
     let applicants = await this.prisma.applicant.findMany({
       include: this.applicantIncludes,
-      where: {
-        ...whereArgs,
-        profiles: {
-          every: { profile: profiles_every }
-        },
-        projects: {
-          every: { project: projects_every }
-        },
-        suggestions: {
-          every: suggestions_every
-        },
-        skillset: {
-          every: { skill: skills_every }
-        }
-      }
+      where: filter
     });
 
+    console.log(applicants);
+
+    console.log(filter);
+
+    // todo refactor
     if (projects_every) applicants = applicants.filter((applicant) => applicant.projects.length);
     if (profiles_every) applicants = applicants.filter((applicant) => applicant.profiles.length);
 

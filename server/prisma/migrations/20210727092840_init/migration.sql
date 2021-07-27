@@ -4,13 +4,19 @@ CREATE TYPE "Role" AS ENUM ('USER', 'COACH', 'ADMIN');
 -- CreateEnum
 CREATE TYPE "Status" AS ENUM ('YES', 'MAYBE', 'NO');
 
+-- CreateEnum
+CREATE TYPE "OAuthProvider" AS ENUM ('GITHUB');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
     "uuid" TEXT NOT NULL,
+    "externalId" TEXT,
+    "provider" "OAuthProvider",
     "email" TEXT NOT NULL,
-    "firstname" TEXT NOT NULL,
-    "lastname" TEXT NOT NULL,
+    "displayName" TEXT NOT NULL,
+    "firstname" TEXT,
+    "lastname" TEXT,
     "imageUrl" TEXT,
     "role" "Role" NOT NULL DEFAULT E'USER',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -174,6 +180,9 @@ CREATE TABLE "Question" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User.uuid_unique" ON "User"("uuid");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User.externalId_unique" ON "User"("externalId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User.email_unique" ON "User"("email");

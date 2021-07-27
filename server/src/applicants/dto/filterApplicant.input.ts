@@ -8,14 +8,14 @@ import { FilterSkillInput } from '../../skills/dto/filterSkill.input';
 
 @InputType()
 export class FilterApplicantInput {
-  @Field((type) => FilterApplicantInput, { nullable: true })
-  AND?: FilterApplicantInput;
+  @Field((type) => [FilterApplicantInput], { nullable: true })
+  AND?: FilterApplicantInput[];
 
-  @Field((type) => FilterApplicantInput, { nullable: true })
-  OR?: FilterApplicantInput;
+  @Field((type) => [FilterApplicantInput], { nullable: true })
+  OR?: FilterApplicantInput[];
 
-  @Field((type) => FilterApplicantInput, { nullable: true })
-  NOT?: FilterApplicantInput;
+  @Field((type) => [FilterApplicantInput], { nullable: true })
+  NOT?: FilterApplicantInput[];
 
   @Field((type) => StringFilter, { nullable: true })
   email?: StringFilter;
