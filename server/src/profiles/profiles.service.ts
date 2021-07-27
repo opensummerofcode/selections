@@ -11,20 +11,25 @@ export class ProfilesService {
       include: {
         applicant: true
       }
+    },
+    projects: {
+      include: {
+        project: true
+      }
     }
   };
   constructor(private prisma: PrismaService) {}
 
   async findAll(): Promise<Profile[]> {
     const profiles = await this.prisma.profile.findMany({
-      include: this.profileIncludes,
-      
+      include: this.profileIncludes
     });
 
     return profiles.map((profile) => {
       return {
         ...profile,
-        applicants: profile.applicants.map((applicants) => applicants.applicant)
+        applicants: profile.applicants.map((applicants) => applicants.applicant),
+        projects: profile.projects.map((projects) => projects.project)
       };
     });
   }
@@ -37,7 +42,8 @@ export class ProfilesService {
 
     return {
       ...profile,
-      applicants: profile.applicants.map((applicants) => applicants.applicant)
+      applicants: profile.applicants.map((applicants) => applicants.applicant),
+      projects: profile.projects.map((projects) => projects.project)
     };
   }
 
@@ -70,7 +76,7 @@ export class ProfilesService {
     throw new NotFoundException(`Profile with id ${id} cannot be`);
   }
 
-  async addToApplicant(applicantId: number, profileId: number): Promise<Boolean> {
+  async addToApplicant(applicantId: number, profileId: number): Promise<boolean> {
     await this.prisma.applicantProfile.create({
       data: {
         applicant: {
@@ -85,10 +91,35 @@ export class ProfilesService {
     return true;
   }
 
-  async removeFromApplicant(applicantId: number, profileId: number): Promise<Boolean> {
+  async removeFromApplicant(applicantId: number, profileId: number): Promise<boolean> {
     await this.prisma.applicantProfile.delete({
       where: {
         applicantId_profileId: { applicantId, profileId }
+      }
+    });
+
+    return true;
+  }
+
+  async addToProject(projectId: number, profileId: number): Promise<boolean> {
+    await this.prisma.projectProfile.create({
+      data: {
+        project: {
+          connect: { id: projectId }
+        },
+        profile: {
+          connect: { id: profileId }
+        }
+      }
+    });
+
+    return true;
+  }
+
+  async removeFromProject(projectId: number, profileId: number): Promise<boolean> {
+    await this.prisma.projectProfile.delete({
+      where: {
+        projectId_profileId: { projectId, profileId }
       }
     });
 

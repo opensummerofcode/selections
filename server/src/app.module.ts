@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module';
 import { SuggestionsModule } from './suggestions/suggestions.module';
 import { ProjectsModule } from './projects/projects.module';
 import { ProfilesModule } from './profiles/profiles.module';
+import { SkillsModule } from './skills/skills.module';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
@@ -19,6 +20,7 @@ import { AuthModule } from './auth/auth.module';
     SuggestionsModule,
     ProjectsModule,
     ProfilesModule,
+    SkillsModule,
     AuthModule
   ],
   controllers: [],

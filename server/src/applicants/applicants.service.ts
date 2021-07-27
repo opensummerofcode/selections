@@ -4,6 +4,7 @@ import { PrismaService } from '../prisma.service';
 import { Applicant } from './models/applicant.model';
 import { CreateApplicantInput } from './dto/createApplicant.input';
 import { UpdateApplicantInput } from './dto/updateApplicant.input';
+import { FilterApplicantInput } from './dto/filterApplicant.input';
 
 @Injectable()
 export class ApplicantsService {
@@ -28,10 +29,36 @@ export class ApplicantsService {
     }
   };
 
-  async findAll(): Promise<Applicant[]> {
-    const applicants = await this.prisma.applicant.findMany({
-      include: this.applicantIncludes
+  async findAll(where?: FilterApplicantInput): Promise<Applicant[]> {
+    const { profiles_every, projects_every, suggestions_every, skills_every, ...whereArgs } =
+      where || {};
+
+    //todo: filter parents with more than one condition
+    // fix: filter
+    // const filter = {
+    //   ...whereArgs,
+    //   profiles: {
+    //     some: { profile: profiles_every }
+    //   },
+    //   projects: {
+    //     some: { project: projects_every }
+    //   },
+    //   suggestions: {
+    //     every: suggestions_every
+    //   },
+    //   skillset: {
+    //     every: { skill: skills_every }
+    //   }
+    // };
+
+    let applicants = await this.prisma.applicant.findMany({
+      include: this.applicantIncludes,
+      where: { ...whereArgs }
     });
+
+    // todo refactor
+    if (projects_every) applicants = applicants.filter((applicant) => applicant.projects.length);
+    if (profiles_every) applicants = applicants.filter((applicant) => applicant.profiles.length);
 
     return applicants.map((applicant) => {
       return {
@@ -111,6 +138,50 @@ export class ApplicantsService {
     }
 
     throw new NotFoundException(`Applicant with uuid ${uuid} cannot be`);
+  }
+
+  async addSkill(applicantId: number, skill: string, level: string): Promise<boolean> {
+    await this.prisma.applicantSkill.create({
+      data: {
+        applicant: {
+          connect: {
+            id: applicantId
+          }
+        },
+        skill: {
+          connectOrCreate: {
+            where: {
+              name: skill
+            },
+            create: {
+              name: skill
+            }
+          }
+        },
+        level: {
+          connectOrCreate: {
+            where: {
+              name: level
+            },
+            create: {
+              name: level
+            }
+          }
+        }
+      }
+    });
+
+    return true;
+  }
+
+  async removeSkill(applicantId: number, skillId: number): Promise<boolean> {
+    await this.prisma.applicantSkill.delete({
+      where: {
+        applicantId_skillId: { applicantId, skillId }
+      }
+    });
+
+    return true;
   }
 
   async addToProject(applicantId: number, projectId: number): Promise<boolean> {

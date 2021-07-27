@@ -4,13 +4,19 @@ CREATE TYPE "Role" AS ENUM ('USER', 'COACH', 'ADMIN');
 -- CreateEnum
 CREATE TYPE "Status" AS ENUM ('YES', 'MAYBE', 'NO');
 
+-- CreateEnum
+CREATE TYPE "OAuthProvider" AS ENUM ('GITHUB');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
     "uuid" TEXT NOT NULL,
+    "externalId" TEXT,
+    "provider" "OAuthProvider",
     "email" TEXT NOT NULL,
-    "firstname" TEXT NOT NULL,
-    "lastname" TEXT NOT NULL,
+    "displayName" TEXT NOT NULL,
+    "firstname" TEXT,
+    "lastname" TEXT,
     "imageUrl" TEXT,
     "role" "Role" NOT NULL DEFAULT E'USER',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -26,8 +32,8 @@ CREATE TABLE "Project" (
     "name" TEXT NOT NULL,
     "description" TEXT,
     "client" TEXT,
-    "template_url" TEXT,
-    "leadCoachId" INTEGER NOT NULL,
+    "templateUrl" TEXT,
+    "leadCoachId" INTEGER,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -87,7 +93,7 @@ CREATE TABLE "Address" (
 CREATE TABLE "Suggestion" (
     "id" SERIAL NOT NULL,
     "status" "Status" NOT NULL,
-    "Comment" TEXT NOT NULL,
+    "comment" TEXT NOT NULL,
     "applicantId" INTEGER NOT NULL,
     "suggesterId" INTEGER NOT NULL,
 
@@ -98,7 +104,7 @@ CREATE TABLE "Suggestion" (
 CREATE TABLE "Profile" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "image_url" TEXT NOT NULL,
+    "image_url" TEXT,
 
     PRIMARY KEY ("id")
 );
@@ -130,7 +136,7 @@ CREATE TABLE "Skill" (
 -- CreateTable
 CREATE TABLE "SkillLevel" (
     "id" SERIAL NOT NULL,
-    "level" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
 
     PRIMARY KEY ("id")
 );
@@ -141,7 +147,7 @@ CREATE TABLE "ApplicantSkill" (
     "skillId" INTEGER NOT NULL,
     "levelId" INTEGER NOT NULL,
 
-    PRIMARY KEY ("applicantId","skillId","levelId")
+    PRIMARY KEY ("applicantId","skillId")
 );
 
 -- CreateTable
@@ -176,7 +182,16 @@ CREATE TABLE "Question" (
 CREATE UNIQUE INDEX "User.uuid_unique" ON "User"("uuid");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "User.externalId_unique" ON "User"("externalId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "User.email_unique" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Project.uuid_unique" ON "Project"("uuid");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Applicant.uuid_unique" ON "Applicant"("uuid");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Applicant.email_unique" ON "Applicant"("email");
@@ -185,31 +200,34 @@ CREATE UNIQUE INDEX "Applicant.email_unique" ON "Applicant"("email");
 CREATE UNIQUE INDEX "Applicant.addressId_unique" ON "Applicant"("addressId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "SkillLevel.level_unique" ON "SkillLevel"("level");
+CREATE UNIQUE INDEX "Skill.name_unique" ON "Skill"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "SkillLevel.name_unique" ON "SkillLevel"("name");
 
 -- AddForeignKey
-ALTER TABLE "Project" ADD FOREIGN KEY ("leadCoachId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Project" ADD FOREIGN KEY ("leadCoachId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UsersOnProjects" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "UsersOnProjects" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UsersOnProjects" ADD FOREIGN KEY ("projectId") REFERENCES "Project"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "UsersOnProjects" ADD FOREIGN KEY ("projectId") REFERENCES "Project"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Applicant" ADD FOREIGN KEY ("addressId") REFERENCES "Address"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ApplicantsOnProjects" ADD FOREIGN KEY ("applicantId") REFERENCES "Applicant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "ApplicantsOnProjects" ADD FOREIGN KEY ("applicantId") REFERENCES "Applicant"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ApplicantsOnProjects" ADD FOREIGN KEY ("projectId") REFERENCES "Project"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "ApplicantsOnProjects" ADD FOREIGN KEY ("projectId") REFERENCES "Project"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Suggestion" ADD FOREIGN KEY ("applicantId") REFERENCES "Applicant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Suggestion" ADD FOREIGN KEY ("applicantId") REFERENCES "Applicant"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Suggestion" ADD FOREIGN KEY ("suggesterId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Suggestion" ADD FOREIGN KEY ("suggesterId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ApplicantProfile" ADD FOREIGN KEY ("applicantId") REFERENCES "Applicant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

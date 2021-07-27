@@ -1,4 +1,5 @@
-import { Field, InputType, ObjectType } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
+import { IsUrl } from 'class-validator';
 
 @InputType()
 export class CreateProfileInput {
@@ -6,7 +7,6 @@ export class CreateProfileInput {
   name: string;
 
   @Field({ nullable: true })
+  @IsUrl()
   image_url?: string;
-
-  
 }

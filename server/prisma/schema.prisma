@@ -6,7 +6,7 @@ datasource db {
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["referentialActions"]
+  previewFeatures = ["referentialActions", "selectRelationCount"]
 }
 
 enum Role {
@@ -150,14 +150,14 @@ model ProjectProfile {
 
 model Skill {
   id         Int              @id @default(autoincrement())
-  name       String
+  name       String           @unique
   applicants ApplicantSkill[]
   projects   ProjectSkill[]
 }
 
 model SkillLevel {
   id             Int              @id @default(autoincrement())
-  level          String           @unique
+  name           String           @unique
   ApplicantSkill ApplicantSkill[]
 }
 
@@ -169,7 +169,7 @@ model ApplicantSkill {
   level       SkillLevel @relation(fields: [levelId], references: [id])
   levelId     Int
 
-  @@id([applicantId, skillId, levelId])
+  @@id([applicantId, skillId])
 }
 
 model ProjectSkill {
