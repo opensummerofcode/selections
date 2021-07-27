@@ -2,12 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Skillset {
-  id: Int!
-  name: String!
-  level: String!
-}
-
 type Address {
   id: Int!
   addressLine: String!
@@ -15,6 +9,13 @@ type Address {
   city: String!
   state: String!
   country: String!
+}
+
+type Profile {
+  id: Float!
+  name: String!
+  image_url: String
+  applicants: [Applicant!]
 }
 
 type User {
@@ -39,11 +40,6 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type Skill {
-  id: Int!
-  name: String!
-}
-
 type Project {
   id: Int!
   uuid: String!
@@ -54,18 +50,8 @@ type Project {
   leadCoach: User
   coaches: [User!]
   applicants: [Applicant!]
-  profiles: [Profile!]
-  skills: [Skill!]
   createdAt: DateTime!
   updatedAt: DateTime!
-}
-
-type Profile {
-  id: Float!
-  name: String!
-  image_url: String
-  applicants: [Applicant!]
-  projects: [Project!]
 }
 
 type Suggestion {
@@ -93,14 +79,11 @@ type Applicant {
   suggestions: [Suggestion!]
   projects: [Project!]
   profiles: [Profile!]
-  skillset: [Skillset!]
 }
 
 type Query {
-  applicants(where: FilterApplicantInput): [Applicant!]!
+  applicants: [Applicant!]!
   applicant(uuid: String!): Applicant!
-  skills: [Skill!]!
-  skill(id: Float!): Skill!
   users: [User!]!
   user(uuid: String!): User!
   suggestions: [Suggestion!]!
@@ -112,86 +95,12 @@ type Query {
   logout: User
 }
 
-input FilterApplicantInput {
-  AND: [FilterApplicantInput!]
-  OR: [FilterApplicantInput!]
-  NOT: [FilterApplicantInput!]
-  email: StringFilter
-  firstname: StringFilter
-  lastname: StringFilter
-  callname: StringFilter
-  gender: StringFilter
-  phone: StringFilter
-  nationality: StringFilter
-  address: FilterAddressInput
-  isAlumni: Boolean
-  profiles_every: FilterProfileInput
-  projects_every: FilterProjectInput
-  suggestions_every: FilterSuggestionInput
-  skills_every: FilterSkillInput
-}
-
-input StringFilter {
-  equals: String
-  in: [String!]
-  notIn: [String!]
-  lt: String
-  lte: String
-  gt: String
-  gte: String
-  contains: String
-  startsWith: String
-  endsWith: String
-}
-
-input FilterAddressInput {
-  AND: FilterAddressInput
-  OR: FilterAddressInput
-  NOT: FilterAddressInput
-  addressLine: StringFilter
-  postalCode: StringFilter
-  city: StringFilter
-  state: StringFilter
-  country: StringFilter
-}
-
-input FilterProfileInput {
-  AND: [FilterProfileInput!]
-  OR: [FilterProfileInput!]
-  NOT: [FilterProfileInput!]
-  name: StringFilter
-}
-
-input FilterProjectInput {
-  AND: FilterProjectInput
-  OR: FilterProjectInput
-  NOT: FilterProjectInput
-  name: StringFilter
-  client: StringFilter
-  leadCoachId: Float
-}
-
-input FilterSuggestionInput {
-  AND: FilterSuggestionInput
-  OR: FilterSuggestionInput
-  NOT: FilterSuggestionInput
-  status: StringFilter
-}
-
-input FilterSkillInput {
-  AND: FilterSkillInput
-  OR: FilterSkillInput
-  NOT: FilterSkillInput
-  name: StringFilter
-}
-
 type Mutation {
   createApplicant(input: CreateApplicantInput!): Applicant!
   updateApplicant(input: UpdateApplicantInput!, uuid: String!): Applicant!
   deleteApplicant(uuid: String!): Boolean!
   addApplicantToProject(projectId: Int!, applicantId: Int!): Boolean!
   removeApplicantFromProject(projectId: Int!, applicantId: Int!): Boolean!
-  addSkillToApplicant(level: String!, skill: String!, applicantId: Int!): Boolean!
   updateUser(input: UpdateUserInput!, uuid: String!): User!
   deleteUser(uuid: String!): Boolean!
   addUserToProject(projectId: Int!, userId: Int!): Boolean!
@@ -202,14 +111,11 @@ type Mutation {
   createProject(input: CreateProjectInput!): Project!
   updateProject(input: UpdateProjectInput!, uuid: String!): Project!
   deleteProject(uuid: String!): Boolean!
-  addSkillToProject(skill: String!, projectId: Int!): Boolean!
   createProfile(input: CreateProfileInput!): Profile!
   updateProfile(input: UpdateProfileInput!, id: Float!): Profile!
   deleteProfile(id: Float!): Boolean!
-  addProfileToApplicant(profileId: Int!, applicantId: Int!): Boolean!
-  removeProfileToApplicant(profileId: Int!, applicantId: Int!): Boolean!
-  addProfileToProject(profileId: Int!, projectId: Int!): Boolean!
-  removeProfileToProject(profileId: Int!, projectId: Int!): Boolean!
+  addProfileToApplicant(projectId: Int!, applicantId: Int!): Boolean!
+  removeProfileToApplicant(projectId: Int!, applicantId: Int!): Boolean!
 }
 
 input CreateApplicantInput {
