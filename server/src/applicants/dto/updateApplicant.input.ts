@@ -1,7 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { IsEmail } from 'class-validator';
 import { UpdateAddressInput } from '../../addresses/dto/updateAdress.input';
-
+import { ApplicantStatus } from 'common';
 @InputType()
 export class UpdateApplicantInput {
   @Field({ nullable: true })
@@ -31,4 +31,7 @@ export class UpdateApplicantInput {
 
   @Field({ nullable: true })
   readonly isAlumni?: boolean;
+
+  @Field({ nullable: true })
+  readonly status?: ApplicantStatus;
 }

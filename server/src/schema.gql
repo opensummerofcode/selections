@@ -88,6 +88,7 @@ type Applicant {
   nationality: String!
   address: Address!
   isAlumni: Boolean!
+  status: String!
   createdAt: DateTime!
   updatedAt: DateTime!
   suggestions: [Suggestion!]
@@ -242,6 +243,7 @@ input UpdateApplicantInput {
   nationality: String
   address: UpdateAddressInput
   isAlumni: Boolean
+  status: String
 }
 
 input UpdateAddressInput {

@@ -1,5 +1,5 @@
 import { Field, ObjectType, Int } from '@nestjs/graphql';
-import { IApplicant } from 'common';
+import { ApplicantStatus, IApplicant } from 'common';
 import { Skillset } from 'src/skills/models/skillset.model';
 import { Address } from '../../addresses/models/address.model';
 import { Profile } from '../../profiles/models/profile.model';
@@ -40,6 +40,9 @@ export class Applicant implements IApplicant {
 
   @Field()
   isAlumni: boolean;
+
+  @Field()
+  status: ApplicantStatus;
 
   @Field()
   createdAt: Date;
