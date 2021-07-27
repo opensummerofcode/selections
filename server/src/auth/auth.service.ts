@@ -3,6 +3,7 @@ import { UsersService } from '../users/users.service';
 import { User } from '../users/models/user.model';
 import { IExternalUserInput } from 'common';
 import { CookieOptions } from 'express';
+import { JwtAuthService } from './jwt/jwt-auth.service';
 
 const cookieOptions: CookieOptions = {
   domain: process.env.HOST || 'localhost',
@@ -14,7 +15,7 @@ const cookieOptions: CookieOptions = {
 
 @Injectable()
 export class AuthService {
-  constructor(private userService: UsersService) {}
+  constructor(private userService: UsersService, private jwtAuthService: JwtAuthService) {}
 
   async validateUser(username: string, password: string): Promise<any> {
     // const user = await this.usersService.findOneById(username);
@@ -39,9 +40,8 @@ export class AuthService {
       return 'No user from GitHub';
     }
 
-    console.log(context);
-    // todo set access token
-    context.res.cookie('token', 'id', cookieOptions);
+    const { accessToken } = this.jwtAuthService.login(context.user);
+    context.res.cookie('token', accessToken, cookieOptions);
 
     return context.user;
   }
