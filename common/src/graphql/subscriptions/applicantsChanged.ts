@@ -4,8 +4,12 @@ export default gql`
   subscription ApplicantsSub {
     applicantsChanged {
       id
-      suggestions
-      projects
+      suggestions {
+        id
+      }
+      projects {
+        id
+      }
       firstname
       lastname
       isAlumni

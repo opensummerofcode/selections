@@ -6,3 +6,4 @@ export * from './types/Project';
 export * from './types/Profile';
 export * from './types/Skill';
 export * as queries from './graphql/queries';
+export * as subscriptions from './graphql/subscriptions';
