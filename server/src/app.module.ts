@@ -13,7 +13,11 @@ import { AuthModule } from './auth/auth.module';
   imports: [
     GraphQLModule.forRoot({
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-      installSubscriptionHandlers: true
+      installSubscriptionHandlers: true,
+      cors: {
+        origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+        credentials: true
+      }
     }),
     ApplicantsModule,
     UsersModule,
