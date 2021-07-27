@@ -9,6 +9,9 @@ const isServerSide = typeof window === 'undefined';
 const ssrCache = ssrExchange({ isClient: !isServerSide });
 const client = createClient({
   url: `${API_URL}/graphql`,
+  fetchOptions: {
+    credentials: 'include'
+  },
   exchanges: [dedupExchange, cache, fetchExchange, ssrCache]
 });
 

@@ -20,7 +20,7 @@ export default function useAuth() {
 
   const { user, isLoggingIn, setUser, finishLoading, login, isLoading } = useStore();
   const router = useRouter();
-
+  console.log(data);
   useEffect(() => {
     if (!fetching) {
       finishLoading();
