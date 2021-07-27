@@ -8,9 +8,7 @@ export class AuthController {
 
   @Get('auth/github')
   @UseGuards(AuthGuard('github'))
-  async githubAuth() {
-    // Guard will work its magic
-  }
+  async githubAuth() {}
 
   @Get('auth/github/callback')
   @UseGuards(AuthGuard('github'))
