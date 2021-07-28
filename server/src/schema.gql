@@ -84,8 +84,8 @@ type Applicant {
   lastname: String!
   callname: String
   gender: String!
-  phone: String!
-  nationality: String!
+  phone: String
+  nationality: String
   address: Address
   isAlumni: Boolean!
   status: String!
