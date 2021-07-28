@@ -85,10 +85,10 @@ model Applicant {
   lastname    String
   callname    String?
   gender      String
-  nationality String
-  address     Address                @relation(fields: [addressId], references: [id])
-  addressId   Int                    @unique
-  phone       String
+  nationality String?
+  address     Address?               @relation(fields: [addressId], references: [id])
+  addressId   Int?                   @unique
+  phone       String?
   isAlumni    Boolean
   status      applicantStatus        @default(NOSTATUS)
   projects    ApplicantsOnProjects[]

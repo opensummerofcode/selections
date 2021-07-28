@@ -25,16 +25,13 @@ export class CreateApplicantInput {
   readonly gender: string;
 
   @Field()
-  @IsNotEmpty()
-  readonly phone: string;
+  readonly phone?: string;
 
   @Field()
-  @IsNotEmpty()
-  readonly nationality: string;
+  readonly nationality?: string;
 
   @Field()
-  @IsNotEmpty()
-  readonly address: CreateAddressInput;
+  readonly address?: CreateAddressInput;
 
   @Field()
   @IsNotEmpty()

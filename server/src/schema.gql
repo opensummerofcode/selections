@@ -86,7 +86,7 @@ type Applicant {
   gender: String!
   phone: String!
   nationality: String!
-  address: Address!
+  address: Address
   isAlumni: Boolean!
   status: String!
   createdAt: DateTime!

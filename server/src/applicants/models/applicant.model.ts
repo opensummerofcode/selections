@@ -35,7 +35,7 @@ export class Applicant implements IApplicant {
   @Field()
   nationality: string;
 
-  @Field()
+  @Field({ nullable: true })
   address?: Address;
 
   @Field()

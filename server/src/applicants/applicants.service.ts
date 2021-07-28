@@ -87,22 +87,27 @@ export class ApplicantsService {
 
   async create(createApplicantData: CreateApplicantInput): Promise<Applicant> {
     const { address, ...data } = createApplicantData;
-    const applicant = await this.prisma.applicant.create({
-      data: {
-        uuid: uuidv4(),
-        ...data,
-        address: {
-          create: address
-        }
-      },
-      include: this.applicantIncludes
-    });
 
-    return {
-      ...applicant,
-      projects: applicant.projects.map((projects) => projects.project),
-      profiles: applicant.profiles.map((profiles) => profiles.profile)
-    };
+    try {
+      const applicant = await this.prisma.applicant.create({
+        data: {
+          uuid: uuidv4(),
+          ...data,
+          address: {
+            create: address
+          }
+        },
+        include: this.applicantIncludes
+      });
+
+      return {
+        ...applicant,
+        projects: applicant.projects.map((projects) => projects.project),
+        profiles: applicant.profiles.map((profiles) => profiles.profile)
+      };
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async update(uuid: string, updateApplicantData: UpdateApplicantInput): Promise<Applicant> {
