@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpService, Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { User } from '../users/models/user.model';
 import { IExternalUserInput } from 'common';

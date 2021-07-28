@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { StringFilter } from '../../helpers/stringFilter.input';
+import { StringFilter } from '../../lib/stringFilter.input';
 
 @InputType()
 export class FilterAddressInput {

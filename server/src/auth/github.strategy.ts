@@ -4,7 +4,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
 @Injectable()
-export class GithubStrategy extends PassportStrategy(Strategy) {
+export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
   constructor(private authService: AuthService) {
     super({
       clientID: process.env.GITHUB_CLIENT_ID,
@@ -29,6 +29,6 @@ export class GithubStrategy extends PassportStrategy(Strategy) {
       return done(new UnauthorizedException(), false);
     }
 
-    return done(null, user);
+    return done(null, { ...user, accessToken });
   }
 }

@@ -29,13 +29,13 @@ export class Applicant implements IApplicant {
   @Field()
   gender: string;
 
-  @Field()
-  phone: string;
+  @Field({ nullable: true })
+  phone?: string;
 
-  @Field()
-  nationality: string;
+  @Field({ nullable: true })
+  nationality?: string;
 
-  @Field()
+  @Field({ nullable: true })
   address?: Address;
 
   @Field()
