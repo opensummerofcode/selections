@@ -24,7 +24,8 @@ enum Status {
 enum applicantStatus {
   ACCEPTED
   REJECTED
-  UNDECIDED
+  NOSTATUS  @map("NO STATUS")
+  MAYBE
 }
 
 enum OAuthProvider {
@@ -89,7 +90,7 @@ model Applicant {
   addressId   Int                    @unique
   phone       String
   isAlumni    Boolean
-  status      applicantStatus        @default(UNDECIDED)
+  status      applicantStatus        @default(NOSTATUS)
   projects    ApplicantsOnProjects[]
   suggestions Suggestion[]
   profiles    ApplicantProfile[]

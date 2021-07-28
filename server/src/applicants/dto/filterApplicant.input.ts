@@ -3,7 +3,7 @@ import { FilterAddressInput } from '../../addresses/dto/filterAddress.input';
 import { FilterProfileInput } from '../../profiles/dto/filterProfile.input';
 import { FilterProjectInput } from '../../projects/dto/filterProject.input';
 import { FilterSuggestionInput } from '../../suggestions/dto/filterSuggestion.input';
-import { StringFilter } from '../../helpers/stringFilter.input';
+import { StringFilter } from '../../lib/stringFilter.input';
 import { FilterSkillInput } from '../../skills/dto/filterSkill.input';
 
 @InputType()
