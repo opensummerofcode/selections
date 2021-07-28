@@ -9,9 +9,9 @@ export interface IApplicant {
   lastname: string;
   callname?: string;
   gender: string;
-  nationality: string;
+  nationality?: string;
   address?: IAddress;
-  phone: string;
+  phone?: string;
   isAlumni: boolean;
   status: ApplicantStatus;
   createdAt: Date;
