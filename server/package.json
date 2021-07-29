@@ -22,6 +22,7 @@
     "prisma:generate": "npx prisma generate",
     "prisma:migrate": "npx prisma migrate dev",
     "prisma:migrate-prod": "npx prisma migrate deploy",
+    "prisma:reset": "npx prisma migrate reset",
     "ts-node": "ts-node --compiler-options \"{\\\"module\\\":\\\"commonjs\\\"}\"",
     "seed": "npx prisma db seed --preview-feature"
   },
