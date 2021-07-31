@@ -151,12 +151,13 @@ const Filters = ({ students: studentObj, setFiltered, filteredCount, showOnly = 
   ));
   return (
     <header className={styles.filters}>
-      <div>
+      <div className={styles.double}>
         <SearchInput
           placeholder="Search students by name..."
           width="100%"
           onChange={(e) => dispatch({ type: 'search', payload: e.target.value })}
           value={state.searchQuery}
+          className={styles.studentSearch}
         />
       </div>
       <div className={styles.double}>

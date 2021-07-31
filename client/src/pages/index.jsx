@@ -3,9 +3,9 @@ import StudentDetail from '@/components/StudentDetail';
 import SidebarLayout from '@/components/SidebarLayout';
 
 function Index() {
-  const user = useRequireAuth();
+  // const user = useRequireAuth();
 
-  if (!user) return <p />;
+  // if (!user) return <p />;
   return <StudentDetail />;
 }
 

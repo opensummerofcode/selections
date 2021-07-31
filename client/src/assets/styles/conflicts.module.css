@@ -1,3 +1,15 @@
 .conflicts {
   padding: 2rem;
 }
+
+.slide {
+  /* margin-top: 10rem;
+  max-height: 100%; */
+  top: 10rem !important;
+  left: 10rem !important;
+  position: absolute;
+}
+
+.slide  div {
+  
+}

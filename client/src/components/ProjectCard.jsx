@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -17,7 +18,7 @@ import { useAuth } from '@/hooks';
 import { sortAlphabetically } from '../util';
 import ProjectModel from '../models/Project';
 
-import styles from '../assets/styles/projects.module.css';
+import styles from '../assets/styles/projects.module.scss';
 
 const collectDrag = (connect, monitor) => ({
   connectDropTarget: connect.dropTarget(),
@@ -143,7 +144,11 @@ const ProjectCard = ({ students, project, isOverDropZone, connectDropTarget }) =
       <article key={studentId} className={styles.students__student}>
         <div>
           <div className={styles['student-name']}>
-            {student.firstName} {student.lastName}{' '}
+            <Link href={`/student/${studentId}/${student.firstName}-${student.lastName}`}>
+              <a>
+                {student.firstName} {student.lastName}{' '}
+              </a>
+            </Link>
             {student.isAlum && (
               <Badge color="green" marginLeft={4}>
                 alum
@@ -237,6 +242,13 @@ const ProjectCard = ({ students, project, isOverDropZone, connectDropTarget }) =
           <ul className={styles.roles}>{$roles}</ul>
         </header>
         <div className={styles.students}>{$assignedStudents}</div>
+        <div className={styles.goToDetail}>
+          {/* <Link href={`/project/${project.id}/${project.name}`}>
+                <button type="button" className="button--seamless">
+                    Go to detail page <DoubleChevronRightIcon />
+                </button>
+            </Link> */}
+        </div>
       </Pane>
     </li>
   );

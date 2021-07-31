@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Table, Select } from 'evergreen-ui';
 import { useAuth } from '@/hooks';
+import { Table, Select } from 'evergreen-ui';
 import { User } from '@/models';
 import { db } from '@/firebase';
 import { sortByRole } from '@/util';
