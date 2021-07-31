@@ -1,0 +1,306 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Skillset {
+  id: Int!
+  name: String!
+  level: String!
+}
+
+type Address {
+  id: Int!
+  addressLine: String!
+  postalCode: String!
+  city: String!
+  state: String!
+  country: String!
+}
+
+type User {
+  id: Int!
+  uuid: String!
+  provider: String
+  externalId: String
+  email: String!
+  displayName: String!
+  firstname: String
+  lastname: String
+  imageUrl: String!
+  role: String!
+  leadCoachOn: [Project!]
+  coachOn: [Project!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Skill {
+  id: Int!
+  name: String!
+}
+
+type Project {
+  id: Int!
+  uuid: String!
+  name: String!
+  description: String
+  client: String
+  templateUrl: String
+  leadCoach: User
+  coaches: [User!]
+  applicants: [Applicant!]
+  profiles: [Profile!]
+  skills: [Skill!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Profile {
+  id: Float!
+  name: String!
+  image_url: String
+  applicants: [Applicant!]
+  projects: [Project!]
+}
+
+type Suggestion {
+  id: Int!
+  status: String!
+  comment: String!
+  applicant: Applicant!
+  suggester: User!
+}
+
+type Applicant {
+  id: Int!
+  uuid: String!
+  email: String!
+  firstname: String!
+  lastname: String!
+  callname: String
+  gender: String!
+  phone: String
+  nationality: String
+  address: Address
+  isAlumni: Boolean!
+  status: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  suggestions: [Suggestion!]
+  projects: [Project!]
+  profiles: [Profile!]
+  skillset: [Skillset!]
+}
+
+type Query {
+  applicants(where: FilterApplicantInput): [Applicant!]!
+  applicant(uuid: String!): Applicant!
+  skills: [Skill!]!
+  skill(id: Float!): Skill!
+  users: [User!]!
+  user(uuid: String!): User!
+  suggestions: [Suggestion!]!
+  projects: [Project!]!
+  project(uuid: String!): Project!
+  profiles: [Profile!]!
+  profile(id: Float!): Profile!
+  me: User
+  logout: User
+}
+
+input FilterApplicantInput {
+  AND: [FilterApplicantInput!]
+  OR: [FilterApplicantInput!]
+  NOT: [FilterApplicantInput!]
+  email: StringFilter
+  firstname: StringFilter
+  lastname: StringFilter
+  callname: StringFilter
+  gender: StringFilter
+  phone: StringFilter
+  nationality: StringFilter
+  address: FilterAddressInput
+  isAlumni: Boolean
+  profiles_every: FilterProfileInput
+  projects_every: FilterProjectInput
+  suggestions_every: FilterSuggestionInput
+  skills_every: FilterSkillInput
+}
+
+input StringFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+}
+
+input FilterAddressInput {
+  AND: FilterAddressInput
+  OR: FilterAddressInput
+  NOT: FilterAddressInput
+  addressLine: StringFilter
+  postalCode: StringFilter
+  city: StringFilter
+  state: StringFilter
+  country: StringFilter
+}
+
+input FilterProfileInput {
+  AND: [FilterProfileInput!]
+  OR: [FilterProfileInput!]
+  NOT: [FilterProfileInput!]
+  name: StringFilter
+}
+
+input FilterProjectInput {
+  AND: FilterProjectInput
+  OR: FilterProjectInput
+  NOT: FilterProjectInput
+  name: StringFilter
+  client: StringFilter
+  leadCoachId: Float
+}
+
+input FilterSuggestionInput {
+  AND: FilterSuggestionInput
+  OR: FilterSuggestionInput
+  NOT: FilterSuggestionInput
+  status: StringFilter
+}
+
+input FilterSkillInput {
+  AND: FilterSkillInput
+  OR: FilterSkillInput
+  NOT: FilterSkillInput
+  name: StringFilter
+}
+
+type Mutation {
+  createApplicant(input: CreateApplicantInput!): Applicant!
+  updateApplicant(input: UpdateApplicantInput!, uuid: String!): Applicant!
+  deleteApplicant(uuid: String!): Boolean!
+  addApplicantToProject(projectId: Int!, applicantId: Int!): Boolean!
+  removeApplicantFromProject(projectId: Int!, applicantId: Int!): Boolean!
+  addSkillToApplicant(level: String!, skill: String!, applicantId: Int!): Boolean!
+  updateUser(input: UpdateUserInput!, uuid: String!): User!
+  deleteUser(uuid: String!): Boolean!
+  addUserToProject(projectId: Int!, userId: Int!): Boolean!
+  removeUserFromProject(projectId: Int!, userId: Int!): Boolean!
+  createSuggestion(input: CreateSuggestionInput!): Suggestion!
+  updateSuggestion(input: UpdateSuggestionInput!, id: Float!): Suggestion!
+  deleteSuggestion(id: Float!): Boolean!
+  createProject(input: CreateProjectInput!): Project!
+  updateProject(input: UpdateProjectInput!, uuid: String!): Project!
+  deleteProject(uuid: String!): Boolean!
+  addSkillToProject(skill: String!, projectId: Int!): Boolean!
+  createProfile(input: CreateProfileInput!): Profile!
+  updateProfile(input: UpdateProfileInput!, id: Float!): Profile!
+  deleteProfile(id: Float!): Boolean!
+  addProfileToApplicant(profileId: Int!, applicantId: Int!): Boolean!
+  removeProfileToApplicant(profileId: Int!, applicantId: Int!): Boolean!
+  addProfileToProject(profileId: Int!, projectId: Int!): Boolean!
+  removeProfileToProject(profileId: Int!, projectId: Int!): Boolean!
+}
+
+input CreateApplicantInput {
+  email: String!
+  firstname: String!
+  lastname: String!
+  callname: String
+  gender: String!
+  phone: String!
+  nationality: String!
+  address: CreateAddressInput!
+  isAlumni: Boolean!
+}
+
+input CreateAddressInput {
+  addressLine: String!
+  postalCode: String!
+  city: String!
+  state: String!
+  country: String!
+}
+
+input UpdateApplicantInput {
+  email: String
+  firstname: String
+  lastname: String
+  callname: String
+  gender: String
+  phone: String
+  nationality: String
+  address: UpdateAddressInput
+  isAlumni: Boolean
+  status: String
+}
+
+input UpdateAddressInput {
+  addressLine: String
+  postalCode: String
+  city: String
+  state: String
+  country: String
+}
+
+input UpdateUserInput {
+  email: String!
+  displayName: String
+  firstname: String
+  lastname: String
+  imageUrl: String
+  role: String
+}
+
+input CreateSuggestionInput {
+  status: String!
+  comment: String!
+  applicantId: Float!
+  suggesterId: Float!
+}
+
+input UpdateSuggestionInput {
+  status: String
+  comment: String
+}
+
+input CreateProjectInput {
+  name: String!
+  description: String
+  client: String
+  templateUrl: String
+  leadCoachId: Float
+}
+
+input UpdateProjectInput {
+  name: String
+  description: String
+  client: String
+  templateUrl: String
+  leadCoachId: Float
+}
+
+input CreateProfileInput {
+  name: String!
+  image_url: String
+}
+
+input UpdateProfileInput {
+  image_url: String
+}
+
+type Subscription {
+  applicantsChanged: Applicant!
+  projectsChanged: Project!
+}

@@ -1,0 +1,129 @@
+.condensed {
+    width: 100%;
+    padding: 1rem 2rem;
+    background: #FFF;
+
+    > div {
+        padding: .5rem 0;
+        
+        &:first-child {
+            display: flex;
+            flex-direction: column;
+
+            > span {
+                display: flex;
+                align-items: center;
+
+                svg {
+                    margin-right: .5rem;
+                }
+            }
+        }
+
+        &:last-child {
+            display: flex;
+            align-items: center;
+            width: auto;
+            justify-content: flex-end;
+            padding-right: .5rem;
+            
+            svg {
+                margin-left: .5rem;
+            }
+        }
+    }
+}
+
+.role {
+    display: inline-block;
+    margin-top: .5rem;
+    border-radius: 3px;
+    padding: 0.25rem .5rem;
+    font-weight: bold;
+
+    background-color: #E4E7EB;
+    text-transform: uppercase;
+    color: #425A70;
+    
+    &+ div {
+        padding-left: .5rem;
+    }
+}
+
+//TODO: fix padding on things that come below
+
+.recommendations {
+  > span {
+    display: inline-block;
+    margin-top: .5rem;
+    border-radius: 3px;
+    padding: 0.25rem .5rem;
+    padding-bottom: .5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  ul {
+    
+
+    li {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      margin-bottom: .5rem;
+      
+      &:before {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100%;
+          width: 3px;
+          transform: translateX(-1rem);
+          background-color: #fff;
+          content: '';
+      }
+
+      &.yes {
+          &:before {
+              background-color: green;
+          }
+      }
+
+      &.no {
+          &:before {
+              background-color: red;
+          }
+      }
+
+      &.maybe {
+          &:before {
+              background-color: orange;
+          }
+      }
+
+      .recommCoach {
+          font-weight: bold;
+          
+          
+      }
+    }
+  }
+}
+
+.profileLink {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    position: relative;
+
+    svg {
+        transition: all .15s ease-in-out;
+    }
+
+    &:hover {
+
+        svg {
+            transform: translateX(.5rem);
+        }
+    }
+}

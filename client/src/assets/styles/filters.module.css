@@ -1,0 +1,58 @@
+.filters {
+  position: fixed;
+  height: var(--height-filters);
+  width: var(--width-list);
+  display: flex;
+  flex-direction: column;
+  background: var(--color-white);
+  z-index: 5;
+  padding: 0 1rem;
+  box-shadow: 0 0.5rem 2rem -2rem rgba(0, 0, 0, 0.8);
+}
+
+.filters > div {
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  font-size: 1.4rem;
+}
+
+.filters > div > span {
+  margin-left: 0.8rem;
+}
+
+.status-selectors {
+  display: flex;
+  margin: 1rem 0;
+}
+.status-selectors > button {
+  flex: 0.25;
+  justify-content: center;
+}
+
+.double {
+  display: flex;
+  justify-content: space-between;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.filterstoggle {
+  box-sizing: border-box;
+  /* margin-left: 1rem; */
+  display: block;
+}
+
+
+.studentSearch {
+  margin-right: 1rem;
+}
+
+.relative {
+  position: relative;
+}

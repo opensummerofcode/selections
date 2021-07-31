@@ -1,53 +1,37 @@
 {
-  "name": "osoc-selections",
-  "version": "2.1.0",
-  "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "evergreen-ui": "^4.26.0",
-    "firebase": "^7.14.0",
-    "normalize.css": "^8.0.1",
-    "prop-types": "^15.7.2",
-    "react": "^16.13.1",
-    "react-dnd": "^11.0.0",
-    "react-dnd-html5-backend": "^11.0.0",
-    "react-dom": "^16.13.1",
-    "react-router-dom": "^5.1.2",
-    "react-scripts": "^4.0.3"
-  },
+  "name": "selections",
+  "version": "2.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "deploy": "npm run build && firebase deploy"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently \"npm start -w server\" \"npm start -w client\"",
+    "client:dev": "npm run -w client dev",
+    "server:dev": "npm run -w server start:dev",
+    "common:build": "npm run -w common build",
+    "prisma:generate": "npm run -w server prisma:generate",
+    "prisma:migrate": "npm run -w server prisma:migrate"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/opensummerofcode/selections.git"
   },
-  "devDependencies": {
-    "babel-eslint": "^10.1.0",
-    "eslint": "^7.24.0",
-    "eslint-config-airbnb": "^18.2.1",
-    "eslint-config-node": "^4.1.0",
-    "eslint-config-prettier": "^6.15.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^3.4.0",
-    "eslint-plugin-react": "^7.23.2",
-    "eslint-plugin-react-hooks": "^1.7.0",
-    "prettier": "^2.2.1"
+  "author": "Open Summer of Code <info@osoc.be>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/opensummerofcode/selections/issues"
+  },
+  "homepage": "https://github.com/opensummerofcode/selections#readme",
+  "workspaces": [
+    "./common",
+    "./server",
+    "./client"
+  ],
+  "dependencies": {
+    "concurrently": "^6.2.0"
+  },
+  "engines": {
+    "npm": "^7.20.0",
+    "node": "14.x"
   }
 }

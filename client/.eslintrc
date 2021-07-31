@@ -1,0 +1,35 @@
+{
+  "extends": ["airbnb", "plugin:prettier/recommended", "plugin:workspaces/recommended"],
+  "plugins": ["prettier", "workspaces"],
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "rules": {
+    "prettier/prettier": ["error"],
+    "comma-dangle": ["error", "never"],
+    "no-underscore-dangle": 0,
+    "no-console": "warn",
+    "no-unused-expressions": ["error", { "allowTernary": true }],
+    "no-return-assign": [2, "except-parens"],
+    "no-param-reassign": ["error", { "props": false }],
+    "react/jsx-props-no-spreading": 0,
+    "react/jsx-one-expression-per-line": 0,
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off",
+    "react/require-default-props": "off",
+    "jsx-a11y/anchor-is-valid": [ "error", {
+      "components": [ "Link" ],
+      "specialLink": [ "hrefLeft", "hrefRight" ],
+      "aspects": [ "invalidHref", "preferButton" ]
+    }]
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    },
+    "import/resolver": {
+      "typescript": {}
+    }
+  }
+}

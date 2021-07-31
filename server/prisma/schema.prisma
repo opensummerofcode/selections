@@ -1,0 +1,207 @@
+datasource db {
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialActions", "selectRelationCount"]
+}
+
+enum Role {
+  USER
+  COACH
+  ADMIN
+}
+
+enum Status {
+  YES
+  MAYBE
+  NO
+}
+
+enum applicantStatus {
+  ACCEPTED
+  REJECTED
+  NOSTATUS  @map("NO STATUS")
+  MAYBE
+}
+
+enum OAuthProvider {
+  GITHUB
+}
+
+model User {
+  id          Int               @id @default(autoincrement())
+  uuid        String            @unique @default(uuid())
+  externalId  String?           @unique
+  provider    OAuthProvider?
+  email       String            @unique
+  displayName String
+  firstname   String?
+  lastname    String?
+  imageUrl    String?
+  role        Role              @default(USER)
+  leadCoachOn Project[]
+  coachOn     UsersOnProjects[]
+  suggestions Suggestion[]
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+}
+
+model Project {
+  id          Int                    @id @default(autoincrement())
+  uuid        String                 @unique @default(uuid())
+  name        String
+  description String?
+  client      String?
+  templateUrl String?
+  leadCoach   User?                  @relation(fields: [leadCoachId], references: [id], onDelete: SetNull)
+  leadCoachId Int?
+  coaches     UsersOnProjects[]
+  applicants  ApplicantsOnProjects[]
+  profiles    ProjectProfile[]
+  skills      ProjectSkill[]
+  createdAt   DateTime               @default(now())
+  updatedAt   DateTime               @updatedAt
+}
+
+model UsersOnProjects {
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     Int
+  project    Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId  Int
+  assignedAt DateTime @default(now())
+
+  @@id([userId, projectId])
+}
+
+model Applicant {
+  id          Int                    @id @default(autoincrement())
+  uuid        String                 @unique @default(uuid())
+  email       String                 @unique
+  firstname   String
+  lastname    String
+  callname    String?
+  gender      String
+  nationality String?
+  address     Address?               @relation(fields: [addressId], references: [id])
+  addressId   Int?                   @unique
+  phone       String?
+  isAlumni    Boolean
+  status      applicantStatus        @default(NOSTATUS)
+  projects    ApplicantsOnProjects[]
+  suggestions Suggestion[]
+  profiles    ApplicantProfile[]
+  skillset    ApplicantSkill[]
+  answers     Answer[]
+  createdAt   DateTime               @default(now())
+  updatedAt   DateTime               @updatedAt
+}
+
+model ApplicantsOnProjects {
+  applicant   Applicant @relation(fields: [applicantId], references: [id], onDelete: Cascade)
+  applicantId Int
+  project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId   Int
+  assignedAt  DateTime  @default(now())
+
+  @@id([applicantId, projectId])
+}
+
+model Address {
+  id          Int        @id @default(autoincrement())
+  addressLine String
+  postalCode  String
+  city        String
+  state       String
+  country     String
+  applicant   Applicant?
+}
+
+model Suggestion {
+  id          Int       @id @default(autoincrement())
+  status      Status
+  comment     String
+  applicant   Applicant @relation(fields: [applicantId], references: [id], onDelete: Cascade)
+  applicantId Int
+  suggester   User      @relation(fields: [suggesterId], references: [id], onDelete: Cascade)
+  suggesterId Int
+}
+
+model Profile {
+  id         Int                @id @default(autoincrement())
+  name       String
+  image_url  String?
+  applicants ApplicantProfile[]
+  projects   ProjectProfile[]
+}
+
+model ApplicantProfile {
+  applicant   Applicant @relation(fields: [applicantId], references: [id])
+  applicantId Int
+  profile     Profile   @relation(fields: [profileId], references: [id])
+  profileId   Int
+
+  @@id([applicantId, profileId])
+}
+
+model ProjectProfile {
+  project   Project @relation(fields: [projectId], references: [id])
+  projectId Int
+  profile   Profile @relation(fields: [profileId], references: [id])
+  profileId Int
+
+  @@id([projectId, profileId])
+}
+
+model Skill {
+  id         Int              @id @default(autoincrement())
+  name       String           @unique
+  applicants ApplicantSkill[]
+  projects   ProjectSkill[]
+}
+
+model SkillLevel {
+  id             Int              @id @default(autoincrement())
+  name           String           @unique
+  ApplicantSkill ApplicantSkill[]
+}
+
+model ApplicantSkill {
+  applicant   Applicant  @relation(fields: [applicantId], references: [id])
+  applicantId Int
+  skill       Skill      @relation(fields: [skillId], references: [id])
+  skillId     Int
+  level       SkillLevel @relation(fields: [levelId], references: [id])
+  levelId     Int
+
+  @@id([applicantId, skillId])
+}
+
+model ProjectSkill {
+  project   Project @relation(fields: [projectId], references: [id])
+  projectId Int
+  skill     Skill   @relation(fields: [skillId], references: [id])
+  skillId   Int
+
+  @@id([projectId, skillId])
+}
+
+model Answer {
+  id          Int       @id @default(autoincrement())
+  text        String
+  question    Question  @relation(fields: [questionId], references: [id])
+  questionId  Int
+  applicant   Applicant @relation(fields: [applicantId], references: [id])
+  applicantId Int
+}
+
+model Question {
+  id        Int      @id @default(autoincrement())
+  reference String
+  text      String
+  type      String
+  answers   Answer[]
+}
